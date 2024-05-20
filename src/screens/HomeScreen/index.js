@@ -23,7 +23,7 @@ function HomeScreen({ navigation }) {
 
     return (
         <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-            <Text>Count: {count}</Text>
+            <Text style={{ fontFamily: 'VampiroOne-Regular' }}>Count: {count}</Text>
             <Text>Home Screen</Text>
             <Icon
                 source="camera"
