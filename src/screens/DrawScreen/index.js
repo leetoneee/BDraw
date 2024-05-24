@@ -10,7 +10,7 @@ import ViewShot from "react-native-view-shot";
 import styles from './styles';
 import { captureRef } from 'react-native-view-shot';
 import { throttle } from '../../hooks/throttle';
-
+import { debounce } from '../../hooks/debounce';
 const { height, width } = Dimensions.get('window');
 
 export default DrawScreen = () => {
@@ -19,9 +19,10 @@ export default DrawScreen = () => {
     const [currentPath, setCurrentPath] = useState([]);
     const [isClearButtonClicked, setIsClearButtonClicked] = useState(false);
     const [label, setLabel] = useState('');
+    const [encodeImage, setEncodeImage] = useState('');
 
     const requestAPI = useMemo(() => {
-        return throttle((data) => {
+        return debounce((data) => {
             fetch(
                 "https://api-inference.huggingface.co/models/kmewhort/beit-sketch-classifier",
                 {
@@ -40,36 +41,37 @@ export default DrawScreen = () => {
                 .catch((err) => {
                     console.log("🚀 ~ ERR:", err);
                 })
-        }, 2000);
+        }, 0);
     }, []);
 
-    const handleExport = async () => {
-        // Take the snapshot of the view
+    const handleExport = useMemo(() => {
+        return debounce(async () => {
+            console.log("🚀 ~ handleClearButtonClick ~ encodeImage: no")
+            await captureRef(ref, {
+                result: 'base64'
+            }).then(
+                result => {
+                    console.log("🚀 ~ handleClearButtonClick ~ encodeImage: yes")
+                    setEncodeImage(result)
+                }
+            ).catch((err) => {
+                console.log("🚀 ~ handleClearButtonClick ~ err:", err)
+            })
+        }, 500);
+    }, []);
 
-        console.log("🚀 ~ handleClearButtonClick ~ encodeImage: no")
-        const encodeImage = await captureRef(ref, {
-            result: 'base64'
-        }).then(
-            result => {
-                return result
-            }
-        ).catch((err) => {
-            console.log("🚀 ~ handleClearButtonClick ~ err:", err)
-        })
-        if (encodeImage) {
-            console.log("🚀 ~ handleClearButtonClick ~ encodeImage: yes")
-            requestAPI(encodeImage);
-        }
-    };
-
-    const throttled = useRef(throttle(handleExport, 1000))
 
     useEffect(() => {
-        if (currentPath)
-            throttled.current();
+        if (!isClearButtonClicked)
+            handleExport();
     }, [currentPath])
 
+    useEffect(() => {
+        requestAPI(encodeImage)
+    }, [encodeImage])
+
     const onTouchMove = (event) => {
+        setIsClearButtonClicked(false);
         const newPath = [...currentPath];
 
         //get current user touches position

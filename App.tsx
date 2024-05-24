@@ -27,8 +27,16 @@ export default function App() {
       <PaperProvider>
         <NavigationContainer>
           <Stack.Navigator>
-            <Stack.Screen name="Home" component={HomeScreen} />
-            <Stack.Screen name="Draw" component={DrawScreen} />
+            <Stack.Screen
+              name="Home"
+              component={HomeScreen}
+              options={{
+                headerShown: false
+              }} />
+            <Stack.Screen
+              name="Draw"
+              component={DrawScreen}
+            />
           </Stack.Navigator>
         </NavigationContainer>
       </PaperProvider>
