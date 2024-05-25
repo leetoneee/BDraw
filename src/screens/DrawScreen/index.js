@@ -9,17 +9,40 @@ import { Svg, Path } from 'react-native-svg';
 import ViewShot from "react-native-view-shot";
 import styles from './styles';
 import { captureRef } from 'react-native-view-shot';
-import { throttle } from '../../hooks/throttle';
 import { debounce } from '../../hooks/debounce';
+import AwesomeButton from "react-native-really-awesome-button";
+import { Icon } from 'react-native-paper';
+import { displayTime } from '../../utils/displayTime';
+
 const { height, width } = Dimensions.get('window');
 
-export default DrawScreen = () => {
+export default DrawScreen = ({ keyword, onRoundEnd }) => {
     const ref = useRef()
+    const [timer, setTimer] = useState(5);
+
     const [paths, setPaths] = useState([]);
     const [currentPath, setCurrentPath] = useState([]);
     const [isClearButtonClicked, setIsClearButtonClicked] = useState(false);
     const [label, setLabel] = useState('');
     const [encodeImage, setEncodeImage] = useState('');
+
+    // Reset timer whenever the keyword changes
+    // useEffect(() => {
+    //     setTimer(5);
+    // }, [keyword]);
+
+    // Countdown timer logic
+    // useEffect(() => {
+    //     if (timer > 0) {
+    //         const interval = setInterval(() => {
+    //             setTimer(timer - 1);
+    //         }, 1000);
+
+    //         return () => clearInterval(interval);
+    //     } else {
+    //         onRoundEnd();  // Callback to notify the parent component that the round has ended
+    //     }
+    // }, [timer]);
 
     const requestAPI = useMemo(() => {
         return debounce((data) => {
@@ -41,7 +64,7 @@ export default DrawScreen = () => {
                 .catch((err) => {
                     console.log("🚀 ~ ERR:", err);
                 })
-        }, 0);
+        }, 500);
     }, []);
 
     const handleExport = useMemo(() => {
@@ -61,14 +84,15 @@ export default DrawScreen = () => {
     }, []);
 
 
-    useEffect(() => {
-        if (!isClearButtonClicked)
-            handleExport();
-    }, [currentPath])
+    // useEffect(() => {
+    //     if (paths)
+    //         handleExport();
+    // }, [currentPath])
 
-    useEffect(() => {
-        requestAPI(encodeImage)
-    }, [encodeImage])
+    // useEffect(() => {
+    //     if (paths)
+    //         requestAPI(encodeImage)
+    // }, [encodeImage])
 
     const onTouchMove = (event) => {
         setIsClearButtonClicked(false);
@@ -108,12 +132,66 @@ export default DrawScreen = () => {
 
     return (
         <View style={styles.container}>
-            <ViewShot ref={ref} >
+            <View style={styles.topContainer}>
+                <View style={{ flex: 1 }}>
+                    <AwesomeButton
+                        backgroundColor='#D3CCBD'
+                        backgroundDarker='#B8B09C'
+                        textFontFamily='verdana'
+                        raiseLevel={5}
+                        width={50}
+                        borderRadius={10}
+                        paddingHorizontal={10}
+                    >
+                        <Icon
+                            source="close"
+                            color={'#fff'}
+                            size={30}
+                        />
+                    </AwesomeButton>
+                </View>
+                <View style={{ flex: 1, justifyContent: 'space-evenly', alignItems: 'center', flexDirection: 'column' }}>
+                    <Text style={styles.drawText}>Draw: {keyword}</Text>
+                    <View style={[styles.timeBg, styles.shadowProp]}>
+                        <Text style={{ fontFamily: 'RobotoMono-Regular', fontSize: 18 }}>{displayTime(timer)}</Text>
+                    </View>
+                </View>
+                <View style={{ flex: 1, alignItems: 'flex-end' }}>
+                    <AwesomeButton
+                        backgroundColor='#D3CCBD'
+                        backgroundDarker='#B8B09C'
+                        textFontFamily='verdana'
+                        raiseLevel={5}
+                        width={50}
+                        borderRadius={10}
+                        paddingHorizontal={10}
+                    >
+                        <Icon
+                            source="forward"
+                            color={'#fff'}
+                            size={30}
+                        />
+                    </AwesomeButton>
+                </View>
+
+            </View>
+            <View style={styles.resultContainer}>
+                <Text>fff</Text>
+            </View>
+            <View style={styles.drawContainer}>
+                <Text>fff</Text>
+
+            </View>
+            <View style={styles.bottomContainer}>
+                <Text>fff</Text>
+
+            </View>
+            {/* <ViewShot ref={ref} >
                 <View
                     style={styles.svgContainer}
                     onTouchMove={onTouchMove}
                     onTouchEnd={onTouchEnd}>
-                    <Svg height={height * 0.7} width={width}>
+                    <Svg>
                         <Path
                             d={currentPath.join('')}
                             stroke={'red'}
@@ -152,7 +230,7 @@ export default DrawScreen = () => {
                 >
                     {label}
                 </Text>
-            ) : null}
+            ) : null} */}
         </View>
     );
 };

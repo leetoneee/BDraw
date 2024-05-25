@@ -13,11 +13,15 @@ import {
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import HomeScreen from './src/screens/HomeScreen';
+import DrawModal from './src/components/DrawModal';
 import DrawScreen from './src/screens/DrawScreen';
+import SinglePlayerGame from './src/screens/SinglePlayerGame';
 import { PaperProvider } from 'react-native-paper';
 import { Provider as StoreProvide } from 'react-redux';
 import { store } from './src/redux/store';
+
 const Stack = createNativeStackNavigator();
+
 
 export default function App() {
 
@@ -34,13 +38,16 @@ export default function App() {
                 headerShown: false
               }} />
             <Stack.Screen
-              name="Draw"
-              component={DrawScreen}
-            />
+              name="SinglePlayerGame"
+              component={SinglePlayerGame}
+              options={{
+                headerShown: false
+              }} />
+
           </Stack.Navigator>
         </NavigationContainer>
       </PaperProvider>
-    </StoreProvide>
+    </StoreProvide >
   );
 }
 

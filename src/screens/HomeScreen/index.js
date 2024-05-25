@@ -45,6 +45,10 @@ function HomeScreen({ navigation }) {
                     title="Go to Draw"
                     onPress={() => navigation.navigate('Draw')}
                 />
+                <Button
+                    onPress={() => navigation.navigate('SinglePlayerGame')}
+                    title="Open SinglePlayerGame"
+                />
             </View>
         </Background>
     );
