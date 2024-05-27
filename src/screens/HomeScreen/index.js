@@ -1,7 +1,8 @@
 import {
     Text,
     View,
-    Button
+    Button,
+    Image
 } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import { decrement, increment } from "../../redux/counterSlice/counterSlice";
@@ -28,6 +29,13 @@ function HomeScreen({ navigation }) {
             <View style={styles.container}>
                 <Text style={{ fontFamily: 'VampiroOne-Regular' }}>Count: {count}</Text>
                 <Text>Home Screen {height},{width}</Text>
+                <Image
+                    style={styles.logo}
+
+                    source={{
+                        uri: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADMAAAAzCAYAAAA6oTAqAAAAEXRFWHRTb2Z0d2FyZQBwbmdjcnVzaEB1SfMAAABQSURBVGje7dSxCQBACARB+2/ab8BEeQNhFi6WSYzYLYudDQYGBgYGBgYGBgYGBgYGBgZmcvDqYGBgmhivGQYGBgYGBgYGBgYGBgYGBgbmQw+P/eMrC5UTVAAAAABJRU5ErkJggg==',
+                    }}
+                />
                 <Icon
                     source="camera"
                     color={MD3Colors.error50}

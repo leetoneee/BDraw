@@ -4,6 +4,7 @@ import {
     Dimensions,
     TouchableOpacity,
     Text,
+    Image,
 } from 'react-native';
 import { Svg, Path } from 'react-native-svg';
 import ViewShot from "react-native-view-shot";
@@ -13,12 +14,26 @@ import { debounce } from '../../hooks/debounce';
 import AwesomeButton from "react-native-really-awesome-button";
 import { Icon } from 'react-native-paper';
 import { displayTime } from '../../utils/displayTime';
+import { Dialog, Portal, Button } from 'react-native-paper';
+import ColorPicker from '../../components/ColorPicker';
+import { colors, timeLimit, strokeWidthPath } from '../../constants';
+import { useDispatch, useSelector } from 'react-redux';
+import { reset, setEncodeImages, setScore } from '../../redux/drawSlice/drawSlice';
 
-const { height, width } = Dimensions.get('window');
 
-export default DrawScreen = ({ keyword, onRoundEnd }) => {
-    const ref = useRef()
-    const [timer, setTimer] = useState(5);
+export default DrawScreen = ({ props, keyword, onRoundEnd }) => {
+    const viewShotRef = useRef()
+    const colorPickerRef = useRef();
+    const isMounted = useRef(true); // Biến ref để theo dõi trạng thái mount của component
+    const dispatch = useDispatch();
+
+    const currentColor = useSelector((state) => state.draw.currentColor);
+    const score = useSelector((state) => state.draw.score);
+    const encodeImages = useSelector((state) => state.draw.encodeImages);
+
+    const [timer, setTimer] = useState(timeLimit);
+
+    const [visible, setVisible] = useState(false);
 
     const [paths, setPaths] = useState([]);
     const [currentPath, setCurrentPath] = useState([]);
@@ -26,23 +41,80 @@ export default DrawScreen = ({ keyword, onRoundEnd }) => {
     const [label, setLabel] = useState('');
     const [encodeImage, setEncodeImage] = useState('');
 
+    const hideDialog = async () => setVisible(false);
+    const showDialog = () => setVisible(true);
+
+    useEffect(() => {
+        // Khi component mount, đặt isMounted.current là true
+        isMounted.current = true;
+
+        // Khi component unmount, đặt isMounted.current là false
+        return () => {
+            isMounted.current = false;
+        };
+    }, []);
+
     // Reset timer whenever the keyword changes
-    // useEffect(() => {
-    //     setTimer(5);
-    // }, [keyword]);
+    useEffect(() => {
+        setTimer(timeLimit);
+    }, [keyword]);
 
     // Countdown timer logic
-    // useEffect(() => {
-    //     if (timer > 0) {
-    //         const interval = setInterval(() => {
-    //             setTimer(timer - 1);
-    //         }, 1000);
+    useEffect(() => {
+        if (timer > 0) {
+            const interval = setInterval(() => {
+                setTimer(timer - 1);
+            }, 1000);
 
-    //         return () => clearInterval(interval);
-    //     } else {
-    //         onRoundEnd();  // Callback to notify the parent component that the round has ended
-    //     }
-    // }, [timer]);
+            return () => clearInterval(interval);
+        } else {
+            setLabel('');
+            handleStoreEncodeImage();
+            onRoundEnd();  // Callback to notify the parent component that the round has ended
+        }
+    }, [timer]);
+
+
+    // handle win game
+    useEffect(() => {
+        if (label === keyword) {
+            dispatch(setScore(score + 1));
+            handleStoreEncodeImage();
+            handleClearButtonClick();
+            onRoundEnd();
+        }
+    }, [label])
+
+
+    useEffect(() => {
+        if (paths.length > 0)
+            handleExport();
+    }, [currentPath, paths])
+
+    useEffect(() => {
+        if (paths.length > 0)
+            requestAPI(encodeImage)
+    }, [encodeImage, paths])
+
+    const handleExport = useMemo(() => {
+        return debounce(async () => {
+            console.log("🚀 ~ handleClearButtonClick ~ encodeImage: no");
+            if (!isMounted.current) {
+                console.log("🚀 ~ returndebounce ~ isMounted.current:", isMounted.current)
+                return;
+            }
+            await captureRef(viewShotRef, {
+                result: 'base64'
+            }).then(
+                result => {
+                    console.log("🚀 ~ handleClearButtonClick ~ encodeImage: yes")
+                    setEncodeImage(result)
+                }
+            ).catch((err) => {
+                console.log("🚀 ~ handleClearButtonClick ~ err:", err)
+            })
+        }, 500);
+    }, []);
 
     const requestAPI = useMemo(() => {
         return debounce((data) => {
@@ -64,35 +136,8 @@ export default DrawScreen = ({ keyword, onRoundEnd }) => {
                 .catch((err) => {
                     console.log("🚀 ~ ERR:", err);
                 })
-        }, 500);
+        }, 1000);
     }, []);
-
-    const handleExport = useMemo(() => {
-        return debounce(async () => {
-            console.log("🚀 ~ handleClearButtonClick ~ encodeImage: no")
-            await captureRef(ref, {
-                result: 'base64'
-            }).then(
-                result => {
-                    console.log("🚀 ~ handleClearButtonClick ~ encodeImage: yes")
-                    setEncodeImage(result)
-                }
-            ).catch((err) => {
-                console.log("🚀 ~ handleClearButtonClick ~ err:", err)
-            })
-        }, 500);
-    }, []);
-
-
-    // useEffect(() => {
-    //     if (paths)
-    //         handleExport();
-    // }, [currentPath])
-
-    // useEffect(() => {
-    //     if (paths)
-    //         requestAPI(encodeImage)
-    // }, [encodeImage])
 
     const onTouchMove = (event) => {
         setIsClearButtonClicked(false);
@@ -124,36 +169,65 @@ export default DrawScreen = ({ keyword, onRoundEnd }) => {
         setPaths(currentPaths);
     };
 
-    const handleClearButtonClick = async () => {
+    const handleClearButtonClick = () => {
         setPaths([]);
         setCurrentPath([]);
+        setLabel('')
         setIsClearButtonClicked(true);
+    }
+
+    const handleNextRound = () => {
+        handleStoreEncodeImage();
+        handleClearButtonClick();
+        onRoundEnd();
+    }
+
+    const hanldeQuit = () => {
+        setVisible(false);
+        handleClearButtonClick();
+        dispatch(reset());
+        onRoundEnd('Home');
+    }
+
+    const handleShowColorPicker = () => {
+        colorPickerRef.current.show()
+    }
+
+    const handleStoreEncodeImage = () => {
+        const currentEncodeImage = encodeImage;
+        const newEncodeImages = [...encodeImages];
+        newEncodeImages.push(currentEncodeImage);
+        dispatch(setEncodeImages(newEncodeImages));
+        console.log("🚀 ~ encodeImages:", encodeImages.length)
     }
 
     return (
         <View style={styles.container}>
             <View style={styles.topContainer}>
                 <View style={{ flex: 1 }}>
-                    <AwesomeButton
-                        backgroundColor='#D3CCBD'
-                        backgroundDarker='#B8B09C'
-                        textFontFamily='verdana'
-                        raiseLevel={5}
-                        width={50}
-                        borderRadius={10}
-                        paddingHorizontal={10}
-                    >
-                        <Icon
-                            source="close"
-                            color={'#fff'}
-                            size={30}
-                        />
-                    </AwesomeButton>
+                    <View style={{ height: 'auto', width: 'auto', alignSelf: 'flex-start' }}>
+                        <AwesomeButton
+                            backgroundColor='#D3CCBD'
+                            backgroundDarker='#B8B09C'
+                            textFontFamily='verdana'
+                            raiseLevel={5}
+                            width={50}
+                            borderRadius={10}
+                            paddingHorizontal={10}
+                            onPress={showDialog}
+                        >
+                            <Icon
+                                source="close"
+                                color={'#fff'}
+                                size={30}
+                            />
+                        </AwesomeButton>
+                    </View>
                 </View>
-                <View style={{ flex: 1, justifyContent: 'space-evenly', alignItems: 'center', flexDirection: 'column' }}>
+                <View style={{ flex: 3, justifyContent: 'space-evenly', alignItems: 'center', flexDirection: 'column' }}>
                     <Text style={styles.drawText}>Draw: {keyword}</Text>
                     <View style={[styles.timeBg, styles.shadowProp]}>
-                        <Text style={{ fontFamily: 'RobotoMono-Regular', fontSize: 18 }}>{displayTime(timer)}</Text>
+                        <Text style={{ fontFamily: 'RobotoMono-Regular', fontSize: 20 }}>{displayTime(timer)}</Text>
                     </View>
                 </View>
                 <View style={{ flex: 1, alignItems: 'flex-end' }}>
@@ -165,72 +239,160 @@ export default DrawScreen = ({ keyword, onRoundEnd }) => {
                         width={50}
                         borderRadius={10}
                         paddingHorizontal={10}
+                        onPress={handleNextRound}
                     >
-                        <Icon
-                            source="forward"
-                            color={'#fff'}
-                            size={30}
-                        />
+                        <Svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="#fff"
+                            stroke="currentColor"
+                            strokeWidth={1.5}
+                            className="size-6"
+                            viewBox="0 0 24 24"
+                            {...props}
+                        >
+                            <Path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                d="M3 8.689c0-.864.933-1.406 1.683-.977l7.108 4.061a1.125 1.125 0 0 1 0 1.954l-7.108 4.061A1.125 1.125 0 0 1 3 16.811V8.69Zm9.75 0c0-.864.933-1.406 1.683-.977l7.108 4.061a1.125 1.125 0 0 1 0 1.954l-7.108 4.061a1.125 1.125 0 0 1-1.683-.977V8.69Z"
+                            />
+                        </Svg>
                     </AwesomeButton>
                 </View>
 
             </View>
-            <View style={styles.resultContainer}>
-                <Text>fff</Text>
+            <View style={[styles.resultContainer, styles.shadowProp]}>
+                <Text style={{ fontSize: 30 }}>{label}</Text>
             </View>
             <View style={styles.drawContainer}>
-                <Text>fff</Text>
+                <ViewShot ref={viewShotRef} >
+                    <View
+                        style={styles.svgContainer}
+                        onTouchMove={onTouchMove}
+                        onTouchEnd={onTouchEnd}>
+                        <Svg>
+                            <Path
+                                d={currentPath.join('')}
+                                stroke={colors[currentColor]}
+                                fill={'transparent'}
+                                strokeWidth={strokeWidthPath}
+                                strokeLinejoin={'round'}
+                                strokeLinecap={'round'}
+                            />
 
+                            {paths.length > 0 &&
+                                paths.map((item, index) => (
+                                    <Path
+                                        key={`path-${index}`}
+                                        d={item.join('')}
+                                        stroke={colors[currentColor]}
+                                        fill={'transparent'}
+                                        strokeWidth={strokeWidthPath}
+                                        strokeLinejoin={'round'}
+                                        strokeLinecap={'round'}
+                                    />
+                                ))}
+                        </Svg>
+                    </View>
+                </ViewShot>
             </View>
             <View style={styles.bottomContainer}>
-                <Text>fff</Text>
-
-            </View>
-            {/* <ViewShot ref={ref} >
-                <View
-                    style={styles.svgContainer}
-                    onTouchMove={onTouchMove}
-                    onTouchEnd={onTouchEnd}>
-                    <Svg>
+                <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start' }}>
+                    <Svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill={colors[currentColor]}
+                        stroke="black"
+                        strokeWidth={1}
+                        width={50}
+                        height={50}
+                        className="size-6"
+                        viewBox="0 0 24 24"
+                        {...props}
+                    >
                         <Path
-                            d={currentPath.join('')}
-                            stroke={'red'}
-                            fill={'transparent'}
-                            strokeWidth={2}
-                            strokeLinejoin={'round'}
-                            strokeLinecap={'round'}
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            d="M9.53 16.122a3 3 0 0 0-5.78 1.128 2.25 2.25 0 0 1-2.4 2.245 4.5 4.5 0 0 0 8.4-2.245c0-.399-.078-.78-.22-1.128Zm0 0a15.998 15.998 0 0 0 3.388-1.62m-5.043-.025a15.994 15.994 0 0 1 1.622-3.395m3.42 3.42a15.995 15.995 0 0 0 4.764-4.648l3.876-5.814a1.151 1.151 0 0 0-1.597-1.597L14.146 6.32a15.996 15.996 0 0 0-4.649 4.763m3.42 3.42a6.776 6.776 0 0 0-3.42-3.42"
                         />
-
-                        {paths.length > 0 &&
-                            paths.map((item, index) => (
-                                <Path
-                                    key={`path-${index}`}
-                                    d={item.join('')}
-                                    stroke={'red'}
-                                    fill={'transparent'}
-                                    strokeWidth={2}
-                                    strokeLinejoin={'round'}
-                                    strokeLinecap={'round'}
-                                />
-                            ))}
                     </Svg>
+                    <AwesomeButton
+                        backgroundColor='#D3CCBD'
+                        backgroundDarker='#B8B09C'
+                        textFontFamily='verdana'
+                        raiseLevel={5}
+                        width={70}
+                        height={50}
+                        borderRadius={10}
+                        paddingHorizontal={10}
+                        onPress={handleShowColorPicker}
+                    >
+                        <Image
+                            style={{ width: 40, height: 40 }}
+                            source={require('D:/K17-UIT-HK4/Project/BDraw/src/assets/images/paint-palette_2272364.png')} />
+                    </AwesomeButton>
                 </View>
-            </ViewShot>
-            <TouchableOpacity style={styles.clearButton} onPress={handleClearButtonClick}>
-                <Text style={styles.clearButtonText}>Clear</Text>
-            </TouchableOpacity>
-            {label ? (
-                <Text
-                    style={{
-                        marginTop: 20,
-                        fontSize: 18,
-                        textAlign: 'center',
-                        color: 'black',
-                    }}
-                >
-                    {label}
-                </Text>
-            ) : null} */}
+                <View style={{ flex: 1, alignItems: 'flex-end', justifyContent: 'center' }}>
+                    <AwesomeButton
+                        backgroundColor='#D3CCBD'
+                        backgroundDarker='#B8B09C'
+                        textFontFamily='verdana'
+                        raiseLevel={5}
+                        width={60}
+                        height={40}
+                        borderRadius={10}
+                        paddingHorizontal={10}
+                        onPress={handleClearButtonClick}
+                    >
+                        <Icon
+                            source="delete"
+                            color={'red'}
+                            size={30}
+                            backgroundColor={'red'}
+                        />
+                    </AwesomeButton>
+                </View>
+            </View>
+
+            <ColorPicker ref={colorPickerRef} />
+
+            <Portal>
+                <Dialog visible={visible} onDismiss={hideDialog}  >
+                    <Dialog.Icon icon="alert" color='#FFD139' size={30} />
+                    <Dialog.Title style={{ fontFamily: 'VampiroOne-Regular' }}>Are you sure you want to Quit?</Dialog.Title>
+                    <Dialog.Content>
+                        <View style={{ flexDirection: 'row', justifyContent: 'space-around' }}>
+                            <AwesomeButton
+                                backgroundColor='#FFD139'
+                                backgroundDarker='#E2B537'
+                                textFontFamily='verdana'
+                                raiseLevel={5}
+                                width={100}
+                                height={40}
+                                paddingHorizontal={10}
+                                onPress={hideDialog}
+                            >
+                                <Text style={{
+                                    fontFamily: 'RobotoMono-Regular', color: '#fff'
+                                }}>Cancel</Text>
+                            </AwesomeButton>
+                            <AwesomeButton
+                                backgroundColor='#FFD139'
+                                backgroundDarker='#E2B537'
+                                textFontFamily='verdana'
+                                raiseLevel={5}
+                                width={100}
+                                height={40}
+                                paddingHorizontal={10}
+                                onPress={hanldeQuit}
+                            >
+                                <Text style={{
+                                    fontFamily: 'RobotoMono-Regular', color: '#fff'
+                                }}>Quit</Text>
+                            </AwesomeButton>
+                        </View>
+                    </Dialog.Content>
+                </Dialog>
+            </Portal>
+
         </View>
     );
 };

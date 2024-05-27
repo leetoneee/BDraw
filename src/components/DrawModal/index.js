@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Alert, Modal, StyleSheet, Text, Pressable, View } from 'react-native';
-import { height, width } from '../../constants';
+import { height, timeLimit, width } from '../../constants';
 import Background from '../Background';
 import { forwardRef, useImperativeHandle } from 'react';
 import { styles } from './styles';
@@ -45,7 +45,7 @@ const DrawModal = (props, ref) => {
                     <View style={styles.midContainer}>
                         <Text style={styles.modalText}>Draw</Text>
                         <Text style={styles.keywordText}>{keyword}</Text>
-                        <Text style={styles.modalText}>in under 20 seconds</Text>
+                        <Text style={styles.modalText}>in under {timeLimit} seconds</Text>
                     </View>
                     <View style={styles.bottomContainer}>
                         <AwesomeButton

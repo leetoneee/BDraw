@@ -29,5 +29,9 @@ export default styles = StyleSheet.create({
         color: 'white',
         fontSize: 16,
         fontWeight: 'bold'
+    },
+    logo: {
+        width: 30,
+        height: 30
     }
 });

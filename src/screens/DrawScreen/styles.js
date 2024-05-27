@@ -12,22 +12,9 @@ export default styles = StyleSheet.create({
     },
     svgContainer: {
         borderColor: 'black',
-        width: width - 20,
-        marginTop: 50,
-        backgroundColor: 'green',
-        borderWidth: 1,
-    },
-    clearButton: {
-        marginTop: 10,
-        backgroundColor: 'black',
-        paddingVertical: 10,
-        paddingHorizontal: 20,
-        borderRadius: 5,
-    },
-    clearButtonText: {
-        color: 'white',
-        fontSize: 16,
-        fontWeight: 'bold'
+        width: width - 40,
+        borderRadius: 10,
+        // borderWidth: 1,
     },
     topContainer: {
         flex: 2,
@@ -38,17 +25,27 @@ export default styles = StyleSheet.create({
     },
     resultContainer: {
         flex: 1.5,
-        backgroundColor: 'green',
-        width: width - 20
+        backgroundColor: 'white',
+        marginVertical: 10,
+        width: width - 40,
+        borderRadius: 10,
+        justifyContent: 'center',
+        alignItems: 'center'
     },
     drawContainer: {
         flex: 9,
-        backgroundColor: 'blue',
-        width: width - 20
+        backgroundColor: 'white',
+        width: width - 40,
+        borderRadius: 10,
+        justifyContent: 'center',
+        alignItems: 'center'
     },
     bottomContainer: {
-        flex: 1.5,
-        width: width - 20
+        flex: 1,
+        width: width - 20,
+        paddingHorizontal: 10,
+        paddingVertical: 10,
+        flexDirection: 'row',
     },
     drawText: {
         fontFamily: 'RobotoMono-Regular',
@@ -62,9 +59,14 @@ export default styles = StyleSheet.create({
         borderRadius: 5,
     },
     shadowProp: {
-        shadowColor: '#171717',
-        shadowOffset: { width: -2, height: 4 },
-        shadowOpacity: 0.2,
-        shadowRadius: 3,
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 3,
+        },
+        shadowOpacity: 0.27,
+        shadowRadius: 4.65,
+
+        elevation: 6,
     },
 });
