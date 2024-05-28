@@ -15,7 +15,6 @@ const ResultModal = (props, ref) => {
     const navigation = useNavigation();
 
     const [modalVisible, setModalVisible] = useState(false);
-    const [keyword, setKeyword] = useState('');
     const [round, setRound] = useState('');
 
     const scoreTable = useSelector((state) => state.draw.scoreTable);
@@ -45,7 +44,7 @@ const ResultModal = (props, ref) => {
                 setModalVisible(true);
             },
         }
-    }, [modalVisible, keyword])
+    }, [modalVisible])
     console.log("🚀 ~ ResultModal ~ modalVisible:", modalVisible)
 
     const handleQuitPress = () => {
@@ -74,9 +73,15 @@ const ResultModal = (props, ref) => {
                 <View style={styles.modalView}>
                     <View style={styles.topContainer}>
                         <View style={{ flex: 1, flexDirection: 'row' }}>
-                            <View style={{ flex: 1 }}></View>
-                            <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', flexDirection: 'column' }}>
-                                <Text style={styles.titleText}>OOPS!</Text>
+                            <View style={{ flex: 1, position: 'absolute', width: '100%', height: '100%' }}>
+                                <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', flexDirection: 'column', }}>
+                                    {calcScore(scoreTable) === 0 &&
+                                        <Text style={styles.titleText}>OOPS!</Text>
+                                    }
+                                    {calcScore(scoreTable) > 0 && calcScore(scoreTable) < 6 &&
+                                        <Text style={styles.titleText}>WELL DRAWN!</Text>
+                                    }
+                                </View>
                             </View>
                             <View style={{ flex: 1, alignItems: 'flex-end' }}>
                                 <AwesomeButton
@@ -119,10 +124,9 @@ const ResultModal = (props, ref) => {
                     <View style={styles.midContainer}>
                         {formattedData && formattedData.length > 0 &&
                             formattedData.map((item, index) => {
-                                // console.log("🚀 ~ formattedData.map ~ item:", item.encodeImage)
 
                                 return (
-                                    <View key={index} style={{ width: '48%', height: 140, justifyContent: 'center', alignItems: 'center' }}>
+                                    <View key={index} style={{ width: (width - 50) / 2, height: 140, justifyContent: 'center', alignItems: 'center' }}>
                                         <View>
                                             <View style={styles.aweBtnView}>
                                                 <AwesomeButton
@@ -130,7 +134,7 @@ const ResultModal = (props, ref) => {
                                                     backgroundDarker='#B8B09C'
                                                     textFontFamily='verdana'
                                                     raiseLevel={10}
-                                                    width={180}
+                                                    width={(width - 50) / 2}
                                                     height={140}
                                                     paddingHorizontal={10}
                                                     onPress={() => {
@@ -144,6 +148,22 @@ const ResultModal = (props, ref) => {
                                                             uri: `data:image/png;base64,${item.encodeImage}`,
                                                         }}
                                                     />
+                                                    <View style={{ position: 'absolute', flexDirection: 'row', width: (width - 50) / 2, bottom: 0, justifyContent: 'center', alignItems: 'center' }}>
+                                                        {scoreTable[index] ?
+                                                            <Icon
+                                                                source='check'
+                                                                size={20}
+                                                                color='green'
+                                                            />
+                                                            : <Icon
+                                                                source='close'
+                                                                size={20}
+                                                                color='red'
+                                                            />
+                                                        }
+
+                                                        <Text style={{ color: 'black', fontSize: 18 }}>{keywords[index]}</Text>
+                                                    </View>
                                                 </AwesomeButton>
                                             </View>
                                         </View>
@@ -154,7 +174,7 @@ const ResultModal = (props, ref) => {
                     </View>
 
                     <View style={styles.bottomContainer}>
-                        <Text style={styles.shareText}>Share your drawings</Text>
+                        {/* <Text style={styles.shareText}>Share your drawings</Text>
                         <View>
                             <View style={styles.aweBtnView}>
                                 <AwesomeButton
@@ -175,7 +195,7 @@ const ResultModal = (props, ref) => {
                                     </View>
                                 </AwesomeButton>
                             </View>
-                        </View>
+                        </View> */}
 
 
                         <AwesomeButton

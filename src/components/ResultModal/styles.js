@@ -19,11 +19,11 @@ export const styles = StyleSheet.create({
         elevation: 5,
     },
     topContainer: {
-        flex: 2,
+        flex: 3,
         width: '100%',
         paddingVertical: 10,
         paddingHorizontal: 10,
-        gap: 10
+        gap: 10,
         // backgroundColor: 'blue'
     },
     midContainer: {
@@ -35,11 +35,12 @@ export const styles = StyleSheet.create({
         gap: 10
     },
     bottomContainer: {
-        flex: 3,
+        flex: 2,
         width: '100%',
         gap: 20,
         justifyContent: 'center',
-        alignItems: 'center'
+        alignItems: 'center',
+        // backgroundColor: 'red'
     },
     roundText: {
         fontFamily: 'RobotoMono-Regular',
@@ -79,7 +80,7 @@ export const styles = StyleSheet.create({
     shareText: {
         fontFamily: 'RobotoMono-Regular',
         color: '#000',
-        fontSize: 18,
+        fontSize: 15,
         textAlign: 'center'
     },
     titleText: {

@@ -332,7 +332,7 @@ export default DrawScreen = ({ props, round, onRoundEnd }) => {
                     >
                         <Image
                             style={{ width: 40, height: 40 }}
-                            source={require('D:/K17-UIT-HK4/Project/BDraw/src/assets/images/paint-palette_2272364.png')} />
+                            source={require('../../assets/images/paint-palette_2272364.png')} />
                     </AwesomeButton>
                 </View>
                 <View style={{ flex: 1, alignItems: 'flex-end', justifyContent: 'center' }}>
