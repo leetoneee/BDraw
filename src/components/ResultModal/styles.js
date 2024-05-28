@@ -80,6 +80,7 @@ export const styles = StyleSheet.create({
         fontFamily: 'RobotoMono-Regular',
         color: '#000',
         fontSize: 18,
+        textAlign: 'center'
     },
     titleText: {
         textAlign: 'center',

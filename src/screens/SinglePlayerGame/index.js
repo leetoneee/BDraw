@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react'
+import React, { useState, useRef, useEffect, useCallback } from 'react'
 import { Text, View } from 'react-native'
 import Background from '../../components/Background';
 import DrawModal from '../../components/DrawModal';
@@ -7,31 +7,57 @@ import { Button } from 'react-native-paper';
 import AwesomeButton from "react-native-really-awesome-button";
 import DrawScreen from '../DrawScreen';
 import ResultModal from '../../components/ResultModal';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { useNavigation, useFocusEffect } from '@react-navigation/native';
+import { setKeywords } from '../../redux/drawSlice/drawSlice';
 
-function SinglePlayerGame({ navigation }) {
+function SinglePlayerGame() {
     const modalRef = useRef();
     const resultRef = useRef();
+    const dispatch = useDispatch();
+    const navigation = useNavigation();
 
     const [round, setRound] = useState(0);
     const [isDrawing, setIsDrawing] = useState(false);  // State to manage the drawing status
     const keywords = ['yoga', 'house', 'star', 'car', 'line', 'snowman'];  // Example keywords
 
-    const encodeImages = useSelector((state) => state.draw.encodeImages);
+    // const encodeImages = useSelector((state) => state.draw.encodeImages);
 
     //handle start game
     const handleStartGame = () => {
-        modalRef.current.startGame(keywords[round], round);
+        modalRef.current.startGame(round);
     }
+
+    useEffect(() => {
+        dispatch(setKeywords(keywords));
+    }, [])
+
+    useFocusEffect(
+        useCallback(() => {
+            // Do something when the screen is focused
+            console.log('Screen is focused');
+            console.log("🚀 ~ useCallback ~ round:", round)
+            if (round === 6) {
+                resultRef.current.showResult();
+            }
+
+            return () => {
+                // Clean up or reset when the screen is unfocused
+                console.log('Screen is unfocused');
+            };
+        }, [round])
+    );
+
 
     //handle start new round
     useEffect(() => {
         if (round < keywords.length && round !== 0) {
-            modalRef.current.startGame(keywords[round], round);
+            modalRef.current.startGame(round);
         } else {
             //Handle end of game
-            if (round === keywords.length)
+            if (round === keywords.length) {
                 resultRef.current.showResult();
+            }
         }
     }, [round])
 
@@ -74,7 +100,7 @@ function SinglePlayerGame({ navigation }) {
                 {/* On round */}
                 {isDrawing &&
                     <>
-                        <DrawScreen keyword={keywords[round]} onRoundEnd={handleRoundEnd} />
+                        <DrawScreen round={round} onRoundEnd={handleRoundEnd} />
                     </>
                 }
 
@@ -83,7 +109,7 @@ function SinglePlayerGame({ navigation }) {
 
                 }
                 <DrawModal ref={modalRef} onStartDrawing={handleStartDrawing} />
-                <ResultModal ref={resultRef} navigation={navigation} />
+                <ResultModal ref={resultRef} />
             </View>
         </Background>
     )

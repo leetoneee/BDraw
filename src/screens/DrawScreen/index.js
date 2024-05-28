@@ -18,17 +18,18 @@ import { Dialog, Portal, Button } from 'react-native-paper';
 import ColorPicker from '../../components/ColorPicker';
 import { colors, timeLimit, strokeWidthPath } from '../../constants';
 import { useDispatch, useSelector } from 'react-redux';
-import { reset, setEncodeImages, setScore } from '../../redux/drawSlice/drawSlice';
+import { reset, setEncodeImages, setScoreTable } from '../../redux/drawSlice/drawSlice';
 
 
-export default DrawScreen = ({ props, keyword, onRoundEnd }) => {
+export default DrawScreen = ({ props, round, onRoundEnd }) => {
     const viewShotRef = useRef()
     const colorPickerRef = useRef();
     const isMounted = useRef(true); // Biến ref để theo dõi trạng thái mount của component
     const dispatch = useDispatch();
 
     const currentColor = useSelector((state) => state.draw.currentColor);
-    const score = useSelector((state) => state.draw.score);
+    const scoreTable = useSelector((state) => state.draw.scoreTable);
+    const keywords = useSelector((state) => state.draw.keywords);
     const encodeImages = useSelector((state) => state.draw.encodeImages);
 
     const [timer, setTimer] = useState(timeLimit);
@@ -57,7 +58,7 @@ export default DrawScreen = ({ props, keyword, onRoundEnd }) => {
     // Reset timer whenever the keyword changes
     useEffect(() => {
         setTimer(timeLimit);
-    }, [keyword]);
+    }, [round]);
 
     // Countdown timer logic
     useEffect(() => {
@@ -77,8 +78,12 @@ export default DrawScreen = ({ props, keyword, onRoundEnd }) => {
 
     // handle win game
     useEffect(() => {
-        if (label === keyword) {
-            dispatch(setScore(score + 1));
+        if (label === keywords[round]) {
+            let currentScoreTable = [...scoreTable];
+            console.log("🚀 ~ useEffect ~ currentScoreTable:", currentScoreTable)
+            currentScoreTable[round] = true;
+            console.log("🚀 ~ useEffect ~ currentScoreTable:", currentScoreTable)
+            dispatch(setScoreTable(currentScoreTable));
             handleStoreEncodeImage();
             handleClearButtonClick();
             onRoundEnd();
@@ -225,7 +230,7 @@ export default DrawScreen = ({ props, keyword, onRoundEnd }) => {
                     </View>
                 </View>
                 <View style={{ flex: 3, justifyContent: 'space-evenly', alignItems: 'center', flexDirection: 'column' }}>
-                    <Text style={styles.drawText}>Draw: {keyword}</Text>
+                    <Text style={styles.drawText}>Draw: {keywords[round]}</Text>
                     <View style={[styles.timeBg, styles.shadowProp]}>
                         <Text style={{ fontFamily: 'RobotoMono-Regular', fontSize: 20 }}>{displayTime(timer)}</Text>
                     </View>

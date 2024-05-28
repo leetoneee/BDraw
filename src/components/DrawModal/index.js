@@ -5,21 +5,21 @@ import Background from '../Background';
 import { forwardRef, useImperativeHandle } from 'react';
 import { styles } from './styles';
 import AwesomeButton from "react-native-really-awesome-button";
+import { useSelector } from 'react-redux';
 
 const DrawModal = (props, ref) => {
     const [modalVisible, setModalVisible] = useState(false);
-    const [keyword, setKeyword] = useState('');
     const [round, setRound] = useState('');
+    const keywords = useSelector((state) => state.draw.keywords);
 
     useImperativeHandle(ref, () => {
         return {
-            startGame(keyword, round) {
-                setKeyword(keyword);
+            startGame(round) {
                 setRound(round);
                 setModalVisible(true);
             }
         }
-    }, [modalVisible, keyword])
+    }, [modalVisible])
 
     const handleGotItPress = () => {
         setModalVisible(!modalVisible)
@@ -44,7 +44,7 @@ const DrawModal = (props, ref) => {
                     </View>
                     <View style={styles.midContainer}>
                         <Text style={styles.modalText}>Draw</Text>
-                        <Text style={styles.keywordText}>{keyword}</Text>
+                        <Text style={styles.keywordText}>{keywords[round]}</Text>
                         <Text style={styles.modalText}>in under {timeLimit} seconds</Text>
                     </View>
                     <View style={styles.bottomContainer}>

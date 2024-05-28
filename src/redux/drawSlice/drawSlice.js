@@ -2,7 +2,8 @@ import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
     currentColor: 0,
-    score: 0,
+    scoreTable: [false, false, false, false, false, false],
+    keywords: [],
     encodeImages: []
 }
 
@@ -13,8 +14,11 @@ export const drawSlice = createSlice({
         setCurrentColor: (state, action) => {
             state.currentColor = action.payload;
         },
-        setScore: (state, action) => {
-            state.score = action.payload;
+        setScoreTable: (state, action) => {
+            state.scoreTable = action.payload;
+        },
+        setKeywords: (state, action) => {
+            state.keywords = action.payload;
         },
         setEncodeImages: (state, action) => {
             state.encodeImages = action.payload;
@@ -23,6 +27,6 @@ export const drawSlice = createSlice({
     },
 });
 
-export const { setCurrentColor, setScore, setEncodeImages, reset } = drawSlice.actions;
+export const { setCurrentColor, setScoreTable, setKeywords, setEncodeImages, reset } = drawSlice.actions;
 
 export default drawSlice.reducer;

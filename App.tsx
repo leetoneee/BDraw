@@ -16,6 +16,7 @@ import HomeScreen from './src/screens/HomeScreen';
 import DrawModal from './src/components/DrawModal';
 import DrawScreen from './src/screens/DrawScreen';
 import SinglePlayerGame from './src/screens/SinglePlayerGame';
+import DetailResultScreen from './src/screens/DetailResultScreen';
 import { PaperProvider } from 'react-native-paper';
 import { Provider as StoreProvide } from 'react-redux';
 import { store } from './src/redux/store';
@@ -44,7 +45,12 @@ export default function App() {
               options={{
                 headerShown: false
               }} />
-
+            <Stack.Screen
+              name="DetailResultScreen"
+              component={DetailResultScreen}
+              options={{
+                headerShown: false
+              }} />
           </Stack.Navigator>
         </NavigationContainer>
       </PaperProvider>

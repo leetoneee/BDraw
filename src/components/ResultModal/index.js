@@ -8,15 +8,18 @@ import AwesomeButton from "react-native-really-awesome-button";
 import { Icon } from 'react-native-paper';
 import { useDispatch, useSelector } from 'react-redux';
 import { reset } from '../../redux/drawSlice/drawSlice';
-
+import { useNavigation } from '@react-navigation/native';
+import calcScore from '../../utils/calcScore';
 const ResultModal = (props, ref) => {
     const dispatch = useDispatch();
+    const navigation = useNavigation();
 
     const [modalVisible, setModalVisible] = useState(false);
     const [keyword, setKeyword] = useState('');
     const [round, setRound] = useState('');
 
-    const score = useSelector((state) => state.draw.score);
+    const scoreTable = useSelector((state) => state.draw.scoreTable);
+    const keywords = useSelector((state) => state.draw.keywords);
     const encodeImages = useSelector((state) => state.draw.encodeImages);
 
     // const encodeImages = [
@@ -39,31 +42,23 @@ const ResultModal = (props, ref) => {
     useImperativeHandle(ref, () => {
         return {
             showResult() {
-                // setKeyword(keyword);
-                // setRound(round);
                 setModalVisible(true);
-            }
+            },
         }
     }, [modalVisible, keyword])
-
-    const handleGotItPress = () => {
-        setModalVisible(!modalVisible)
-        if (props.onStartDrawing) {
-            props.onStartDrawing();
-        }
-    };
+    console.log("🚀 ~ ResultModal ~ modalVisible:", modalVisible)
 
     const handleQuitPress = () => {
         setModalVisible(!modalVisible);
         dispatch(reset());
-        props.navigation.navigate('Home');
+        navigation.navigate('Home');
     }
 
     const handlePlayAgainPress = () => {
         setModalVisible(!modalVisible);
         dispatch(reset());
-        props.navigation.navigate('Home');
-        props.navigation.navigate('SinglePlayerGame');
+        navigation.navigate('Home');
+        navigation.navigate('SinglePlayerGame');
     }
 
     return (
@@ -103,9 +98,19 @@ const ResultModal = (props, ref) => {
                             </View>
                         </View>
                         <View style={{ flex: 1 }}>
-                            {score === 0 &&
+                            {calcScore(scoreTable) === 0 &&
                                 <>
                                     <Text style={styles.shareText}>Our neural net saw something else in all of your doodles. Select one to see what it saw.</Text>
+                                </>
+                            }
+                            {calcScore(scoreTable) === 6 &&
+                                <>
+                                    <Text style={styles.shareText}>Our neural net figured out all of your doodles. Select one to see what it saw.</Text>
+                                </>
+                            }
+                            {calcScore(scoreTable) > 0 && calcScore(scoreTable) < 6 &&
+                                <>
+                                    <Text style={styles.shareText}>Our neural net figured out {calcScore(scoreTable)} of your doodles. But it saw something else in the other {6 - calcScore(scoreTable)}. Select one to see what it saw</Text>
                                 </>
                             }
                         </View>
@@ -128,6 +133,10 @@ const ResultModal = (props, ref) => {
                                                     width={180}
                                                     height={140}
                                                     paddingHorizontal={10}
+                                                    onPress={() => {
+                                                        setModalVisible(false);
+                                                        navigation.navigate('DetailResultScreen', { index })
+                                                    }}
                                                 >
                                                     <Image
                                                         style={{ width: '100%', height: '100%', resizeMode: 'contain', }}
