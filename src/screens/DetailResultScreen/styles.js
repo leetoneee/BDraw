@@ -58,6 +58,7 @@ export default styles = StyleSheet.create({
         width: width - 60,
         height: width - 60,
         borderRadius: 10,
+        marginBottom: 10,
         alignSelf: 'center',
         backgroundColor: 'white'
     },

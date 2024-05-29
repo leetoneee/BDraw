@@ -1,15 +1,19 @@
 import { StackActions, useNavigation } from '@react-navigation/native';
-import React from 'react'
-import { Button, Text, View, Image } from 'react-native';
+import React, { useRef, useState } from 'react'
+import { Button, Text, View, Image, PermissionsAndroid, Alert, Platform } from 'react-native';
 import Background from '../../components/Background';
 import styles from './styles';
 import AwesomeButton from "react-native-really-awesome-button";
 import { Icon } from 'react-native-paper';
 import Svg, { Path } from "react-native-svg"
 import { useSelector } from 'react-redux';
+import ViewShot, { captureRef } from 'react-native-view-shot';
+import Share from 'react-native-share';
+// import { CameraRoll } from "@react-native-camera-roll/camera-roll";
 
 function DetailResultScreen({ props, route }) {
     const navigation = useNavigation();
+    const viewShotRef = useRef()
 
     const { index } = route.params;
 
@@ -18,6 +22,9 @@ function DetailResultScreen({ props, route }) {
     const encodeImages = useSelector((state) => state.draw.encodeImages);
     console.log("🚀 ~ DetailResultScreen ~ encodeImages:", encodeImages[index]);
 
+    const [imageUri, setImageUri] = useState('');
+
+
     const handleGoBack = () => {
         // const popAction = StackActions.pop(1);
         // navigation.dispatch(popAction);
@@ -25,6 +32,88 @@ function DetailResultScreen({ props, route }) {
     };
 
     console.log("🚀 ~ DetailResultScreen ~ index:", index)
+
+
+    const handleShare = async () => {
+        const uri = await captureRef(viewShotRef, {
+            format: "png",
+            quality: 1,
+        }).then(
+            (uri) => {
+                console.log("Image saved to", uri);
+                return uri;
+            },
+            (error) => console.error("Oops, snapshot failed", error)
+        );
+
+        await Share.open({ uri: uri })
+            .then((res) => {
+                console.log(res);
+            })
+            .catch((err) => {
+                err && console.log(err);
+            });
+    }
+
+    // get permission on android
+    const getPermissionAndroid = async () => {
+        try {
+            const granted = await PermissionsAndroid.request(
+                PermissionsAndroid.PERMISSIONS.READ_MEDIA_IMAGES,
+                {
+                    title: 'Image Download Permission',
+                    message: 'Your permission is required to save images to your device',
+                    buttonNegative: 'Cancel',
+                    buttonPositive: 'OK',
+                },
+            );
+            if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+                return true;
+            }
+            Alert.alert(
+                '',
+                'Your permission is required to save images to your device',
+                [{ text: 'OK', onPress: () => { } }],
+                { cancelable: false },
+            );
+        } catch (err) {
+            // handle error as you please
+            console.log('err', err);
+        }
+    };
+
+    // download image
+    // const downloadImage = async () => {
+    //     try {
+    //         // react-native-view-shot caputures component
+    //         const uri = await captureRef(viewShotRef, {
+    //             format: 'png',
+    //             quality: 1,
+    //         });
+
+    //         if (Platform.OS === 'android') {
+    //             const granted = await getPermissionAndroid();
+    //             if (!granted) {
+    //                 return;
+    //             }
+    //         }
+
+    //         // cameraroll saves image
+    //         const image = CameraRoll.save(uri, 'photo');
+    //         if (image) {
+    //             Alert.alert(
+    //                 '',
+    //                 'Image saved successfully.',
+    //                 [{ text: 'OK', onPress: () => { } }],
+    //                 { cancelable: false },
+    //             );
+    //         }
+    //     } catch (error) {
+    //         console.log('error', error);
+    //     }
+    // };
+
+
 
     return (
         <Background>
@@ -68,7 +157,6 @@ function DetailResultScreen({ props, route }) {
                     </View>
                 </View>
 
-
                 <View style={styles.topContainer}>
                     <Text style={styles.modalText}>You were asked to draw {keywords[index]}</Text>
                     {scoreTable[index] ?
@@ -76,31 +164,37 @@ function DetailResultScreen({ props, route }) {
                         : <Text style={styles.shareText}>You drew this, and the neural net didn't recognize it.</Text>
                     }
                 </View>
+
                 <View style={styles.midContainer}>
-                    <View style={{ flexDirection: 'row', width: '100%', justifyContent: 'center', }}>
-                        {scoreTable[index] ?
-                            <Icon
-                                source='check'
-                                size={50}
-                                color='green'
-                            />
-                            : <Icon
-                                source='close'
-                                size={50}
-                                color='red'
-                            />
-                        }
-                        <Text style={[styles.modalText, { fontSize: 40 }]}>{keywords[index]}</Text>
-                    </View>
-                    <View style={[styles.svgContainer, styles.shadowProp]}>
-                        <Image
-                            style={{ width: '100%', height: '100%', resizeMode: 'contain', }}
-                            source={{
-                                uri: `data:image/png;base64,${encodeImages[index]}`,
-                            }}
-                        />
-                    </View>
+                    <ViewShot ref={viewShotRef}>
+                        <View style={{ width: 'auto', height: 'auto', backgroundColor: '#FFD139', borderRadius: 20 }}>
+                            <View style={{ flexDirection: 'row', width: '100%', justifyContent: 'center', }}>
+                                {scoreTable[index] ?
+                                    <Icon
+                                        source='check'
+                                        size={50}
+                                        color='green'
+                                    />
+                                    : <Icon
+                                        source='close'
+                                        size={50}
+                                        color='red'
+                                    />
+                                }
+                                <Text style={[styles.modalText, { fontSize: 40 }]}>{keywords[index]}</Text>
+                            </View>
+                            <View style={[styles.svgContainer, styles.shadowProp]}>
+                                <Image
+                                    style={{ width: '100%', height: '100%', resizeMode: 'contain', }}
+                                    source={{
+                                        uri: `data:image/png;base64,${encodeImages[index]}`,
+                                    }}
+                                />
+                            </View>
+                        </View>
+                    </ViewShot>
                 </View>
+
                 <View style={styles.bottomContainer}>
                     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
                         <View>
@@ -113,7 +207,7 @@ function DetailResultScreen({ props, route }) {
                                     width={150}
                                     borderRadius={10}
                                     paddingHorizontal={10}
-                                    onPress={handleGoBack}
+                                    onPress={downloadImage}
                                 >
                                     <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center', gap: 5, paddingHorizontal: 10 }}>
                                         <Svg
@@ -154,7 +248,7 @@ function DetailResultScreen({ props, route }) {
                                         width={150}
                                         borderRadius={10}
                                         paddingHorizontal={10}
-                                        onPress={handleGoBack}
+                                        onPress={handleShare}
                                     >
                                         <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center', gap: 5, paddingHorizontal: 10 }}>
                                             <Svg
