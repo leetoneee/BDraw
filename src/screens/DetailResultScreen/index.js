@@ -46,7 +46,8 @@ function DetailResultScreen({ props, route }) {
             (error) => console.error("Oops, snapshot failed", error)
         );
 
-        await Share.open({ uri: uri })
+
+        Share.open({ url: uri })
             .then((res) => {
                 console.log(res);
             })
@@ -207,7 +208,6 @@ function DetailResultScreen({ props, route }) {
                                     width={150}
                                     borderRadius={10}
                                     paddingHorizontal={10}
-                                    onPress={downloadImage}
                                 >
                                     <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center', gap: 5, paddingHorizontal: 10 }}>
                                         <Svg
