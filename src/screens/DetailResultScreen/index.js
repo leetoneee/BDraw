@@ -46,7 +46,8 @@ function DetailResultScreen({ props, route }) {
             (error) => console.error("Oops, snapshot failed", error)
         );
 
-        await Share.open({ url: uri })
+
+        Share.open({ url: uri })
             .then((res) => {
                 console.log(res);
             })
