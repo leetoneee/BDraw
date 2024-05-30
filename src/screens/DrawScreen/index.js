@@ -20,6 +20,7 @@ import { colors, timeLimit, strokeWidthPath } from '../../constants';
 import { useDispatch, useSelector } from 'react-redux';
 import { reset, setEncodeImages, setScoreTable } from '../../redux/drawSlice/drawSlice';
 import Tts from 'react-native-tts';
+import { throttle } from '../../hooks/throttle';
 
 
 export default DrawScreen = ({ props, round, onRoundEnd }) => {
@@ -136,8 +137,12 @@ export default DrawScreen = ({ props, round, onRoundEnd }) => {
                 clearInterval(intervalRef.current);
                 console.log("🚀 ~ interval ~ allResults:", allResults)
             } else if (allResults.length > 0) {
+                if (currentIndex === allResults.length) {
+                    setLabel('...');
+                    return;
+                }
                 setLabel(allResults[currentIndex].label);
-                setCurrentIndex((prevIndex) => (prevIndex + 1) % allResults.length);
+                setCurrentIndex((prevIndex) => (prevIndex + 1));
             }
         }, 1500);
         console.log("🚀 ~ interval ~ interval:", intervalRef.current)
@@ -163,7 +168,7 @@ export default DrawScreen = ({ props, round, onRoundEnd }) => {
 
     const handleExport = useMemo(() => {
         return debounce(async () => {
-            console.log("🚀 ~ handleClearButtonClick ~ encodeImage: no");
+            console.log("🚀 ~ handleExport ~ encodeImage: no");
             if (!isMounted.current) {
                 console.log("🚀 ~ returndebounce ~ isMounted.current:", isMounted.current)
                 return;
@@ -172,11 +177,11 @@ export default DrawScreen = ({ props, round, onRoundEnd }) => {
                 result: 'base64'
             }).then(
                 result => {
-                    console.log("🚀 ~ handleClearButtonClick ~ encodeImage: yes")
+                    console.log("🚀 ~ handleExport ~ encodeImage: yes")
                     setEncodeImage(result)
                 }
             ).catch((err) => {
-                console.log("🚀 ~ handleClearButtonClick ~ err:", err)
+                console.log("🚀 ~ handleExport ~ err:", err)
             })
         }, 500);
     }, []);
@@ -237,7 +242,8 @@ export default DrawScreen = ({ props, round, onRoundEnd }) => {
     const handleClearButtonClick = () => {
         setPaths([]);
         setCurrentPath([]);
-        setLabel('')
+        setAllResults([]);
+        setLabel('...');
         setIsClearButtonClicked(true);
     }
 
@@ -340,7 +346,7 @@ export default DrawScreen = ({ props, round, onRoundEnd }) => {
 
             </View>
             <View style={[styles.resultContainer, styles.shadowProp]}>
-                <Text style={{ fontSize: 30 }}>{label}</Text>
+                <Text style={{ fontSize: 25 }}>{label}</Text>
             </View>
             <View style={styles.drawContainer}>
                 <ViewShot ref={viewShotRef} >

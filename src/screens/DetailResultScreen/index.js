@@ -10,7 +10,6 @@ import { useSelector } from 'react-redux';
 import ViewShot, { captureRef } from 'react-native-view-shot';
 import Share from 'react-native-share';
 import fs from 'react-native-fs';
-// import { CameraRoll } from "@react-native-camera-roll/camera-roll";
 
 function DetailResultScreen({ props, route }) {
     const navigation = useNavigation();
@@ -59,7 +58,7 @@ function DetailResultScreen({ props, route }) {
 
     const handelDownload = async () => {
         const uri = await captureRef(viewShotRef, {
-            format: "jpg",
+            format: "png",
             quality: 1,
         }).then(
             (uri) => {
@@ -74,7 +73,7 @@ function DetailResultScreen({ props, route }) {
             const now = new Date();
             const formattedDate = `${now.getFullYear()}-${(now.getMonth() + 1).toString().padStart(2, '0')}-${now.getDate().toString().padStart(2, '0')}_${now.getHours().toString().padStart(2, '0')}-${now.getMinutes().toString().padStart(2, '0')}-${now.getSeconds().toString().padStart(2, '0')}`;
 
-            const newPath = `${fs.PicturesDirectoryPath}/${keywords[index]}_${formattedDate}.jpg`; // Define the new path to save the downloaded image
+            const newPath = `${fs.PicturesDirectoryPath}/${keywords[index]}_${formattedDate}.png`; // Define the new path to save the downloaded image
 
             console.log("🚀 ~ downloadImage ~ newPath:", newPath)
             fs.copyFile(uri, newPath) // Copy the selected image to the new path
@@ -116,39 +115,6 @@ function DetailResultScreen({ props, route }) {
             console.log('err', err);
         }
     };
-
-    // download image
-    // const downloadImage = async () => {
-    //     try {
-    //         // react-native-view-shot caputures component
-    //         const uri = await captureRef(viewShotRef, {
-    //             format: 'png',
-    //             quality: 1,
-    //         });
-
-    //         if (Platform.OS === 'android') {
-    //             const granted = await getPermissionAndroid();
-    //             if (!granted) {
-    //                 return;
-    //             }
-    //         }
-
-    //         // cameraroll saves image
-    //         const image = CameraRoll.save(uri, 'photo');
-    //         if (image) {
-    //             Alert.alert(
-    //                 '',
-    //                 'Image saved successfully.',
-    //                 [{ text: 'OK', onPress: () => { } }],
-    //                 { cancelable: false },
-    //             );
-    //         }
-    //     } catch (error) {
-    //         console.log('error', error);
-    //     }
-    // };
-
-
 
     return (
         <Background>

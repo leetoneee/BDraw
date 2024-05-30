@@ -22,10 +22,10 @@ export const styles = StyleSheet.create({
         flex: 2,
     },
     midContainer: {
-        flex: 3,
+        flex: 4,
     },
     bottomContainer: {
-        flex: 3,
+        flex: 2,
     },
     roundText: {
         fontFamily: 'RobotoMono-Regular',
@@ -52,15 +52,15 @@ export const styles = StyleSheet.create({
         marginBottom: 15,
         textAlign: 'center',
         fontFamily: 'VampiroOne-Regular',
-        fontSize: 30,
+        fontSize: 25,
         color: 'black'
     },
     keywordText: {
         marginBottom: 15,
         textAlign: 'center',
         fontFamily: 'VampiroOne-Regular',
-        fontSize: 60,
-        color: 'black'
+        fontSize: 40,
+        color: 'black',
     },
     startText: {
         fontFamily: 'RobotoMono-Regular',

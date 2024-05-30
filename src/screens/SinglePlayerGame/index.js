@@ -9,7 +9,9 @@ import DrawScreen from '../DrawScreen';
 import ResultModal from '../../components/ResultModal';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigation, useFocusEffect } from '@react-navigation/native';
-import { setKeywords } from '../../redux/drawSlice/drawSlice';
+import { setKeywords as dispatchSetKeywords } from '../../redux/drawSlice/drawSlice';
+
+const data = require('../../data/label.json');
 
 function SinglePlayerGame() {
     const modalRef = useRef();
@@ -19,9 +21,20 @@ function SinglePlayerGame() {
 
     const [round, setRound] = useState(0);
     const [isDrawing, setIsDrawing] = useState(false);  // State to manage the drawing status
-    const keywords = ['yoga', 'house', 'star', 'car', 'line', 'snowman'];  // Example keywords
+    const [keywords, setKeywords] = useState([]);
+
+    console.log("🚀 ~ SinglePlayerGame ~ keywords:", keywords)
 
     // const encodeImages = useSelector((state) => state.draw.encodeImages);
+
+    useEffect(() => {
+        const randomKeywords = [];
+        for (let i = 0; i < 6; i++) {
+            const randomIndex = Math.floor(Math.random() * data.names.length);
+            randomKeywords.push(data.names[randomIndex]);
+        }
+        setKeywords(randomKeywords);
+    }, []);
 
     //handle start game
     const handleStartGame = () => {
@@ -29,8 +42,8 @@ function SinglePlayerGame() {
     }
 
     useEffect(() => {
-        dispatch(setKeywords(keywords));
-    }, [])
+        dispatch(dispatchSetKeywords(keywords));
+    }, [keywords])
 
     useFocusEffect(
         useCallback(() => {
@@ -55,7 +68,7 @@ function SinglePlayerGame() {
             modalRef.current.startGame(round);
         } else {
             //Handle end of game
-            if (round === keywords.length) {
+            if (round === keywords.length && keywords.length > 0) {
                 resultRef.current.showResult();
             }
         }
