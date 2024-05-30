@@ -51,6 +51,11 @@ export default DrawScreen = ({ props, round, onRoundEnd }) => {
     const hideDialog = async () => setVisible(false);
     const showDialog = () => setVisible(true);
 
+    const handleVoice = (script) => {
+        Tts.setDefaultLanguage('en-US');
+        Tts.speak(script);
+    };
+
     useEffect(() => {
         // Khi component mount, đặt isMounted.current là true
         isMounted.current = true;
@@ -155,11 +160,6 @@ export default DrawScreen = ({ props, round, onRoundEnd }) => {
         if (paths.length > 0)
             requestAPI(encodeImage)
     }, [encodeImage, paths])
-
-    const handleVoice = (script) => {
-        Tts.setDefaultLanguage('en-US');
-        Tts.speak(script);
-    };
 
     const handleExport = useMemo(() => {
         return debounce(async () => {

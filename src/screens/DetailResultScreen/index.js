@@ -9,6 +9,7 @@ import Svg, { Path } from "react-native-svg"
 import { useSelector } from 'react-redux';
 import ViewShot, { captureRef } from 'react-native-view-shot';
 import Share from 'react-native-share';
+import fs from 'react-native-fs';
 // import { CameraRoll } from "@react-native-camera-roll/camera-roll";
 
 function DetailResultScreen({ props, route }) {
@@ -55,6 +56,39 @@ function DetailResultScreen({ props, route }) {
                 err && console.log(err);
             });
     }
+
+    const handelDownload = async () => {
+        const uri = await captureRef(viewShotRef, {
+            format: "jpg",
+            quality: 1,
+        }).then(
+            (uri) => {
+                console.log("Image saved to", uri);
+                return uri;
+            },
+            (error) => console.error("Oops, snapshot failed", error)
+        );
+
+        if (uri) {
+            // Lấy thời gian hiện tại
+            const now = new Date();
+            const formattedDate = `${now.getFullYear()}-${(now.getMonth() + 1).toString().padStart(2, '0')}-${now.getDate().toString().padStart(2, '0')}_${now.getHours().toString().padStart(2, '0')}-${now.getMinutes().toString().padStart(2, '0')}-${now.getSeconds().toString().padStart(2, '0')}`;
+
+            const newPath = `${fs.PicturesDirectoryPath}/${keywords[index]}_${formattedDate}.jpg`; // Define the new path to save the downloaded image
+
+            console.log("🚀 ~ downloadImage ~ newPath:", newPath)
+            fs.copyFile(uri, newPath) // Copy the selected image to the new path
+                .then(() => {
+                    Alert.alert('Success', 'Image Downloaded Successfully.');
+                })
+                .catch(error => {
+                    console.log('Download Error: ', error);
+                    Alert.alert('Error', 'Failed to Download Image.');
+                });
+        } else {
+            Alert.alert('Error', 'No image selected.');
+        }
+    };
 
     // get permission on android
     const getPermissionAndroid = async () => {
@@ -208,6 +242,7 @@ function DetailResultScreen({ props, route }) {
                                     width={150}
                                     borderRadius={10}
                                     paddingHorizontal={10}
+                                    onPress={handelDownload}
                                 >
                                     <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center', gap: 5, paddingHorizontal: 10 }}>
                                         <Svg

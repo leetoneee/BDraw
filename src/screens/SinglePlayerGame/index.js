@@ -17,7 +17,7 @@ function SinglePlayerGame() {
     const dispatch = useDispatch();
     const navigation = useNavigation();
 
-    const [round, setRound] = useState(6);
+    const [round, setRound] = useState(0);
     const [isDrawing, setIsDrawing] = useState(false);  // State to manage the drawing status
     const keywords = ['yoga', 'house', 'star', 'car', 'line', 'snowman'];  // Example keywords
 
