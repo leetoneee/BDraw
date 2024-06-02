@@ -19,12 +19,15 @@ import ColorPicker from '../../components/ColorPicker';
 import { colors, timeLimit, strokeWidthPath } from '../../constants';
 import { useDispatch, useSelector } from 'react-redux';
 import { reset, setEncodeImages, setScoreTable } from '../../redux/drawSlice/drawSlice';
+import Tts from 'react-native-tts';
+import { throttle } from '../../hooks/throttle';
 
 
 export default DrawScreen = ({ props, round, onRoundEnd }) => {
     const viewShotRef = useRef()
     const colorPickerRef = useRef();
     const isMounted = useRef(true); // Biến ref để theo dõi trạng thái mount của component
+    const intervalRef = useRef(null);
     const dispatch = useDispatch();
 
     const currentColor = useSelector((state) => state.draw.currentColor);
@@ -32,9 +35,13 @@ export default DrawScreen = ({ props, round, onRoundEnd }) => {
     const keywords = useSelector((state) => state.draw.keywords);
     const encodeImages = useSelector((state) => state.draw.encodeImages);
 
+    const [endRound, setEndRound] = useState(false);
     const [timer, setTimer] = useState(timeLimit);
 
     const [visible, setVisible] = useState(false);
+
+    const [allResults, setAllResults] = useState([]);
+    const [currentIndex, setCurrentIndex] = useState(0);
 
     const [paths, setPaths] = useState([]);
     const [currentPath, setCurrentPath] = useState([]);
@@ -44,6 +51,11 @@ export default DrawScreen = ({ props, round, onRoundEnd }) => {
 
     const hideDialog = async () => setVisible(false);
     const showDialog = () => setVisible(true);
+
+    const handleVoice = (script) => {
+        Tts.setDefaultLanguage('en-US');
+        Tts.speak(script);
+    };
 
     useEffect(() => {
         // Khi component mount, đặt isMounted.current là true
@@ -69,27 +81,80 @@ export default DrawScreen = ({ props, round, onRoundEnd }) => {
 
             return () => clearInterval(interval);
         } else {
-            setLabel('');
-            handleStoreEncodeImage();
-            onRoundEnd();  // Callback to notify the parent component that the round has ended
+            if (timer === 0) {
+                setEndRound(true);
+                setLabel("Sorry, I couldn't guess it.");
+                handleVoice("Sorry, I couldn't guess it.")
+                handleStoreEncodeImage();
+                setTimeout(() => {
+                    onRoundEnd();  // Callback to notify the parent component that the round has ended
+                }, 2000)
+            }
         }
     }, [timer]);
 
 
     // handle win game
     useEffect(() => {
+        console.log("🚀 ~ useEffect ~ scoreTable:", scoreTable)
+
+        if (scoreTable[round])
+            return;
+
         if (label === keywords[round]) {
             let currentScoreTable = [...scoreTable];
             console.log("🚀 ~ useEffect ~ currentScoreTable:", currentScoreTable)
             currentScoreTable[round] = true;
             console.log("🚀 ~ useEffect ~ currentScoreTable:", currentScoreTable)
             dispatch(setScoreTable(currentScoreTable));
-            handleStoreEncodeImage();
-            handleClearButtonClick();
-            onRoundEnd();
-        }
-    }, [label])
 
+            setLabel(`Oh I know, It's ${keywords[round]}`);
+            handleVoice(`Oh I know, It's ${keywords[round]}`);
+            handleStoreEncodeImage();
+
+            const timeout = setTimeout(() => {
+                handleClearButtonClick();
+                onRoundEnd();
+            }, 2000);
+            console.log("🚀 ~ timeout ~ timeout:", timeout)
+        }
+        if (label && label !== keywords[round] && !endRound) {
+            handleVoice(`or ${label}`);
+        }
+
+    }, [label, scoreTable, endRound])
+
+    useEffect(() => {
+        if (intervalRef.current) clearInterval(intervalRef.current);
+
+        if (scoreTable[round] || endRound)
+            return;
+
+        intervalRef.current = setInterval(() => {
+            const match = allResults.find(result => result.label === keywords[round]);
+            if (match) {
+                setLabel(match.label);
+                clearInterval(intervalRef.current);
+                console.log("🚀 ~ interval ~ allResults:", allResults)
+            } else if (allResults.length > 0) {
+                if (currentIndex === allResults.length) {
+                    setLabel('...');
+                    return;
+                }
+                setLabel(allResults[currentIndex].label);
+                setCurrentIndex((prevIndex) => (prevIndex + 1));
+            }
+        }, 1500);
+        console.log("🚀 ~ interval ~ interval:", intervalRef.current)
+
+        return () => {
+            if (intervalRef.current) {
+                clearInterval(intervalRef.current);
+                intervalRef.current = null;
+            }
+        };
+
+    }, [allResults, currentIndex, scoreTable, endRound]);
 
     useEffect(() => {
         if (paths.length > 0)
@@ -103,7 +168,7 @@ export default DrawScreen = ({ props, round, onRoundEnd }) => {
 
     const handleExport = useMemo(() => {
         return debounce(async () => {
-            console.log("🚀 ~ handleClearButtonClick ~ encodeImage: no");
+            console.log("🚀 ~ handleExport ~ encodeImage: no");
             if (!isMounted.current) {
                 console.log("🚀 ~ returndebounce ~ isMounted.current:", isMounted.current)
                 return;
@@ -112,11 +177,11 @@ export default DrawScreen = ({ props, round, onRoundEnd }) => {
                 result: 'base64'
             }).then(
                 result => {
-                    console.log("🚀 ~ handleClearButtonClick ~ encodeImage: yes")
+                    console.log("🚀 ~ handleExport ~ encodeImage: yes")
                     setEncodeImage(result)
                 }
             ).catch((err) => {
-                console.log("🚀 ~ handleClearButtonClick ~ err:", err)
+                console.log("🚀 ~ handleExport ~ err:", err)
             })
         }, 500);
     }, []);
@@ -135,7 +200,7 @@ export default DrawScreen = ({ props, round, onRoundEnd }) => {
                 .then((res) => {
                     if (res && res.length > 0) {
                         console.log("🚀 ~ query ~ result:", res)
-                        setLabel(res[0].label);
+                        handleApiResponse(res);
                     }
                 })
                 .catch((err) => {
@@ -177,7 +242,8 @@ export default DrawScreen = ({ props, round, onRoundEnd }) => {
     const handleClearButtonClick = () => {
         setPaths([]);
         setCurrentPath([]);
-        setLabel('')
+        setAllResults([]);
+        setLabel('...');
         setIsClearButtonClicked(true);
     }
 
@@ -205,6 +271,20 @@ export default DrawScreen = ({ props, round, onRoundEnd }) => {
         dispatch(setEncodeImages(newEncodeImages));
         console.log("🚀 ~ encodeImages:", encodeImages.length)
     }
+
+    const handleApiResponse = (apiResponse) => {
+        const newResults = [];
+        for (let i = 0; i < apiResponse.length; i++) {
+            if (!allResults.some(result => result.label === apiResponse[i].label)) {
+                newResults.push(apiResponse[i]);
+                if (newResults.length >= 5) {
+                    break;
+                }
+            }
+        }
+
+        setAllResults(prevResults => [...prevResults, ...newResults]);
+    };
 
     return (
         <View style={styles.container}>
@@ -266,7 +346,7 @@ export default DrawScreen = ({ props, round, onRoundEnd }) => {
 
             </View>
             <View style={[styles.resultContainer, styles.shadowProp]}>
-                <Text style={{ fontSize: 30 }}>{label}</Text>
+                <Text style={{ fontSize: 25 }}>{label}</Text>
             </View>
             <View style={styles.drawContainer}>
                 <ViewShot ref={viewShotRef} >
