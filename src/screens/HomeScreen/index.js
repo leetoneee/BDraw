@@ -54,6 +54,10 @@ function HomeScreen({ navigation }) {
                     onPress={() => navigation.navigate('Draw')}
                 />
                 <Button
+                    onPress={() => navigation.navigate('ChooseMode')}
+                    title="Play"
+                />
+                <Button
                     onPress={() => navigation.navigate('SinglePlayerGame')}
                     title="Open SinglePlayerGame"
                 />
