@@ -16,6 +16,7 @@ import HomeScreen from './src/screens/HomeScreen';
 import DrawModal from './src/components/DrawModal';
 import DrawScreen from './src/screens/DrawScreen';
 import SinglePlayerGame from './src/screens/SinglePlayerGame';
+import ChooseMode from './src/screens/ChooseMode';
 import DetailResultScreen from './src/screens/DetailResultScreen';
 import { PaperProvider } from 'react-native-paper';
 import { Provider as StoreProvide } from 'react-redux';
@@ -45,6 +46,14 @@ export default function App() {
               options={{
                 headerShown: false
               }} />
+
+            <Stack.Screen
+              name="ChooseMode"
+              component={ChooseMode}
+              options={{
+                headerShown: false
+              }} />
+
             <Stack.Screen
               name="DetailResultScreen"
               component={DetailResultScreen}
