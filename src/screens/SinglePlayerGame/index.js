@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react'
-import { Text, View } from 'react-native'
+import { Text, View, ImageBackground, TouchableOpacity } from 'react-native'
 import Background from '../../components/Background';
 import DrawModal from '../../components/DrawModal';
 import styles from './styles';
@@ -10,6 +10,10 @@ import ResultModal from '../../components/ResultModal';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import { setKeywords as dispatchSetKeywords } from '../../redux/drawSlice/drawSlice';
+import background_pen from '../../assets/images/background_pen.png';
+import Icon from 'react-native-vector-icons/AntDesign';
+import SinglePlayer from '../../assets/images/SinglePlayer_NoCenter.svg'
+import Robotic from '../../assets/images/robotic.svg'
 
 const data = require('../../data/label.json');
 
@@ -94,18 +98,28 @@ function SinglePlayerGame() {
                 {/* Start game */}
                 {round === 0 && !isDrawing &&
                     <>
-                        <Text>SinglePlayerGame</Text>
-                        <AwesomeButton
-                            backgroundColor='#2EAA50'
-                            backgroundDarker='#237636'
-                            textFontFamily='verdana'
-                            raiseLevel={10}
-                            width={200}
-                            paddingHorizontal={30}
-                            onPressedOut={handleStartGame}
-                        >
-                            <Text style={styles.startText}>Let's Draw!</Text>
-                        </AwesomeButton>
+                        <ImageBackground source={background_pen} resizeMode='contain' style={styles.imagebackground}>
+                            <Text style={{ fontSize: 55, fontFamily: 'VampiroOne-Regular',  textAlign: 'center', color:'red', marginBottom:20}}>BDraw</Text>
+
+                            <SinglePlayer style={{ position: 'relative' }} />
+                            <Robotic style={{ position: 'absolute', top:'35%'}}  />
+
+                            <AwesomeButton
+                                style={{marginTop:30}}
+                                backgroundColor='#2EAA50'
+                                backgroundDarker='#237636'
+                                textFontFamily='verdana'
+                                raiseLevel={10}
+                                width={200}
+                                paddingHorizontal={30}
+                                onPressedOut={handleStartGame}
+                            >
+                                <Text style={styles.startText}>Let's Draw!</Text>
+                            </AwesomeButton>
+                            <TouchableOpacity style={{ marginTop:20}} onPress={() => navigation.goBack()}>
+                                <Icon name="back" size={50} color="black" />
+                            </TouchableOpacity>
+                        </ImageBackground>
 
                     </>
                 }

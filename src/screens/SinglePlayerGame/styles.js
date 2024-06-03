@@ -11,9 +11,18 @@ export default styles = StyleSheet.create({
         borderRadius: 20,
         backgroundColor: 'white',
     },
+
     startText: {
         fontFamily: 'RobotoMono-Regular',
         color: '#fff',
         fontSize: 18
-    }
+    },
+
+    imagebackground: {
+        flex: 1,
+        alignItems: 'center',
+        justifyContent: 'center',
+        width:'100%',
+        height:'100%'
+      },
 })

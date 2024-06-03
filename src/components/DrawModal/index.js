@@ -34,7 +34,6 @@ const DrawModal = (props, ref) => {
             transparent={true}
             visible={modalVisible}
             onRequestClose={() => {
-                Alert.alert('Modal has been closed.');
                 setModalVisible(!modalVisible);
             }}>
             <Background style={{ flex: 1 }}>

@@ -17,5 +17,6 @@ export default styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         marginVertical: 30,
+
       },
 })

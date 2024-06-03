@@ -31,7 +31,7 @@ const InstructModal = (props, ref) => {
             }}>
             <View style={styles.centeredView}>
               <View style={styles.modalView}>
-                <Text style={styles.modalText}>Chào mừng thành viên mới của BDraw. Nơi luyện tập phản xạ, thi đấu và giao lưu với mọi người.</Text>
+                <Text style={styles.modalText}>Welcome to BDraw. A place to practice reflexes, compete and interact with people.</Text>
                 <Image source={background_pen} resizeMode='contain' style={{width: 300, height: 300}}/>
                 
                 <TouchableOpacity onPress={() => setModalVisible(!modalVisible)}>

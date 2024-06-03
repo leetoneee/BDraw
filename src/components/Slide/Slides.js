@@ -2,18 +2,21 @@ export default [
     {
         id: '1',
         image: require('../../assets/images/SinglePlayer.png'),
-        description: "Challenge, chế độ vẽ luyện tập phản xạ với AI.",
+        description: "Challenge - drawing mode to practice reflexes with AI.",
+        href: 'SinglePlayerGame'
     },
 
     {
         id: '2',
         image: require('../../assets/images/Matching.png'),
-        description: "Matching, kết nối với mọi người xung quanh, đối kháng để tìm ra người giỏi nhất.",
+        description: "Matching - connect with people around, compete to find the best.",
+        href: ''
     },
 
     {
         id: '3',
         image: require('../../assets/images/CustomLobby.png'),
-        description: "Custom Lobby, tạo phòng và đối kháng cùng những người bạn.",
+        description: "Custom Lobby, create rooms and compete with friends.",
+        href: ''
     },
 ];
