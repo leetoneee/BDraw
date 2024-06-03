@@ -37,7 +37,7 @@ const ModeItemModal = ( {isVisible, onClose, item}) => {
                     <LinearGradient
                         colors={[FROM_COLOR, VIA_COLOR, TO_COLOR]}
                         style={styles.linearGradient}>
-                        <Text style={styles.textStyle}>Đóng</Text>
+                        <Text style={styles.textStyle}>Close</Text>
                     </LinearGradient>
                 </TouchableOpacity>
               </View>

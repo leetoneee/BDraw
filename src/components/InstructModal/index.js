@@ -38,7 +38,7 @@ const InstructModal = (props, ref) => {
                     <LinearGradient
                         colors={[FROM_COLOR, VIA_COLOR, TO_COLOR]}
                         style={styles.linearGradient}>
-                        <Text style={styles.textStyle}>Tiếp tục</Text>
+                        <Text style={styles.textStyle}>Continue</Text>
                     </LinearGradient>
                 </TouchableOpacity>
               </View>
