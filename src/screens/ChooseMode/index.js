@@ -2,7 +2,6 @@ import React, { useState, useRef, useEffect, useCallback } from 'react'
 import { View, ImageBackground, Text, Dimensions, FlatList, Image, TouchableOpacity } from 'react-native';
 import styles from './styles';
 import background_pen from '../../assets/images/background_pen.png';
-import Carousel from 'react-native-reanimated-carousel';
 import InstructModal from '../../components/InstructModal';
 import Background from '../../components/Background';
 import Slides from '../../components/Slide/Slides';
@@ -18,9 +17,9 @@ function ChooseMode() {
     return (
         <Background>
             <View style={styles.container}>
-            
+
                 <ImageBackground source={background_pen} resizeMode='contain' style={styles.imagebackground}>
-                    <Text style={{ fontSize: 55, fontFamily: 'VampiroOne-Regular',  textAlign: 'center', color:'red'}}>BDraw</Text>
+                    <Text style={{ fontSize: 55, fontFamily: 'VampiroOne-Regular', textAlign: 'center', color: 'red' }}>BDraw</Text>
                     <FlatList
                         data={Slides}
                         renderItem={({ item }) => <ModeItems item={item} />}
@@ -29,11 +28,11 @@ function ChooseMode() {
                         showsHorizontalScrollIndicator={false}
                         bounces={false}
                     />
-                    <TouchableOpacity style={{ marginTop:20}} onPress={() => navigation.goBack()}>
+                    <TouchableOpacity style={{ marginTop: 20 }} onPress={() => navigation.goBack()}>
                         <Icon name="back" size={50} color="black" />
                     </TouchableOpacity>
                 </ImageBackground>
-                
+
                 {showInstruct && <InstructModal ref={instructRef} />}
             </View>
         </Background>
