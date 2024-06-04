@@ -27,6 +27,7 @@ function HomeScreen({ navigation }) {
     return (
         <Background>
             <View style={styles.container}>
+
                 <Text style={{ fontFamily: 'VampiroOne-Regular' }}>Count: {count}</Text>
                 <Text>Home Screen {height},{width}</Text>
                 <Image

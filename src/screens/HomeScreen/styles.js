@@ -10,14 +10,8 @@ export default styles = StyleSheet.create({
         marginVertical: 10,
         borderRadius: 20,
         backgroundColor: 'white',
-    },
-    svgContainer: {
-        height: height * 0.7,
-        width,
-        borderColor: 'black',
-        backgroundColor: 'white',
-        borderWidth: 1,
-    },
+      },
+
     clearButton: {
         marginTop: 10,
         backgroundColor: 'black',

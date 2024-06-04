@@ -29,8 +29,8 @@ function ChooseMode() {
                         showsHorizontalScrollIndicator={false}
                         bounces={false}
                     />
-                    <TouchableOpacity style={{ marginTop:20}} onPress={() => navigation.goBack()}>
-                        <Icon name="back" size={50} color="black" />
+                    <TouchableOpacity style={{ marginTop: 10}} onPress={() => navigation.goBack()}>
+                        <Icon name="back" size={45} color="black" />
                     </TouchableOpacity>
                 </ImageBackground>
                 

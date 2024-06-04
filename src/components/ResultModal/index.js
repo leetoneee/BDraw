@@ -50,13 +50,13 @@ const ResultModal = (props, ref) => {
     const handleQuitPress = () => {
         setModalVisible(!modalVisible);
         dispatch(reset());
-        navigation.navigate('Home');
+        navigation.navigate('BottomTabs');
     }
 
     const handlePlayAgainPress = () => {
         setModalVisible(!modalVisible);
         dispatch(reset());
-        navigation.navigate('Home');
+        navigation.navigate('BottomTabs');
         navigation.navigate('SinglePlayerGame');
     }
 

@@ -21,6 +21,7 @@ import DetailResultScreen from './src/screens/DetailResultScreen';
 import { PaperProvider } from 'react-native-paper';
 import { Provider as StoreProvide } from 'react-redux';
 import { store } from './src/redux/store';
+import BottomTabs from './src/components/Navigation/BottomTabs';
 
 const Stack = createNativeStackNavigator();
 
@@ -33,6 +34,13 @@ export default function App() {
       <PaperProvider>
         <NavigationContainer>
           <Stack.Navigator>
+            <Stack.Screen
+              name="BottomTabs"
+              component={BottomTabs}
+              options={{
+                headerShown: false
+              }} />
+              
             <Stack.Screen
               name="Home"
               component={HomeScreen}
@@ -60,6 +68,7 @@ export default function App() {
               options={{
                 headerShown: false
               }} />
+
           </Stack.Navigator>
         </NavigationContainer>
       </PaperProvider>

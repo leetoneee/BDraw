@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, useWindowDimensions, Image, TouchableOpacity, Pressable } from 'react-native'
+import { StyleSheet, Text, View, useWindowDimensions, Image, TouchableOpacity, Pressable, Dimensions } from 'react-native'
 import React, { useState } from 'react'
 import Icon from 'react-native-vector-icons/SimpleLineIcons';
 import { colors, height } from '../../constants';
@@ -9,6 +9,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { setIsGameStarted } from '../../redux/startGameSlice/startGameSlice';
 import SinglePlayerGame from '../../screens/SinglePlayerGame';
 import { useNavigation } from '@react-navigation/native';
+import { widthPercentageToDP as wp } from 'react-native-responsive-screen';
 
 export default ModeItems = ({ item }) => {
   const navigation = useNavigation();
@@ -43,15 +44,15 @@ export default ModeItems = ({ item }) => {
   };
 
   return (
-    <View style={[styles.container,]}>
-      
+    <View style={[styles.container]}>
+
       <View>
         <Pressable onPress={() => handlePress(item.href)}>
-          <Image source={item.image} style={[styles.image, { resizeMode: 'contain'}]}/>
+          <Image source={item.image} style={[styles.image, { resizeMode: 'contain' }]} />
         </Pressable>
       </View>
 
-      <TouchableOpacity style={{ marginTop:20}} onPress={toggleModal}>
+      <TouchableOpacity style={{ marginTop:15}} onPress={toggleModal}>
         <Icon name="question" size={50} color="black" />
       </TouchableOpacity>
       {isModalVisible && <ModeItemModal isVisible={isModalVisible} onClose={toggleModal} item={item} />}
@@ -62,20 +63,13 @@ export default ModeItems = ({ item }) => {
 
 const styles = StyleSheet.create({
   container: {
+    flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
   },
 
   image: {
-    marginHorizontal: 20,
-  },
-
-  textStyle: {
-    color: 'white',
-    textAlign: 'center',
-    fontSize: 25,
-    marginVertical: 5,
-    marginHorizontal: 30,
+    width: wp('94%'),
   },
 
   linearGradient: {

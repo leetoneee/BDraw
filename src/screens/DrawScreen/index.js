@@ -257,7 +257,7 @@ export default DrawScreen = ({ props, round, onRoundEnd }) => {
         setVisible(false);
         handleClearButtonClick();
         dispatch(reset());
-        onRoundEnd('Home');
+        onRoundEnd('BottomTabs');
     }
 
     const handleShowColorPicker = () => {
