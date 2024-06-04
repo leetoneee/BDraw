@@ -85,9 +85,9 @@ function SinglePlayerGame() {
     const handleRoundEnd = (direction) => {
         setIsDrawing(false);
         setRound(prev => prev + 1);
-        if (direction === 'Home') {
+        if (direction === 'BottomTabs') {
             setRound(0);
-            navigation.navigate('Home');
+            navigation.navigate('BottomTabs');
             return;
         }
     };

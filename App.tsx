@@ -22,6 +22,7 @@ import LobbyScreen from './src/screens/LobbyScreen';
 import { PaperProvider } from 'react-native-paper';
 import { Provider as StoreProvide } from 'react-redux';
 import { store } from './src/redux/store';
+import BottomTabs from './src/components/Navigation/BottomTabs';
 import { socket } from './src/setup/socket';
 
 const Stack = createNativeStackNavigator();
@@ -39,6 +40,10 @@ export default function App() {
         <NavigationContainer>
           <Stack.Navigator screenOptions={{ headerShown: false }}>
             <Stack.Screen
+              name="BottomTabs"
+              component={BottomTabs} />
+
+            <Stack.Screen
               name="Home"
               component={HomeScreen}
             />
@@ -55,18 +60,7 @@ export default function App() {
 
             <Stack.Screen
               name="DetailResultScreen"
-              component={DetailResultScreen}
-            />
-
-            <Stack.Screen
-              name="RoomScreen"
-              component={RoomScreen}
-            />
-
-            <Stack.Screen
-              name="LobbyScreen"
-              component={LobbyScreen}
-            />
+              component={DetailResultScreen} />
           </Stack.Navigator>
         </NavigationContainer>
       </PaperProvider>

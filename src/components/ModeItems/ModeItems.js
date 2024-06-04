@@ -42,7 +42,8 @@ export default ModeItems = ({ item }) => {
   };
 
   return (
-    <View style={[styles.container,]}>
+
+    <View style={[styles.container]}>
 
       <View>
         <Pressable onPress={() => handlePress(item.href)}>
@@ -50,7 +51,7 @@ export default ModeItems = ({ item }) => {
         </Pressable>
       </View>
 
-      <TouchableOpacity style={{ marginTop: 20 }} onPress={toggleModal}>
+      <TouchableOpacity style={{ marginTop: 15 }} onPress={toggleModal}>
         <Icon name="question" size={50} color="black" />
       </TouchableOpacity>
       {isModalVisible && <ModeItemModal isVisible={isModalVisible} onClose={toggleModal} item={item} />}
@@ -61,21 +62,13 @@ export default ModeItems = ({ item }) => {
 
 const styles = StyleSheet.create({
   container: {
+    flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
   },
 
   image: {
-    // width: wp('94%'),
     width: width * 0.94
-  },
-
-  textStyle: {
-    color: 'white',
-    textAlign: 'center',
-    fontSize: 25,
-    marginVertical: 5,
-    marginHorizontal: 30,
   },
 
   linearGradient: {
