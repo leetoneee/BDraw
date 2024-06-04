@@ -18,8 +18,6 @@ export default ModeItems = ({ item }) => {
     setModalVisible(!isModalVisible);
   };
 
-  const dispatch = useDispatch();
-
   const handlePress = (x) => {
     switch (x) {
       case 'SinglePlayerGame':
@@ -32,9 +30,10 @@ export default ModeItems = ({ item }) => {
         // Perform action B
         console.log("Performing action B");
         break;
-      case '3':
+      case 'RoomScreen':
         // Perform action C
         console.log("Performing action C");
+        navigation.navigate(x);
         break;
       default:
         console.log("No action defined for this item.id");

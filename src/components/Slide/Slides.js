@@ -17,6 +17,6 @@ export default [
         id: '3',
         image: require('../../assets/images/CustomLobby.png'),
         description: "Custom Lobby, create rooms and compete with friends.",
-        href: ''
+        href: 'RoomScreen'
     },
 ];

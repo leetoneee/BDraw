@@ -14,11 +14,11 @@ import {
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import HomeScreen from './src/screens/HomeScreen';
-import DrawModal from './src/components/DrawModal';
-import DrawScreen from './src/screens/DrawScreen';
 import SinglePlayerGame from './src/screens/SinglePlayerGame';
 import ChooseMode from './src/screens/ChooseMode';
 import DetailResultScreen from './src/screens/DetailResultScreen';
+import RoomScreen from './src/screens/RoomScreen';
+import LobbyScreen from './src/screens/LobbyScreen';
 import { PaperProvider } from 'react-native-paper';
 import { Provider as StoreProvide } from 'react-redux';
 import { store } from './src/redux/store';
@@ -37,34 +37,36 @@ export default function App() {
     <StoreProvide store={store}>
       <PaperProvider>
         <NavigationContainer>
-          <Stack.Navigator>
+          <Stack.Navigator screenOptions={{ headerShown: false }}>
             <Stack.Screen
               name="Home"
               component={HomeScreen}
-              options={{
-                headerShown: false
-              }} />
+            />
 
             <Stack.Screen
               name="SinglePlayerGame"
               component={SinglePlayerGame}
-              options={{
-                headerShown: false
-              }} />
+            />
 
             <Stack.Screen
               name="ChooseMode"
               component={ChooseMode}
-              options={{
-                headerShown: false
-              }} />
+            />
 
             <Stack.Screen
               name="DetailResultScreen"
               component={DetailResultScreen}
-              options={{
-                headerShown: false
-              }} />
+            />
+
+            <Stack.Screen
+              name="RoomScreen"
+              component={RoomScreen}
+            />
+
+            <Stack.Screen
+              name="LobbyScreen"
+              component={LobbyScreen}
+            />
           </Stack.Navigator>
         </NavigationContainer>
       </PaperProvider>
