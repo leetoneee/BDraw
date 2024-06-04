@@ -6,6 +6,7 @@
  */
 
 import * as React from 'react';
+import { useEffect } from 'react';
 import {
   StyleSheet,
 } from 'react-native';
@@ -21,12 +22,16 @@ import DetailResultScreen from './src/screens/DetailResultScreen';
 import { PaperProvider } from 'react-native-paper';
 import { Provider as StoreProvide } from 'react-redux';
 import { store } from './src/redux/store';
+import { socket } from './src/setup/socket';
 
 const Stack = createNativeStackNavigator();
 
 
 export default function App() {
 
+  useEffect(() => {
+    socket.emit('connection');
+  }, [])
 
   return (
     <StoreProvide store={store}>

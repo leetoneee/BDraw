@@ -1,7 +1,7 @@
-import { StyleSheet, Text, View, useWindowDimensions, Image, TouchableOpacity, Pressable } from 'react-native'
+import { StyleSheet, Text, View, useWindowDimensions, Image, TouchableOpacity, Pressable, Dimensions } from 'react-native'
 import React, { useState } from 'react'
 import Icon from 'react-native-vector-icons/SimpleLineIcons';
-import { colors, height } from '../../constants';
+import { colors, height, width } from '../../constants';
 import Background from '../Background';
 import ModeItemModal from '../ModeItemModal';
 import LinearGradient from 'react-native-linear-gradient';
@@ -44,14 +44,14 @@ export default ModeItems = ({ item }) => {
 
   return (
     <View style={[styles.container,]}>
-      
+
       <View>
         <Pressable onPress={() => handlePress(item.href)}>
-          <Image source={item.image} style={[styles.image, { resizeMode: 'contain'}]}/>
+          <Image source={item.image} style={[styles.image, { resizeMode: 'contain' }]} />
         </Pressable>
       </View>
 
-      <TouchableOpacity style={{ marginTop:20}} onPress={toggleModal}>
+      <TouchableOpacity style={{ marginTop: 20 }} onPress={toggleModal}>
         <Icon name="question" size={50} color="black" />
       </TouchableOpacity>
       {isModalVisible && <ModeItemModal isVisible={isModalVisible} onClose={toggleModal} item={item} />}
@@ -67,7 +67,8 @@ const styles = StyleSheet.create({
   },
 
   image: {
-    marginHorizontal: 20,
+    // width: wp('94%'),
+    width: width * 0.94
   },
 
   textStyle: {
