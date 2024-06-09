@@ -4,8 +4,12 @@ import styles from './styles';
 import { socket } from '../../setup/socket';
 import { useNavigation } from '@react-navigation/native';
 import { Avatar } from 'react-native-paper';
+import { useDispatch } from 'react-redux';
+import { setKeywords, setRoomId } from '../../redux/multiPlayerSlice/multiPlayerSlice';
+
 const LobbyScreen = ({ route }) => {
     const navigation = useNavigation();
+    const dispatch = useDispatch();
 
     const [room, setRoom] = useState({});
     const [players, setPlayers] = useState('');
@@ -28,8 +32,11 @@ const LobbyScreen = ({ route }) => {
             resetCountdown();
         });
 
-        socket.on('startGame', () => {
-            console.log("🚀 ~ socket.on ~ startGame: navigation")
+        socket.on('letsPlay', (keywords) => {
+            console.log("🚀 ~ socket.on ~ keywords: ", keywords)
+            dispatch(setKeywords(keywords));
+            dispatch(setRoomId(roomId));
+            navigation.navigate('MultiPlayerGame');
         });
 
     }, [socket])

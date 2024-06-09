@@ -13,8 +13,8 @@ import { styles } from './styles';
 
 import { colors } from '../../constants';
 import { useDispatch, useSelector } from 'react-redux';
-import { setCurrentColor } from '../../redux/drawSlice/drawSlice';
-
+import { setCurrentColor as SPSetColor } from '../../redux/drawSlice/drawSlice';
+import { setCurrentColor as MPSetColor } from '../../redux/multiPlayerSlice/multiPlayerSlice';
 function ColorPicker(props, ref) {
     const dispatch = useDispatch();
 
@@ -35,7 +35,8 @@ function ColorPicker(props, ref) {
     }, [currentColor])
 
     const handleComfirmColor = () => {
-        dispatch(setCurrentColor(value));
+        dispatch(MPSetColor(value));
+        dispatch(SPSetColor(value));
         sheet.current.close();
     }
     return (

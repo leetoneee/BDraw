@@ -18,12 +18,12 @@ import { Dialog, Portal, Button } from 'react-native-paper';
 import ColorPicker from '../../components/ColorPicker';
 import { colors, timeLimit, strokeWidthPath } from '../../constants';
 import { useDispatch, useSelector } from 'react-redux';
-import { reset, setEncodeImages, setScoreTable } from '../../redux/drawSlice/drawSlice';
+import { reset, setEncodeImages, setScore, setScoreTable } from '../../redux/multiPlayerSlice/multiPlayerSlice';
 import Tts from 'react-native-tts';
 import { throttle } from '../../hooks/throttle';
 
 
-export default DrawScreen = ({ props, round, onRoundEnd }) => {
+export default MPDrawScreen = ({ props, round, onRoundEnd }) => {
     const viewShotRef = useRef()
     const colorPickerRef = useRef();
     const isMounted = useRef(true); // Biến ref để theo dõi trạng thái mount của component
@@ -31,9 +31,10 @@ export default DrawScreen = ({ props, round, onRoundEnd }) => {
     const dispatch = useDispatch();
 
     const currentColor = useSelector((state) => state.multiPlayer.currentColor);
-    const scoreTable = useSelector((state) => state.draw.scoreTable);
+    const scoreTable = useSelector((state) => state.multiPlayer.scoreTable);
     const keywords = useSelector((state) => state.multiPlayer.keywords);
-    const encodeImages = useSelector((state) => state.draw.encodeImages);
+    const encodeImages = useSelector((state) => state.multiPlayer.encodeImages);
+    const score = useSelector((state) => state.multiPlayer.score);
 
     const [endRound, setEndRound] = useState(false);
     const [timer, setTimer] = useState(timeLimit);
@@ -107,6 +108,9 @@ export default DrawScreen = ({ props, round, onRoundEnd }) => {
             currentScoreTable[round] = true;
             console.log("🚀 ~ useEffect ~ currentScoreTable:", currentScoreTable)
             dispatch(setScoreTable(currentScoreTable));
+
+            const newScore = score + timer * 100;
+            dispatch(setScore(newScore));
 
             setLabel(`Oh I know, It's ${keywords[round]}`);
             handleVoice(`Oh I know, It's ${keywords[round]}`);

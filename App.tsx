@@ -19,6 +19,7 @@ import ChooseMode from './src/screens/ChooseMode';
 import DetailResultScreen from './src/screens/DetailResultScreen';
 import RoomScreen from './src/screens/RoomScreen';
 import LobbyScreen from './src/screens/LobbyScreen';
+import MultiPlayerGame from './src/screens/MultiPlayerGame';
 import { PaperProvider } from 'react-native-paper';
 import { Provider as StoreProvide } from 'react-redux';
 import { store } from './src/redux/store';
@@ -61,6 +62,18 @@ export default function App() {
             <Stack.Screen
               name="DetailResultScreen"
               component={DetailResultScreen} />
+
+            <Stack.Screen
+              name="RoomScreen"
+              component={RoomScreen} />
+
+            <Stack.Screen
+              name="LobbyScreen"
+              component={LobbyScreen} />
+
+            <Stack.Screen
+              name="MultiPlayerGame"
+              component={MultiPlayerGame} />
           </Stack.Navigator>
         </NavigationContainer>
       </PaperProvider>
