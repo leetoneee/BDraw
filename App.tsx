@@ -17,8 +17,11 @@ import HomeScreen from './src/screens/HomeScreen';
 import SinglePlayerGame from './src/screens/SinglePlayerGame';
 import ChooseMode from './src/screens/ChooseMode';
 import DetailResultScreen from './src/screens/DetailResultScreen';
+import Login from './src/screens/Login';
+import SignUp from './src/screens/SignUp';
 import RoomScreen from './src/screens/RoomScreen';
 import LobbyScreen from './src/screens/LobbyScreen';
+import Init from './src/screens/Init';
 import { PaperProvider } from 'react-native-paper';
 import { Provider as StoreProvide } from 'react-redux';
 import { store } from './src/redux/store';
@@ -39,6 +42,21 @@ export default function App() {
       <PaperProvider>
         <NavigationContainer>
           <Stack.Navigator screenOptions={{ headerShown: false }}>
+
+            <Stack.Screen
+                name="Init"
+                component={Init} />
+            
+            <Stack.Screen
+                name="SignUp"
+                component={SignUp} />
+
+            <Stack.Screen
+                name="Login"
+                component={Login} />
+
+
+
             <Stack.Screen
               name="BottomTabs"
               component={BottomTabs} />

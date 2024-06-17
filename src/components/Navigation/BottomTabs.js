@@ -11,6 +11,10 @@ const BottomTabs = () => {
             screenOptions={{
                 tabBarStyle: {
                     backgroundColor: '#ffffff',
+                    marginVertical: 15,
+                    marginHorizontal: 20,
+                    borderRadius: 15,
+                    position: 'absolute',
                     height: 50,
                 }
             }}>
