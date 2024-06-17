@@ -13,6 +13,17 @@ export default styles = StyleSheet.create({
     marginVertical: 30,
   },
 
+  pen_back_Container: {
+    flexDirection: 'row-reverse',
+  },
+
+  iconGoBack: {
+    marginHorizontal: 20,
+    marginVertical: 20,
+    position: 'absolute',
+    zIndex: 1
+  },
+
   gradient: {
     width: width,
     height: height,
@@ -43,7 +54,7 @@ export default styles = StyleSheet.create({
     margin: 10,
   },
   loginContainer: {
-    marginBottom: 20
+    marginBottom: 20,
   },
   textStyle: {
     color: 'white',
@@ -79,8 +90,8 @@ export default styles = StyleSheet.create({
     borderWidth: 2,
   },
   background_pen: {
-    width: width/0.8228571428571428,
-    height: height/1.780571428571429,
+    width: width / 0.8228571428571428,
+    height: height / 1.780571428571429,
     transform: [{rotate: '-20deg'}],
   },
   username_password_Input: {
@@ -90,5 +101,9 @@ export default styles = StyleSheet.create({
   },
   forgotPasswordContainer: {
     marginBottom: 20,
-  }
+  },
+  backscreenContainer: {
+    backgroundColor: 'red',
+    alignItems: 'center',
+  },
 });

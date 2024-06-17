@@ -13,7 +13,7 @@ import { Svg, Polygon } from 'react-native-svg';
 import background_pen from '../../assets/images/background_pen.png';
 import { useNavigation, useFocusEffect } from '@react-navigation/native';
 
-function Init({ }) {
+function Init({}) {
     const navigation = useNavigation();
 
     const animatedLogin = useRef(new Animated.Value(-300)).current;

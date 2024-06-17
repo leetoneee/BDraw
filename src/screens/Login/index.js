@@ -13,7 +13,7 @@ import CheckBox from '@react-native-community/checkbox';
 import {useDispatch, useSelector} from 'react-redux';
 import {useEffect, useRef, useState} from 'react';
 import {decrement, increment} from '../../redux/counterSlice/counterSlice';
-import {Icon, MD3Colors} from 'react-native-paper';
+import {MD3Colors} from 'react-native-paper';
 import Background from '../../components/Background';
 import styles from './styles';
 import {height, width} from '../../constants';
@@ -22,6 +22,7 @@ import React from 'react';
 import LinearGradient from 'react-native-linear-gradient';
 import {Svg, Polygon} from 'react-native-svg';
 import background_pen from '../../assets/images/background_pen.png';
+import Icon from 'react-native-vector-icons/AntDesign';
 
 const FROM_COLOR = '#A541E1';
 const VIA_COLOR = '#8752E4';
@@ -52,14 +53,26 @@ function Login({navigation}) {
 
   return (
     <SafeAreaView style={styles.container}>
-      <Animated.View
-        style={{marginTop: animatedBdraw.x, marginLeft: animatedBdraw.y}}>
-        <Image
-          source={background_pen}
-          resizeMode="contain"
-          style={styles.background_pen}
-        />
-      </Animated.View>
+      <View style={styles.pen_back_Container}>
+        <TouchableOpacity
+          style={styles.iconGoBack}
+          onPress={() => navigation.goBack()}>
+          <Icon name="back" size={45} color="black" />
+        </TouchableOpacity>
+        <Animated.View
+          style={{
+            marginTop: animatedBdraw.x,
+            marginLeft: animatedBdraw.y,
+            position: 'absolute',
+          }}>
+          <Image
+            source={background_pen}
+            resizeMode="contain"
+            style={styles.background_pen}
+          />
+        </Animated.View>
+      </View>
+
       <LinearGradient
         colors={['#A541E1', '#8752E4', '#6F60E7']}
         style={styles.gradient}
