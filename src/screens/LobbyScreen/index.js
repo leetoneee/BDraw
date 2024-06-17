@@ -1,11 +1,83 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { View, Text, StyleSheet, Image, Button } from 'react-native';
+import { View, Text, Image, Button, FlatList, TouchableOpacity } from 'react-native';
 import styles from './styles';
 import { socket } from '../../setup/socket';
 import { useNavigation } from '@react-navigation/native';
 import { Avatar } from 'react-native-paper';
 import { useDispatch } from 'react-redux';
 import { setKeywords, setRoomId } from '../../redux/multiPlayerSlice/multiPlayerSlice';
+import LinearGradient from 'react-native-linear-gradient';
+
+const DATA = [
+    {
+        id: '1',
+        name: 'ELON REKT',
+        level: 58,
+        alliance: 12,
+        wins: 125,
+        losses: 78,
+        kills: 50,
+        image: require('../../assets/images/user-default.png'), // Placeholder image
+    },
+    {
+        id: '2',
+        name: 'DONALD PUMP',
+        level: 80,
+        alliance: 32,
+        wins: 32,
+        losses: 180,
+        kills: 12,
+        image: require('../../assets/images/user-default.png'), // Placeholder image
+    },
+    {
+        id: '3',
+        name: 'LEO SAREL',
+        level: 14,
+        alliance: 24,
+        wins: 15,
+        losses: 46,
+        kills: 12,
+        image: require('../../assets/images/user-default.png'), // Placeholder image
+    },
+];
+
+const PlayerCard = ({ player }) => {
+    return (
+        <LinearGradient colors={['#2E2E99', '#2E2E99']} style={styles.card}>
+            <Image source={player.image} style={styles.image} />
+            <View style={styles.info}>
+                <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                    <Text style={styles.name}>{player.name}</Text>
+                    <Text style={{ color: 'green', fontFamily: 'verdana' }}>
+                        {player.isReady ?
+                            "✔️ READY"
+                            : "❌ NOT READY"
+                        }
+                    </Text>
+                </View>
+
+                <Text style={styles.level}>Level {player.level} ⚔️ Alliance {player.alliance}</Text>
+                <View style={styles.stats}>
+                    <Text style={styles.statText}>🏆 {player.wins} Wins</Text>
+                    <Text style={styles.statText}>❌ {player.losses} Losses</Text>
+                    <Text style={styles.statText}>🔪 {player.kills} Kills</Text>
+                </View>
+                <View style={styles.buttons}>
+                    <TouchableOpacity style={styles.button}>
+                        <LinearGradient colors={['#8A2BE2', '#4B0082']} style={styles.gradientButton}>
+                            <Text style={styles.buttonText}>BATTLE</Text>
+                        </LinearGradient>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={styles.button}>
+                        <LinearGradient colors={['#333', '#222']} style={styles.gradientButton}>
+                            <Text style={styles.buttonText}>PROFILE</Text>
+                        </LinearGradient>
+                    </TouchableOpacity>
+                </View>
+            </View>
+        </LinearGradient>
+    );
+};
 
 const LobbyScreen = ({ route }) => {
     const navigation = useNavigation();
@@ -82,7 +154,7 @@ const LobbyScreen = ({ route }) => {
 
     return (
         <View style={styles.container}>
-            <Button title='leave room' onPress={handleLeaveRoom} />
+            {/* <Button title='leave room' onPress={handleLeaveRoom} />
             {room &&
                 <Text style={{ fontSize: 30, color: 'black', backgroundColor: 'green' }}>{String(room?.id)}</Text>
 
@@ -118,8 +190,14 @@ const LobbyScreen = ({ route }) => {
                 </Text>
 
 
+            </View> */}
+            <View style={styles.container}>
+                <FlatList
+                    data={DATA}
+                    renderItem={({ item }) => <PlayerCard player={item} />}
+                    keyExtractor={item => item.id}
+                />
             </View>
-
         </View >
     );
 };
