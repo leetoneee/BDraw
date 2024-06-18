@@ -56,7 +56,7 @@ function Login({navigation}) {
       <View style={styles.pen_back_Container}>
         <TouchableOpacity
           style={styles.iconGoBack}
-          onPress={() => navigation.goBack()}>
+          onPress={() => navigation.navigate('Init')}>
           <Icon name="back" size={45} color="black" />
         </TouchableOpacity>
         <Animated.View

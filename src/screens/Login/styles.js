@@ -1,6 +1,8 @@
 import {StyleSheet, Dimensions, Animated} from 'react-native';
 import {height, width} from '../../constants';
 
+const width_iconback = width - 65; // Move icon_back into the right corner
+
 export default styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -14,14 +16,21 @@ export default styles = StyleSheet.create({
   },
 
   pen_back_Container: {
-    flexDirection: 'row-reverse',
+    position: 'absolute',
   },
 
   iconGoBack: {
     marginHorizontal: 20,
     marginVertical: 20,
+    marginLeft: width_iconback,
     position: 'absolute',
     zIndex: 1
+  },
+
+  background_pen: {
+    width: width / 0.8228571428571428,
+    height: height / 1.780571428571429,
+    transform: [{rotate: '-20deg'}],
   },
 
   gradient: {
@@ -89,11 +98,7 @@ export default styles = StyleSheet.create({
     paddingHorizontal: 20,
     borderWidth: 2,
   },
-  background_pen: {
-    width: width / 0.8228571428571428,
-    height: height / 1.780571428571429,
-    transform: [{rotate: '-20deg'}],
-  },
+
   username_password_Input: {
     width: '100%',
     marginHorizontal: 20,
