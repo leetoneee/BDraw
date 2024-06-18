@@ -221,7 +221,7 @@ const RoomScreen = () => {
                                 </View>
                             }
                         </View>
-                        <TouchableOpacity style={{ flex: 1, justifyContent: 'center' }} onPress={() => navigation.goBack()}>
+                        <TouchableOpacity style={{ flex: 3, justifyContent: 'center' }} onPress={() => navigation.goBack()}>
                             <Icon name="back" size={45} color="black" />
                         </TouchableOpacity>
                         <Snackbar

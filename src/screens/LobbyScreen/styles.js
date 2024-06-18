@@ -5,6 +5,9 @@ export default styles = StyleSheet.create({
         flex: 1,
         backgroundColor: '#000',
         paddingTop: 40,
+        marginHorizontal: 10,
+        marginVertical: 10,
+        borderRadius: 10
     },
     banner: {
         width: '100%',

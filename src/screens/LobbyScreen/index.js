@@ -7,6 +7,7 @@ import { Avatar } from 'react-native-paper';
 import { useDispatch } from 'react-redux';
 import { setKeywords, setRoomId } from '../../redux/multiPlayerSlice/multiPlayerSlice';
 import LinearGradient from 'react-native-linear-gradient';
+import Background from '../../components/Background';
 
 const DATA = [
     {
@@ -48,10 +49,10 @@ const PlayerCard = ({ player }) => {
             <View style={styles.info}>
                 <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                     <Text style={styles.name}>{player.name}</Text>
-                    <Text style={{ color: 'green', fontFamily: 'verdana' }}>
+                    <Text style={{ color: player.isReady ? '#16C60C' : 'white', fontFamily: 'verdana' }}>
                         {player.isReady ?
-                            "✔️ READY"
-                            : "❌ NOT READY"
+                            "🏁 READY"
+                            : "⏳ PLEASE WAIT"
                         }
                     </Text>
                 </View>
@@ -153,8 +154,8 @@ const LobbyScreen = ({ route }) => {
     };
 
     return (
-        <View style={styles.container}>
-            {/* <Button title='leave room' onPress={handleLeaveRoom} />
+        <Background>
+            <Button title='leave room' onPress={handleLeaveRoom} />
             {room &&
                 <Text style={{ fontSize: 30, color: 'black', backgroundColor: 'green' }}>{String(room?.id)}</Text>
 
@@ -190,15 +191,15 @@ const LobbyScreen = ({ route }) => {
                 </Text>
 
 
-            </View> */}
-            <View style={styles.container}>
+            </View>
+            {/* <View style={styles.container}>
                 <FlatList
                     data={DATA}
                     renderItem={({ item }) => <PlayerCard player={item} />}
                     keyExtractor={item => item.id}
                 />
-            </View>
-        </View >
+            </View> */}
+        </Background>
     );
 };
 
