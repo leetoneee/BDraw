@@ -5,13 +5,25 @@ import {
     Image
 } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
+import { useEffect } from "react";
 import { decrement, increment } from "../../redux/counterSlice/counterSlice";
 import { Icon, MD3Colors } from 'react-native-paper';
 import Background from "../../components/Background";
 import styles from "./styles";
 import { height, width } from "../../constants";
+import axios from 'axios';
 
 function HomeScreen({ navigation }) {
+
+    // useEffect(() => {
+    //     axios.get('https://666478dc932baf9032ab2e8d.mockapi.io/api/v1/huhu')
+    //     .then((respone) =>
+    //     console.log(respone.data)
+    //     )
+    //     .catch((err) => console.log(err)
+    //     )
+    // }, []);
+
     const dispatch = useDispatch();
 
     const count = useSelector((state) => state.counter.value);
