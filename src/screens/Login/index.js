@@ -10,26 +10,26 @@ import {
   StyleSheet,
 } from 'react-native';
 import CheckBox from '@react-native-community/checkbox';
-import { useDispatch, useSelector } from 'react-redux';
-import { useEffect, useRef, useState } from 'react';
-import { decrement, increment } from '../../redux/counterSlice/counterSlice';
-import { MD3Colors } from 'react-native-paper';
+import {useDispatch, useSelector} from 'react-redux';
+import {useEffect, useRef, useState} from 'react';
+import {decrement, increment} from '../../redux/counterSlice/counterSlice';
+import {MD3Colors} from 'react-native-paper';
 import Background from '../../components/Background';
 import styles from './styles';
-import { height, width } from '../../constants';
+import {height, width} from '../../constants';
 import axios from 'axios';
 import React from 'react';
 import LinearGradient from 'react-native-linear-gradient';
-import { Svg, Polygon } from 'react-native-svg';
+import {Svg, Polygon} from 'react-native-svg';
 import background_pen from '../../assets/images/background_pen.png';
 import Icon from 'react-native-vector-icons/AntDesign';
-import { useNavigation } from '@react-navigation/native';
+import {useNavigation} from '@react-navigation/native';
 
 const FROM_COLOR = '#A541E1';
 const VIA_COLOR = '#8752E4';
 const TO_COLOR = '#6F60E7';
 
-function Login({ }) {
+function Login({}) {
   const navigation = useNavigation();
 
   const [username, setUsername] = useState('');
@@ -37,11 +37,15 @@ function Login({ }) {
   const [rememberPassword, setRememberPassword] = useState(false);
 
   const animatedLogin = useRef(new Animated.Value(1000)).current;
-  const animatedBdraw = useRef(new Animated.ValueXY({ x: 300, y: 300 })).current;
+  const animatedBdraw = useRef(new Animated.ValueXY({x: 300, y: 300})).current;
 
   const handleLogin = () => {
     navigation.navigate('BottomTabs');
-  }
+  };
+
+  const handleForgotPassword = () => {
+    navigation.navigate('ForgotPassword');
+  };
 
   useEffect(() => {
     Animated.timing(animatedLogin, {
@@ -51,7 +55,7 @@ function Login({ }) {
     }).start();
 
     Animated.timing(animatedBdraw, {
-      toValue: { x: -70, y: -40 },
+      toValue: {x: -70, y: -40},
       duration: 1000,
       useNativeDriver: false,
     }).start();
@@ -78,17 +82,18 @@ function Login({ }) {
           />
         </Animated.View>
       </View>
-
-      <LinearGradient
-        colors={['#A541E1', '#8752E4', '#6F60E7']}
-        style={styles.gradient}
-        start={{ x: 0, y: 0 }}
-        end={{ x: 1, y: 1 }}
-      />
+      <View>
+        <LinearGradient
+          colors={['#A541E1', '#8752E4', '#6F60E7']}
+          style={styles.gradient}
+          start={{x: 0, y: 0}}
+          end={{x: 1, y: 1}}
+        />
+      </View>
       <Animated.View
         style={[
           styles.animatedView,
-          { transform: [{ translateY: animatedLogin }] },
+          {transform: [{translateY: animatedLogin}]},
         ]}>
         <View style={styles.TextBDrawContainer}>
           <Text style={styles.textBdraw}>BDraw</Text>
@@ -117,7 +122,7 @@ function Login({ }) {
           <CheckBox
             value={rememberPassword}
             onValueChange={setRememberPassword}
-            tintColors={{ true: '#6a0dad', false: '#aaa' }}
+            tintColors={{true: '#6a0dad', false: '#aaa'}}
           />
           <Text style={styles.label}>Remember password</Text>
         </View>
@@ -132,7 +137,7 @@ function Login({ }) {
           </TouchableOpacity>
         </View>
         <View style={styles.forgotPasswordContainer}>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={handleForgotPassword}>
             <Text style={styles.forgotPassword}>Forgot your password?</Text>
           </TouchableOpacity>
         </View>
