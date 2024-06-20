@@ -8,6 +8,7 @@ import {
   TextInput,
   SafeAreaView,
   StyleSheet,
+  Keyboard
 } from 'react-native';
 import CheckBox from '@react-native-community/checkbox';
 import { useDispatch, useSelector } from 'react-redux';
@@ -55,6 +56,36 @@ function Login({ }) {
       duration: 1000,
       useNativeDriver: false,
     }).start();
+  }, [animatedLogin, animatedBdraw]);
+
+  useEffect(() => {
+
+    const keyboardDidShowListener = Keyboard.addListener(
+      'keyboardDidShow',
+      () => {
+        Animated.timing(animatedLogin, {
+          toValue: height / 3,
+          duration: 300,
+          useNativeDriver: false,
+        }).start();
+      },
+    );
+
+    const keyboardDidHideListener = Keyboard.addListener(
+      'keyboardDidHide',
+      () => {
+        Animated.timing(animatedLogin, {
+          toValue: height / 2.7,
+          duration: 300,
+          useNativeDriver: false,
+        }).start();
+      },
+    );
+
+    return () => {
+      keyboardDidHideListener.remove();
+      keyboardDidShowListener.remove();
+    };
   }, [animatedLogin, animatedBdraw]);
 
   return (

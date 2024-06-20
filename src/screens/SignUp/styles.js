@@ -21,8 +21,7 @@ export default styles = StyleSheet.create({
   },
 
   iconGoBack: {
-    marginVertical: 20,
-    marginHorizontal: 20,
+    margin: 20,
     marginLeft: width_iconback,
     position: 'absolute',
     zIndex: 1,
@@ -61,7 +60,7 @@ export default styles = StyleSheet.create({
     borderRadius: 5,
     paddingHorizontal: 10,
     marginHorizontal: 20,
-    marginBottom: 20,
+    marginBottom: height * 0.02,
   },
 
   input: {
@@ -69,8 +68,7 @@ export default styles = StyleSheet.create({
   },
 
   TextBDrawContainer: {
-    marginTop: 20,
-    marginBottom: 20,
+    marginVertical: 10, 
   },
 
   textBdraw: {
@@ -81,7 +79,7 @@ export default styles = StyleSheet.create({
 
   checkboxContainer: {
     flexDirection: 'row',
-    marginBottom: 20,
+    marginBottom: height * 0.02,
     alignItems: 'center',
     alignSelf: 'flex-start',
   },
@@ -106,7 +104,7 @@ export default styles = StyleSheet.create({
   },
 
   SignUpContainer: {
-    marginBottom: 20,
+    marginBottom: height * 0.02,
   },
 
   signInText: {

@@ -58,7 +58,7 @@ function SignUp({navigation}) {
       'keyboardDidHide',
       () => {
         Animated.timing(animatedLogin, {
-          toValue: height / 5,
+          toValue: height / 4.7,
           duration: 300,
           useNativeDriver: false,
         }).start();
