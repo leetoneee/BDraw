@@ -6,18 +6,12 @@ export default styles = StyleSheet.create({
         flex: 1,
         alignItems: 'center',
         justifyContent: 'center',
-        marginHorizontal: 8,
-        marginVertical: 8,
+        marginHorizontal: 10,
+        marginVertical: 10,
         borderRadius: 20,
         backgroundColor: 'white',
-    },
-    svgContainer: {
-        height: height * 0.7,
-        width,
-        borderColor: 'black',
-        backgroundColor: 'white',
-        borderWidth: 1,
-    },
+      },
+
     clearButton: {
         marginTop: 10,
         backgroundColor: 'black',
@@ -29,5 +23,9 @@ export default styles = StyleSheet.create({
         color: 'white',
         fontSize: 16,
         fontWeight: 'bold'
+    },
+    logo: {
+        width: 30,
+        height: 30
     }
 });

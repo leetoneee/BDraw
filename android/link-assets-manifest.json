@@ -2,8 +2,24 @@
   "migIndex": 1,
   "data": [
     {
+      "path": "src/assets/fonts/Bangers-Regular.ttf",
+      "sha1": "16e3bc27f1343b6661711eaacb999be3307790d4"
+    },
+    {
+      "path": "src/assets/fonts/RobotoMono-Regular.ttf",
+      "sha1": "c25a072c96240ab8fc288b61edf2bb133aaa975d"
+    },
+    {
       "path": "src/assets/fonts/VampiroOne-Regular.ttf",
       "sha1": "81ece268bad6f6bea2cf820502615d4b87092169"
+    },
+    {
+      "path": "src/assets/fonts/VarelaRound-Regular.ttf",
+      "sha1": "549e4b02217aff2920c11101eca6b41c805ccb69"
+    },
+    {
+      "path": "src/assets/fonts/verdana.ttf",
+      "sha1": "da80da32b18cf7f7feb663715fcb20b993ef2a9b"
     }
   ]
 }

@@ -50,6 +50,10 @@
 	<key>UIAppFonts</key>
 	<array>
 		<string>VampiroOne-Regular.ttf</string>
+		<string>RobotoMono-Regular.ttf</string>
+		<string>verdana.ttf</string>
+		<string>VarelaRound-Regular.ttf</string>
+		<string>Bangers-Regular.ttf</string>
 	</array>
 </dict>
 </plist>
