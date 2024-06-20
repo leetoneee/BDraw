@@ -10,7 +10,7 @@ export default [
         id: '2',
         image: require('../../assets/images/Matching.png'),
         description: "Matching - connect with people around, compete to find the best.",
-        href: ''
+        href: 'FindMatch'
     },
 
     {

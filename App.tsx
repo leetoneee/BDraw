@@ -22,6 +22,7 @@ import SignUp from './src/screens/SignUp';
 import RoomScreen from './src/screens/RoomScreen';
 import LobbyScreen from './src/screens/LobbyScreen';
 import MultiPlayerGame from './src/screens/MultiPlayerGame';
+import FindMatch from './src/screens/FindMatchScreen';
 import Init from './src/screens/Init';
 import { PaperProvider } from 'react-native-paper';
 import { Provider as StoreProvide } from 'react-redux';
@@ -92,6 +93,10 @@ export default function App() {
             <Stack.Screen
               name="MultiPlayerGame"
               component={MultiPlayerGame} />
+
+            <Stack.Screen
+              name="FindMatch"
+              component={FindMatch} />
           </Stack.Navigator>
         </NavigationContainer>
       </PaperProvider>

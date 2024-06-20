@@ -1,4 +1,4 @@
-import { StyleSheet, Dimensions } from "react-native";
+import { StyleSheet } from "react-native";
 import { height, width } from "../../constants";
 
 export default styles = StyleSheet.create({
