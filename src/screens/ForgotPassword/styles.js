@@ -118,5 +118,17 @@ export default styles = StyleSheet.create({
     marginVertical: 5,
   },
 
-  
+  closeButton: {
+    backgroundColor: '#FFD139',
+    borderRadius: 5,
+    paddingHorizontal: 10,
+    paddingVertical: 10,
+  },
+  closeButtonText: {
+    fontSize: 20,
+    color: '#fff',
+    fontFamily: 'Montserrat-Regular',
+    fontWeight: 'bold',
+    paddingHorizontal: 30,
+  },
 });
