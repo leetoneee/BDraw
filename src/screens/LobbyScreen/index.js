@@ -1,4 +1,3 @@
-
 import React, { useEffect, useRef, useState } from 'react';
 import { View, Text, Image, Button, FlatList, TouchableOpacity } from 'react-native';
 import styles from './styles';
@@ -9,6 +8,7 @@ import { useDispatch } from 'react-redux';
 import { setKeywords, setRoomId } from '../../redux/multiPlayerSlice/multiPlayerSlice';
 import LinearGradient from 'react-native-linear-gradient';
 import Background from '../../components/Background';
+import { Snackbar } from 'react-native-paper';
 
 const PlayerCard = ({ player }) => {
   return (
@@ -51,14 +51,20 @@ const PlayerCard = ({ player }) => {
 const LobbyScreen = ({ route }) => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
+  const countdownRef = useRef(null);
 
   const [room, setRoom] = useState({});
   const [players, setPlayers] = useState('');
   const [countdown, setCountdown] = useState('');
-  const countdownRef = useRef(null);
+  const [status, setStatus] = useState('');
+  const [snackbarVisible, setSnackbarVisible] = useState(false);
 
   const { roomId } = route.params;
 
+  useEffect(() => {
+    if (status)
+      setSnackbarVisible(true);
+  }, [status]);
   useEffect(() => {
     const handleFoundRoom = (roomData) => {
       setRoom(roomData);
@@ -79,23 +85,34 @@ const LobbyScreen = ({ route }) => {
       navigation.navigate('MultiPlayerGame');
     };
 
+    const handleInvalidOperation = (message) => {
+      setStatus(message);
+    };
+
     socket.emit('findRoom', roomId);
     socket.on('foundRoom', handleFoundRoom);
     socket.on('startCountdown', handleStartCountdown);
     socket.on('resetCountdown', handleResetCountdown);
     socket.on('letsPlay', handleLetsPlay);
+    socket.on('invalidOperation', handleInvalidOperation);
 
     return () => {
       socket.off('foundRoom', handleFoundRoom);
       socket.off('startCountdown', handleStartCountdown);
       socket.off('resetCountdown', handleResetCountdown);
       socket.off('letsPlay', handleLetsPlay);
+      socket.off('invalidOperation', handleInvalidOperation);
     };
   }, [roomId]);
 
   useEffect(() => {
     setPlayers(room.sockets);
   }, [room]);
+
+  const onDismissSnackBar = () => {
+    setStatus('');
+    setSnackbarVisible(false);
+  };
 
   const handleLeaveRoom = () => {
     socket.emit('leave-room', room.id);
@@ -166,6 +183,18 @@ const LobbyScreen = ({ route }) => {
 
 
       </View>
+      <Snackbar
+        visible={snackbarVisible}
+        onDismiss={onDismissSnackBar}
+      // action={{
+      //     label: 'Undo',
+      //     onPress: () => {
+      //         // Do something
+      //     },
+      // }}
+      >
+        <Text Text style={{ fontFamily: 'verdana', color: '#fff', fontSize: 13 }}>{status}</Text>
+      </Snackbar>
       {/* <View style={styles.container}>
                 <FlatList
                     data={DATA}
