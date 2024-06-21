@@ -16,12 +16,11 @@ import { Icon } from 'react-native-paper';
 import { displayTime } from '../../utils/displayTime';
 import { Dialog, Portal, Button } from 'react-native-paper';
 import ColorPicker from '../../components/ColorPicker';
-import { colors, timeLimit, strokeWidthPath } from '../../constants';
+import { colors, timeLimit, strokeWidthPath, authorToken } from '../../constants';
 import { useDispatch, useSelector } from 'react-redux';
 import { reset, setEncodeImages, setScoreTable } from '../../redux/drawSlice/drawSlice';
 import Tts from 'react-native-tts';
 import { throttle } from '../../hooks/throttle';
-
 
 export default DrawScreen = ({ props, round, onRoundEnd }) => {
   const viewShotRef = useRef()
@@ -191,7 +190,7 @@ export default DrawScreen = ({ props, round, onRoundEnd }) => {
       fetch(
         "https://api-inference.huggingface.co/models/kmewhort/beit-sketch-classifier",
         {
-          headers: { Authorization: `Bearer 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` },
+          headers: { Authorization: `Bearer ${authorToken}` },
           method: "POST",
           body: JSON.stringify({ inputs: data }),
         }
