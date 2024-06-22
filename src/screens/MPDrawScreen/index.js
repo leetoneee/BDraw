@@ -21,8 +21,10 @@ import { useDispatch, useSelector } from 'react-redux';
 import { reset, setEncodeImages, setScore, setScoreTable } from '../../redux/multiPlayerSlice/multiPlayerSlice';
 import Tts from 'react-native-tts';
 import { throttle } from '../../hooks/throttle';
+import { Snackbar } from 'react-native-paper';
+import { socket } from '../../setup/socket';
 
-export default MPDrawScreen = ({ props, round, onRoundEnd }) => {
+export default MPDrawScreen = ({ props, round, onRoundEnd, onQuit }) => {
   const viewShotRef = useRef()
   const colorPickerRef = useRef();
   const isMounted = useRef(true); // Biến ref để theo dõi trạng thái mount của component
@@ -48,6 +50,8 @@ export default MPDrawScreen = ({ props, round, onRoundEnd }) => {
   const [isClearButtonClicked, setIsClearButtonClicked] = useState(false);
   const [label, setLabel] = useState('');
   const [encodeImage, setEncodeImage] = useState('');
+  const [snackbarVisible, setSnackbarVisible] = useState(false);
+  const [status, setStatus] = useState('');
 
   const hideDialog = async () => setVisible(false);
   const showDialog = () => setVisible(true);
@@ -56,6 +60,25 @@ export default MPDrawScreen = ({ props, round, onRoundEnd }) => {
     Tts.setDefaultLanguage('en-US');
     Tts.speak(script);
   };
+
+  useEffect(() => {
+
+    const handleNotice = (message) => {
+      setStatus(message);
+    }
+
+    socket.on('notice-quit', handleNotice);
+
+    return () => {
+      socket.off('notice-quit', handleNotice);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (status) {
+      setSnackbarVisible(true);
+    }
+  }, [status]);
 
   useEffect(() => {
     // Khi component mount, đặt isMounted.current là true
@@ -189,6 +212,11 @@ export default MPDrawScreen = ({ props, round, onRoundEnd }) => {
     }, 500);
   }, []);
 
+  const onDismissSnackBar = () => {
+    setStatus('');
+    setSnackbarVisible(false);
+  }
+
   const requestAPI = useMemo(() => {
     return debounce((data) => {
       fetch(
@@ -257,6 +285,7 @@ export default MPDrawScreen = ({ props, round, onRoundEnd }) => {
   }
 
   const handleQuit = () => {
+    onQuit();
     setVisible(false);
     handleClearButtonClick();
     dispatch(reset());
@@ -441,6 +470,19 @@ export default MPDrawScreen = ({ props, round, onRoundEnd }) => {
       </View>
 
       <ColorPicker ref={colorPickerRef} />
+
+      <Snackbar
+        visible={snackbarVisible}
+        onDismiss={onDismissSnackBar}
+      // action={{
+      //     label: 'Undo',
+      //     onPress: () => {
+      //         // Do something
+      //     },
+      // }}
+      >
+        <Text Text style={{ fontFamily: 'verdana', color: '#fff', fontSize: 13 }}>{status}</Text>
+      </Snackbar>
 
       <Portal>
         <Dialog visible={visible} onDismiss={hideDialog}  >

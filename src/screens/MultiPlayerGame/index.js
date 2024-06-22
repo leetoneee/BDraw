@@ -120,6 +120,10 @@ function MultiPlayerGame() {
     waitingRef.current.show(round);
   };
 
+  const handleQuit = () => {
+    socket.emit('quitGame', roomId);
+  }
+
   return (
     <Background>
       <View style={styles.container}>
@@ -136,7 +140,7 @@ function MultiPlayerGame() {
         {/* On round */}
         {isDrawing &&
           <>
-            <MPDrawScreen round={round} onRoundEnd={handleRoundEnd} />
+            <MPDrawScreen round={round} onRoundEnd={handleRoundEnd} onQuit={handleQuit} />
           </>
         }
 
