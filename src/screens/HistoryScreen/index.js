@@ -214,10 +214,6 @@ function HistoryScreen({ navigation }) {
     { id: '2', rank: 2, score: 100, date: '30/05/2024 20:00' },
     { id: '3', rank: 3, score: 75, date: '30/05/2024 19:30' },
     { id: '4', rank: 4, score: 50, date: '30/05/2024 19:00' },
-    { id: '1', rank: 1, score: 150, date: '30/05/2024 20:30' },
-    { id: '2', rank: 2, score: 100, date: '30/05/2024 20:00' },
-    { id: '3', rank: 3, score: 75, date: '30/05/2024 19:30' },
-    { id: '4', rank: 4, score: 50, date: '30/05/2024 19:00' },
     // Thêm dữ liệu khác ở đây
   ];
 

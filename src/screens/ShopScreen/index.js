@@ -2,7 +2,8 @@ import {
   Text,
   View,
   Button,
-  Image, TouchableOpacity, Animated, ScrollView, FlatList
+  Image, TouchableOpacity, Animated, ScrollView, FlatList,
+  TouchableHighlight
 } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState, useRef } from "react";
@@ -11,22 +12,34 @@ import styles from "./styles";
 import { Dropdown } from 'react-native-element-dropdown';
 import IconBack from 'react-native-vector-icons/AntDesign';
 import LinearGradient from 'react-native-linear-gradient';
+import IconEntypo from 'react-native-vector-icons/Entypo';
 
 const data = [
-  { label: 'Item 1', value: '1' },
-  { label: 'Item 2', value: '2' },
-  { label: 'Item 3', value: '3' },
-  { label: 'Item 4', value: '4' },
-  { label: 'Item 5', value: '5' },
-  { label: 'Item 6', value: '6' },
-  { label: 'Item 7', value: '7' },
-  { label: 'Item 8', value: '8' },
+  { label: 'All Spirit', value: '1' },
+  { label: 'Owned', value: '2' },
+  { label: 'Not Owned', value: '3' },
 ];
 
 function ShopScreen({ navigation }) {
 
   const [value, setValue] = useState(null);
   const [isFocus, setIsFocus] = useState(false);
+
+  const renderItem = item => {
+    return (
+      <View style={styles.item}>
+        <Text style={styles.itemTextStyle}>{item.label}</Text>
+        {item.value === value && (
+          <IconEntypo
+            style={styles.icon}
+            color="#72BF00"
+            name="check"
+            size={25}
+          />
+        )}
+      </View>
+    );
+  };
 
   return (
     <Background>
@@ -41,20 +54,18 @@ function ShopScreen({ navigation }) {
           colors={["#6F60E7", '#8752E4', '#A541E1']}
           start={{ x: 0, y: 0 }}
           end={{ x: 1, y: 1 }}
-          style={{ padding: 3, borderRadius: 10, marginHorizontal: 10}}>
+          style={{ padding: 3, borderRadius: 10, marginHorizontal: 10 }}>
           <Dropdown
             style={[styles.dropdown, isFocus && { borderColor: 'blue' }]}
             placeholderStyle={styles.placeholderStyle}
-            selectedTextStyle={styles.selectedTextStyle}
-            inputSearchStyle={styles.inputSearchStyle}
+            selectedTextStyle={styles.placeholderStyle}
             iconStyle={styles.iconStyle}
+            iconColor="black"
             data={data}
-            search
             maxHeight={300}
             labelField="label"
             valueField="value"
             placeholder={'Select item'}
-            searchPlaceholder="Search..."
             value={value}
             onFocus={() => setIsFocus(true)}
             onBlur={() => setIsFocus(false)}
@@ -62,6 +73,7 @@ function ShopScreen({ navigation }) {
               setValue(item.value);
               setIsFocus(false);
             }}
+            renderItem={renderItem}
           // renderLeftIcon={() => (
           //   <AntDesign
           //     style={styles.icon}
