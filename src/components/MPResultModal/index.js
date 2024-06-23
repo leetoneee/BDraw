@@ -208,7 +208,7 @@ const MPResultModal = (props, ref) => {
               raiseLevel={10}
               width={200}
               paddingHorizontal={30}
-              onPress={handlePlayAgainPress}
+            // onPress={handlePlayAgainPress}
             >
               <Text style={styles.startText}>Play Again</Text>
             </AwesomeButton>
