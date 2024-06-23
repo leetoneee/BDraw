@@ -14,7 +14,7 @@ import { debounce } from '../../hooks/debounce';
 import AwesomeButton from "react-native-really-awesome-button";
 import { Icon } from 'react-native-paper';
 import { displayTime } from '../../utils/displayTime';
-import { Dialog, Portal, Button } from 'react-native-paper';
+import { Dialog, Portal } from 'react-native-paper';
 import ColorPicker from '../../components/ColorPicker';
 import { colors, timeLimit, strokeWidthPath, authorToken } from '../../constants';
 import { useDispatch, useSelector } from 'react-redux';
