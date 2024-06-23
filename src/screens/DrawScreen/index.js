@@ -30,9 +30,9 @@ export default DrawScreen = ({ props, round, onRoundEnd }) => {
     const intervalRef = useRef(null);
     const dispatch = useDispatch();
 
-    const currentColor = useSelector((state) => state.multiPlayer.currentColor);
+    const currentColor = useSelector((state) => state.draw.currentColor);
     const scoreTable = useSelector((state) => state.draw.scoreTable);
-    const keywords = useSelector((state) => state.multiPlayer.keywords);
+    const keywords = useSelector((state) => state.draw.keywords);
     const encodeImages = useSelector((state) => state.draw.encodeImages);
 
     const [endRound, setEndRound] = useState(false);
@@ -191,7 +191,7 @@ export default DrawScreen = ({ props, round, onRoundEnd }) => {
             fetch(
                 "https://api-inference.huggingface.co/models/kmewhort/beit-sketch-classifier",
                 {
-                    headers: { Authorization: `Bearer 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` },
+                    headers: { Authorization: `Bearer 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` },
                     method: "POST",
                     body: JSON.stringify({ inputs: data }),
                 }
