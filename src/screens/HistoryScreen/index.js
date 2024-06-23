@@ -237,7 +237,7 @@ function HistoryScreen({ navigation }) {
                 start={{ x: 0, y: 0 }}
                 end={{ x: 1, y: 1 }}
                 style={{ padding: 3, borderRadius: 20, width: 140, height: 140, }}>
-                <Image source={{ uri: 'https://res.cloudinary.com/dbfftqigf/image/upload/v1719025015/Platinum.jpg' }}
+                <Image source={{ uri: 'https://res.cloudinary.com/dbfftqigf/image/upload/v1719054072/Platinum_rank_er61yd.jpg' }}
                   style={{ width: '100%', height: '100%', borderRadius: 17, }} />
               </LinearGradient>
 

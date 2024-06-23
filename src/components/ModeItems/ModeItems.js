@@ -26,9 +26,10 @@ export default ModeItems = ({ item }) => {
         navigation.navigate(x);
         console.log("Performing action A", isGameStarted);
         break;
-      case '2':
+      case 'FindMatch':
         // Perform action B
         console.log("Performing action B");
+        navigation.navigate(x);
         break;
       case 'RoomScreen':
         // Perform action C
