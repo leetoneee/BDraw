@@ -122,6 +122,36 @@ function Login({ }) {
     }).start();
   }, [animatedLogin, animatedBdraw]);
 
+  useEffect(() => {
+
+    const keyboardDidShowListener = Keyboard.addListener(
+      'keyboardDidShow',
+      () => {
+        Animated.timing(animatedLogin, {
+          toValue: height / 3,
+          duration: 300,
+          useNativeDriver: false,
+        }).start();
+      },
+    );
+
+    const keyboardDidHideListener = Keyboard.addListener(
+      'keyboardDidHide',
+      () => {
+        Animated.timing(animatedLogin, {
+          toValue: height / 2.7,
+          duration: 300,
+          useNativeDriver: false,
+        }).start();
+      },
+    );
+
+    return () => {
+      keyboardDidHideListener.remove();
+      keyboardDidShowListener.remove();
+    };
+  }, [animatedLogin, animatedBdraw]);
+
   const onDismissSnackBar = () => {
     setStatus('');
     setSnackbarVisible(false);

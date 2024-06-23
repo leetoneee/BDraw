@@ -190,7 +190,7 @@ export default DrawScreen = ({ props, round, onRoundEnd }) => {
       fetch(
         "https://api-inference.huggingface.co/models/kmewhort/beit-sketch-classifier",
         {
-          headers: { Authorization: `Bearer ${authorToken}` },
+          headers: { Authorization: `Bearer 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` },
           method: "POST",
           body: JSON.stringify({ inputs: data }),
         }
