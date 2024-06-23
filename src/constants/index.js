@@ -2,6 +2,8 @@ import { Dimensions } from "react-native";
 
 export const { height, width } = Dimensions.get('window');
 
+export const aspect_ratio = 0.02;
+
 // Calculate borderRadius
 
 // Exporting declarations

@@ -28,7 +28,7 @@ import { Provider as StoreProvide } from 'react-redux';
 import { store } from './src/redux/store';
 import BottomTabs from './src/components/Navigation/BottomTabs';
 import { socket } from './src/setup/socket';
-import { Username_input_fp } from './src/screens/ForgotPassword';
+import { Username_input_fp, Email_input_fp } from './src/screens/ForgotPassword';
 
 const Stack = createNativeStackNavigator();
 
@@ -61,6 +61,10 @@ export default function App() {
               name="ForgotPassword"
               component={Username_input_fp}
             />
+
+            <Stack.Screen
+            name="ForgotPassword_email"
+            component={Email_input_fp}/>
 
             <Stack.Screen
               name="BottomTabs"

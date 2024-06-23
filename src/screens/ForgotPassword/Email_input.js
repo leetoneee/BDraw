@@ -25,30 +25,27 @@ import {Svg, Polygon} from 'react-native-svg';
 import background_pen from '../../assets/images/background_pen.png';
 import Icon from 'react-native-vector-icons/AntDesign';
 import {useNavigation} from '@react-navigation/native';
+import AVT_Ingame from '../../components/avt_ingame_fp';
 
 const FROM_COLOR = '#A541E1';
 const VIA_COLOR = '#8752E4';
 const TO_COLOR = '#6F60E7';
 
-function Username_input_fp() {
+function Email_input_fp() {
   console.log({height, width});
   const navigation = useNavigation();
-    //navigato to email_input
-    const handleForgotPassword_email = () => {
-      navigation.navigate('ForgotPassword_email')
-    }
 
-  const [username, setUsername] = useState('');
+  const [Email, setEmail] = useState('');
 
-  const [visibleWrongUsername, setVisibleWrongUsername] = useState(false);
-  const hideDialogWrongUsername = () => setVisibleWrongUsername(false);
-  const showDialogWrongUsername = () => setVisibleWrongUsername(true);
+  const [visibleWrongEmail, setVisibleWrongEmail] = useState(false);
+  const hideDialogWrongEmail = () => setVisibleWrongEmail(false);
+  const showDialogWrongEmail = () => setVisibleWrongEmail(true);
 
-  const [visibleEmptyUsername, setVisibleEmptyUsername] = useState(false);
-  const hideDialogEmptyUsername = () => setVisibleEmptyUsername(false);
-  const showDialogEmptyUsername = () => setVisibleEmptyUsername(true);
+  const [visibleEmptyEmail, setVisibleEmptyEmail] = useState(false);
+  const hideDialogEmptyEmail = () => setVisibleEmptyEmail(false);
+  const showDialogEmptyEmail = () => setVisibleEmptyEmail(true);
 
-  const Test_username = 'embethuong1996';
+  const Test_Email = 'titvamit1996@gmail.com';
 
   const animatedForgotPassWord = useRef(new Animated.Value(1000)).current;
   const animatedBdraw = useRef(new Animated.ValueXY({x: 300, y: 300})).current;
@@ -93,16 +90,12 @@ function Username_input_fp() {
     };
   }, [animatedForgotPassWord, animatedBdraw]);
 
-  //PopUp
-
-  const PopUP = () => {};
-
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.pen_back_Container}>
         <TouchableOpacity
           style={styles.iconGoBack}
-          onPress={() => navigation.navigate('Login')}>
+          onPress={() => navigation.navigate('ForgotPassword')}>
           <Icon name="back" size={45} color="black" />
         </TouchableOpacity>
         <Animated.View
@@ -131,36 +124,35 @@ function Username_input_fp() {
           styles.animatedView,
           {transform: [{translateY: animatedForgotPassWord}]},
         ]}>
-        <View style={styles.TextBDrawContainer}>
+        <View style={styles.email_TextBDrawContainer}>
           <Text style={styles.TextBdraw}>BDraw</Text>
         </View>
         <View style={styles.ForgotPasswordContainer}>
           <Text style={styles.TextForgot}>Forgot</Text>
           <Text style={styles.TextPassword}>Password?</Text>
         </View>
-        <View style={styles.TextContainer}>
-          <Text style={styles.Text}>
-            Don't worry! It happens. Please enter the username of your account.
-          </Text>
+        <View style={styles.infoAccountContainer}>
+            <AVT_Ingame name={'Rayfiri'} elemental={'Earth'} ingame={'Binkeurs'}/>
         </View>
-        <View style={styles.username_input}>
+
+        <View style={styles.email_input}>
           <TextInput
             style={styles.input}
-            placeholder="Username"
+            placeholder="Email"
             placeholderTextColor="#BD98D1"
-            value={username}
-            onChangeText={setUsername}
+            value={Email}
+            onChangeText={setEmail}
           />
         </View>
         <View style={styles.Button_confirm_Container}>
           <TouchableOpacity
             onPress={() => {
-              if (username.length === 0) {
-                showDialogEmptyUsername();
-              } else if (username !== Test_username) {
-                showDialogWrongUsername();
+              if (Email.length === 0) {
+                showDialogEmptyEmail();
+              } else if (Email !== Test_Email) {
+                showDialogWrongEmail();
               } else {
-                handleForgotPassword_email();
+                
               }
             }}>
             <LinearGradient
@@ -171,12 +163,12 @@ function Username_input_fp() {
           </TouchableOpacity>
           <Portal>
             <Dialog
-              visible={visibleWrongUsername}
-              onDismiss={hideDialogWrongUsername}>
+              visible={visibleWrongEmail}
+              onDismiss={hideDialogWrongEmail}>
               <Dialog.Icon icon="alert" color="#FFD139" size={50} />
               <Dialog.Title
                 style={{fontFamily: 'Montserrat-Regular', fontWeight: 'bold'}}>
-                Username does not exist. Please check again!
+                Email does not exist. Please check again!
               </Dialog.Title>
               <Dialog.Content>
                 <View
@@ -188,7 +180,7 @@ function Username_input_fp() {
                   <TouchableOpacity
                     activeOpacity={0.8}
                     style={styles.closeButton}
-                    onPress={hideDialogWrongUsername}>
+                    onPress={hideDialogWrongEmail}>
                     <Text style={styles.closeButtonText}>Close</Text>
                   </TouchableOpacity>
                 </View>
@@ -197,12 +189,12 @@ function Username_input_fp() {
           </Portal>
           <Portal>
             <Dialog
-              visible={visibleEmptyUsername}
-              onDismiss={hideDialogEmptyUsername}>
+              visible={visibleEmptyEmail}
+              onDismiss={hideDialogEmptyEmail}>
               <Dialog.Icon icon="alert" color="#FFD139" size={50} />
               <Dialog.Title
                 style={{fontFamily: 'Montserrat-Regular', fontWeight: 'bold'}}>
-                Username is empty. Please enter your username!
+                Email is empty. Please enter your Email!
               </Dialog.Title>
               <Dialog.Content>
                 <View
@@ -214,7 +206,7 @@ function Username_input_fp() {
                   <TouchableOpacity
                     activeOpacity={0.8}
                     style={styles.closeButton}
-                    onPress={hideDialogEmptyUsername}>
+                    onPress={hideDialogEmptyEmail}>
                     <Text style={styles.closeButtonText}>Close</Text>
                   </TouchableOpacity>
                 </View>
@@ -227,4 +219,4 @@ function Username_input_fp() {
   );
 }
 
-export default Username_input_fp;
+export default Email_input_fp;

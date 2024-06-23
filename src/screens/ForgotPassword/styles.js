@@ -1,7 +1,9 @@
 import {StyleSheet} from 'react-native';
-import {height, width} from '../../constants';
+import {height, width, aspect_ratio} from '../../constants';
 
 const width_iconback = width - 65;
+
+const margin_padding_20 = height * aspect_ratio;
 
 export default styles = StyleSheet.create({
   container: {
@@ -9,8 +11,8 @@ export default styles = StyleSheet.create({
   },
 
   iconGoBack: {
-    marginHorizontal: 20,
-    marginVertical: 20,
+    marginHorizontal: margin_padding_20,
+    marginVertical: margin_padding_20,
     marginLeft: width_iconback,
     position: 'absolute',
     zIndex: 1,
@@ -38,13 +40,13 @@ export default styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'flex-start',
     borderRadius: 15,
-    paddingHorizontal: 20,
+    paddingHorizontal: height * aspect_ratio,
     borderWidth: 2,
   },
 
   TextBDrawContainer: {
-    marginTop: 20,
-    marginBottom: 20,
+    marginTop: margin_padding_20,
+    marginBottom: margin_padding_20,
   },
 
   TextBdraw: {
@@ -54,9 +56,9 @@ export default styles = StyleSheet.create({
   },
 
   ForgotPasswordContainer: {
-    marginBottom: 20,
     width: width / 1.1,
-    paddingHorizontal: 20,
+    marginBottom: margin_padding_20,
+    paddingHorizontal: margin_padding_20,
   },
 
   TextPassword: {
@@ -74,9 +76,9 @@ export default styles = StyleSheet.create({
   },
 
   TextContainer: {
-    marginBottom: 20,
+    marginBottom: margin_padding_20,
     width: width / 1.1,
-    paddingHorizontal: 20,
+    paddingHorizontal: margin_padding_20,
   },
 
   Text: {
@@ -87,8 +89,8 @@ export default styles = StyleSheet.create({
 
   username_input: {
     width: '100%',
-    marginHorizontal: 20,
-    marginBottom: 20,
+    marginHorizontal: margin_padding_20,
+    marginBottom: margin_padding_20,
   },
 
   input: {
@@ -97,11 +99,11 @@ export default styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 5,
     fontSize: 18,
-    paddingHorizontal: 20
+    paddingHorizontal: margin_padding_20
   },
   
   Button_confirm_Container: {
-    marginBottom: 20,
+    marginBottom: margin_padding_20,
   },
 
   linearGradient: {
@@ -125,10 +127,26 @@ export default styles = StyleSheet.create({
     paddingVertical: 10,
   },
   closeButtonText: {
-    fontSize: 20,
+    fontSize: height * aspect_ratio,
     color: '#fff',
     fontFamily: 'Montserrat-Regular',
     fontWeight: 'bold',
     paddingHorizontal: 30,
+  },
+
+  email_TextBDrawContainer: {
+    marginTop: margin_padding_20,
+  },
+
+  email_input: {
+    width: '100%',
+    marginHorizontal: margin_padding_20,
+    marginBottom: margin_padding_20,
+  },
+
+  infoAccountContainer: {
+    marginBottom: margin_padding_20,
+    width: width / 1.1,
+    paddingHorizontal: margin_padding_20,
   },
 });
