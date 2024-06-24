@@ -69,7 +69,8 @@ const MPResultModal = (props, ref) => {
       transparent={true}
       visible={modalVisible}
       onRequestClose={() => {
-        Alert.alert('Modal has been closed.');
+        // Alert.alert('Modal has been closed.');
+        return;
         setModalVisible(!modalVisible);
       }}>
       <Background style={{ flex: 1 }}>

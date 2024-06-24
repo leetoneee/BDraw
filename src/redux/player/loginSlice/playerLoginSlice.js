@@ -22,6 +22,9 @@ export const playerLoginSlice = createSlice({
   name: 'playerLogin',
   initialState,
   reducers: {
+    setUser: (state, action) => {
+      state.user = action.payload;
+    },
     reset: () => initialState,
   },
   extraReducers: (builder) => {
@@ -51,7 +54,7 @@ export const playerLoginSlice = createSlice({
   }
 })
 
-export const { reset, user } = playerLoginSlice.actions
+export const { setUser, reset } = playerLoginSlice.actions
 
 export default playerLoginSlice.reducer
 

@@ -11,6 +11,7 @@ import Icon from 'react-native-vector-icons/AntDesign';
 import styles from './styles';
 import { useNavigation } from '@react-navigation/native';
 import { Snackbar } from 'react-native-paper';
+import { useSelector } from 'react-redux';
 
 const FindMatch = () => {
   const matchRef = useRef();
@@ -19,6 +20,8 @@ const FindMatch = () => {
   const [room, setRoom] = useState(null);
   const [snackbarVisible, setSnackbarVisible] = useState(false);
   const [status, setStatus] = useState('');
+
+  const userDetail = useSelector((state) => state.playerDetail.userDetail);
 
   useEffect(() => {
     const handleMatchFound = (room) => {
@@ -53,7 +56,14 @@ const FindMatch = () => {
   }
 
   const handleFindMatch = () => {
-    socket.emit('findMatch');
+    const player = {
+      playerId: userDetail.playerId,
+      name: userDetail.name,
+      level: userDetail.exp.level,
+      currentAvatar: userDetail.currentAvatar,
+      rank: userDetail.rank
+    }
+    socket.emit('findMatch', player);
     matchRef.current.show();
   };
 

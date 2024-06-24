@@ -10,7 +10,7 @@ import MPWaitingModal from '../../components/MPWaitingModal';
 import MPResultModal from '../../components/MPResultModal';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigation, useFocusEffect } from '@react-navigation/native';
-import { setKeywords as dispatchSetKeywords } from '../../redux/multiPlayerSlice/multiPlayerSlice';
+import { setKeywords as dispatchSetKeywords, reset } from '../../redux/multiPlayerSlice/multiPlayerSlice';
 import background_pen from '../../assets/images/background_pen.png';
 import Icon from 'react-native-vector-icons/AntDesign';
 import Robotic from '../../assets/images/robotic.svg'
@@ -64,12 +64,20 @@ function MultiPlayerGame() {
       setRound(prep => prep + 1);
     };
 
+    const handleReconnect = () => {
+      dispatch(reset());
+      navigation.navigate('BottomTabs');
+    }
+
+    socket.on("connect", handleReconnect);
+
     socket.on('get-score', handleGetScore);
     socket.on('hide-result', handleHideResult);
 
     return () => {
       socket.off('get-score', handleGetScore);
       socket.off('hide-result', handleHideResult);
+      socket.off('connect', handleReconnect)
     };
   }, [round]);
 

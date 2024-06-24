@@ -7,6 +7,8 @@ import Background from '../../components/Background';
 import Icon from 'react-native-vector-icons/AntDesign';
 import AwesomeButton from "react-native-really-awesome-button";
 import { Snackbar } from 'react-native-paper';
+import { useSelector } from 'react-redux';
+import calculateLevel from '../../utils/calcLevel';
 
 const RoomScreen = () => {
   const navigation = useNavigation();
@@ -16,6 +18,8 @@ const RoomScreen = () => {
   const [status, setStatus] = useState('');
   const [snackbarVisible, setSnackbarVisible] = useState(false);
   const [activeTab, setActiveTab] = useState('Join');
+
+  const userDetail = useSelector((state) => state.playerDetail.userDetail);
 
   useEffect(() => {
     if (status)
@@ -47,15 +51,53 @@ const RoomScreen = () => {
   }, []);
 
   const handleCreateRoom = () => {
+    if (!roomId) {
+      setStatus('Invalid roomId: roomId is required');
+      return;
+    }
+
+    const regex = /^\d{1,6}$/;
+
+    if (!regex.test(roomId)) {
+      setStatus('Invalid roomId: roomId must be a number with a maximum of 6 digits.');
+      return;
+    }
+
     if (socket) {
       console.log("🚀 ~ handleCreateRoom ~ roomId:", roomId)
-      socket.emit('roomAction', { action: 'create', room: roomId, password: roomPassword });
+      const player = {
+        playerId: userDetail.playerId,
+        name: userDetail.name,
+        level: userDetail.exp.level,
+        currentAvatar: userDetail.currentAvatar,
+        rank: userDetail.rank
+      }
+      socket.emit('roomAction', { action: 'create', room: roomId, password: roomPassword, player });
     }
   };
 
   const handleJoinRoom = () => {
+    if (!roomId) {
+      setStatus('Invalid roomId: roomId is required');
+      return;
+    }
+
+    const regex = /^\d{1,6}$/;
+
+    if (!regex.test(roomId)) {
+      setStatus('Invalid roomId: roomId must be a number with a maximum of 6 digits.');
+      return;
+    }
+
     if (socket) {
-      socket.emit('roomAction', { action: 'join', room: roomId, password: roomPassword });
+      const player = {
+        playerId: userDetail.playerId,
+        name: userDetail.name,
+        level: userDetail.exp.level,
+        currentAvatar: userDetail.currentAvatar,
+        rank: userDetail.rank
+      }
+      socket.emit('roomAction', { action: 'join', room: roomId, password: roomPassword, player });
     }
   };
 
