@@ -103,7 +103,7 @@ function OTP_verify_fp() {
       <View style={styles.pen_back_Container}>
         <TouchableOpacity
           style={styles.iconGoBack}
-          onPress={() => navigation.navigate('ForgotPassword_email')}>
+          onPress={handleForgotPassword_email}>
           <Icon name="back" size={45} color="black" />
         </TouchableOpacity>
         <Animated.View
