@@ -20,7 +20,7 @@ import axios from 'axios';
 import LinearGradient from 'react-native-linear-gradient';
 import { useNavigation } from '@react-navigation/native';
 import HistoryMatch from "../HistoryMatch";
-import { playerDetail } from '../../redux/player/playerDetailSlice/playerDetailSlice';
+import { getAllItem } from '../../redux/items/getAllItemsSlice/getAllItemsSlice';
 
 const GradientBar = ({ x, y, animated }) => {
   return (
@@ -100,7 +100,12 @@ function HomeScreen({ navigation }) {
   const dispatch = useDispatch();
 
   const userDetail = useSelector((state) => state.playerDetail.userDetail);
+  const user = useSelector((state) => state.playerLog.user);
   console.log("🚀 ~ HomeScreen ~ userDetail:", userDetail);
+
+  useEffect(() => {
+    dispatch(getAllItem(user.playerId));
+  }, [user])
 
   const animatedLogin = useRef(new Animated.Value(-300)).current;
 
@@ -130,7 +135,7 @@ function HomeScreen({ navigation }) {
                 colors={["#6F60E7", '#8752E4', '#A541E1']}
                 start={{ x: 0, y: 0 }}
                 end={{ x: 1, y: 1 }}
-                style={{ padding: 3, borderRadius: 20, width: 140, height: 140 }}>
+                style={{ padding: 3, alignSelf: 'center', borderRadius: 20, width: 140, height: 140 }}>
                 <Image
                   source={{ uri: userDetail.currentAvatar ? userDetail.currentAvatar : defaultAvatarUri }}
                   style={{ width: '100%', height: '100%', borderRadius: 17 }}
@@ -156,17 +161,21 @@ function HomeScreen({ navigation }) {
                 <Text style={[styles.text, { marginLeft: 5 }]}>{userDetail.bcoin}</Text>
               </View>
               {/* Rank hiện tại */}
-              <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                <Image source={{ uri: userDetail.rankUrl }}
-                  style={{ width: 40, height: 40 }} />
-                <Text style={{ fontSize: 25, color: 'black' }}>Challenge</Text>
-              </View>
+              {userDetail &&
+                <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                  <Image source={{ uri: userDetail?.rank?.url }}
+                    style={{ width: 40, height: 40 }} />
+                  <Text style={{ fontSize: 20, color: 'black' ,textTransform: 'uppercase' }}>{userDetail?.rank?.name}</Text>
+                </View>
+              }
             </View>
           </View>
         </View>
+
         {/* List lịch sử */}
         <View style={{ flex: 4 }}>
         </View>
+
         {/* Để trống */}
         <View style={{ flex: 0.5 }}>
         </View>

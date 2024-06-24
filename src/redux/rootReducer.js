@@ -6,6 +6,7 @@ import multiPlayerReducer from "./multiPlayerSlice/multiPlayerSlice";
 import playerRegisterReducer from "./player/registerSlice/playerRegisterSlice";
 import playerLoginReducer from "./player/loginSlice/playerLoginSlice";
 import playerDetailReducer from "./player/playerDetailSlice/playerDetailSlice"
+import getAllItemReducer from "./items/getAllItemsSlice/getAllItemsSlice"
 
 const rootReducer = combineReducers({
   counter: counterReducer,
@@ -15,6 +16,7 @@ const rootReducer = combineReducers({
   playerReg: playerRegisterReducer,
   playerLog: playerLoginReducer,
   playerDetail: playerDetailReducer,
+  getAllItem: getAllItemReducer,
 });
 
 export default rootReducer;

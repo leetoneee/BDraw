@@ -8,7 +8,7 @@ export const { height, width } = Dimensions.get('window');
 
 
 // Authorization
-export const authorToken = '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';
+export const authorToken = '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';
 
 // Export list
 

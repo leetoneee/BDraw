@@ -21,6 +21,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Dialog, Portal } from 'react-native-paper';
 import { Snackbar } from 'react-native-paper';
 import { createProfilePlayer, reset } from '../../redux/player/registerSlice/playerRegisterSlice';
+import axios from '../../services/axios'
 
 const FROM_COLOR = '#A541E1';
 const VIA_COLOR = '#8752E4';
@@ -46,6 +47,7 @@ function SignUp({ navigation }) {
   const isSuccess = useSelector((state) => state.playerReg.isSuccess);
   const error = useSelector((state) => state.playerReg.error);
   const message = useSelector((state) => state.playerReg.message);
+  const player = useSelector((state) => state.playerReg.player);
 
   const hideDialog = async () => {
     setVisible(false);
@@ -56,15 +58,40 @@ function SignUp({ navigation }) {
   const showDialog = () => setVisible(true);
 
   useEffect(() => {
-    if (isSuccess === true) {
+    const postBuyItem = async (dataDauVao) => {
+      try {
+        let res = await axios.post('/player/buy-item', dataDauVao);
+        return res.data;
+      } catch (error) {
+        console.error('Failed to post buy item:', error);
+      }
+        console.log("🚀 ~ postBuyItem ~ data:", data)
+    };
+
+    const handleSuccess = async () => {
       showDialog();
       setIcon('check');
+
+      const dataDauVao = {
+        playerId: player.playerId,
+        itemId: '0',
+      };
+
+      await postBuyItem(dataDauVao);
+
+      // dispatch(playerDetail(user.playerId)); // Nếu cần thiết
+      navigation.navigate('Login');
+    };
+
+    if (isSuccess === true) {
+      handleSuccess();
     }
+
     if (isSuccess === false) {
       showDialog();
       setIcon('alert');
     }
-  }, [isSuccess])
+  }, [isSuccess]);
 
   useEffect(() => {
     if (status) {

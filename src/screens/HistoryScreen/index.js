@@ -125,6 +125,7 @@ const HistoryItem = ({ rank, score, date }) => {
         >
           <TouchableOpacity
             style={{
+              flex: 1,
               backgroundColor,
               flexDirection: 'row',
               justifyContent: 'space-around',
@@ -135,7 +136,7 @@ const HistoryItem = ({ rank, score, date }) => {
             onPress={() => navigation.navigate('HistoryMatch')}
           >
             {/* ảnh huân chương Top 1, Top 2 */}
-            <View style={{ justifyContent: 'center', }}>
+            <View style={{ justifyContent: 'center', alignSelf: 'center', }}>
               {renderTopRank(rank)}
             </View>
 
@@ -148,32 +149,33 @@ const HistoryItem = ({ rank, score, date }) => {
         </LinearGradient>
       ) : (
         <TouchableOpacity style={{
-          backgroundColor, flexDirection: 'row', justifyContent: 'flex-end',
+          backgroundColor, flexDirection: 'row',
           padding: 10, borderRadius: 27, overflow: 'hidden',
         }}
           onPress={() => navigation.navigate('HistoryMatch')}
         >
 
           {/* Chữ Top 3, Top 4 */}
-
-          <Svg style={{}}>
-            <Defs>
-              <LNG id="grad" x1="0" y1="0" x2="0" y2="1">
-                <Stop offset="0" stopColor="#e0e0e0" />
-                <Stop offset="1" stopColor="#b0bec5" />
-              </LNG>
-            </Defs>
-            <Polygon
-              points={calculateStarPoints(230, 30, 4, 25, 15)}
-              fill="url(#grad)"
-            />
-          </Svg>
-          <Text style={{ position: 'absolute', fontSize: 25, left: 53.5, top: 22, fontWeight: '500', fontFamily: 'verdana', color: 'white' }}>
-            {rank}
-          </Text>
+          <View style={{ flex: 1, height: 60, justifyContent: 'center',}}>
+            <Svg >
+              <Defs>
+                <LNG id="grad" x1="0" y1="0" x2="0" y2="1">
+                  <Stop offset="0" stopColor="#e0e0e0" />
+                  <Stop offset="1" stopColor="#b0bec5" />
+                </LNG>
+              </Defs>
+              <Polygon
+                points={calculateStarPoints(55, 30, 4, 25, 15)}
+                fill="url(#grad)"
+              />
+            </Svg>
+            <Text style={{ fontSize: 25, position: 'absolute', fontWeight: '500', fontFamily: 'verdana', color: 'white', left: 46 }}>
+              {rank}
+            </Text>
+          </View>
 
           {/* Điểm và Ngày */}
-          <View>
+          <View style={{ flex: 2, marginLeft: '7%' }}>
             <Text style={{ fontSize: 20, color: 'black', fontWeight: 500 }}>Score: {score}</Text>
             <Text style={{ fontSize: 22, color: 'black', fontWeight: 500 }}>{date}</Text>
           </View>
@@ -223,6 +225,8 @@ function HistoryScreen({ navigation }) {
   const [currentScore, setCurrentScore] = useState(userDetail.exp.currentExp);
   const [defaultScore, setDefaultScore] = useState(userDetail.exp.maxExpOfLevel);
 
+  const defaultAvatarUri = 'https://res.cloudinary.com/dbfftqigf/image/upload/v1719194745/avatar-trang-2_byptft.jpg';
+
   const animatedLogin = useRef(new Animated.Value(-300)).current;
 
   useEffect(() => {
@@ -263,9 +267,11 @@ function HistoryScreen({ navigation }) {
                 colors={["#6F60E7", '#8752E4', '#A541E1']}
                 start={{ x: 0, y: 0 }}
                 end={{ x: 1, y: 1 }}
-                style={{ padding: 3, borderRadius: 20, width: 140, height: 140, }}>
-                <Image source={{ uri: 'https://res.cloudinary.com/dbfftqigf/image/upload/v1719054072/Platinum_rank_er61yd.jpg' }}
-                  style={{ width: '100%', height: '100%', borderRadius: 17, }} />
+                style={{ padding: 3, alignSelf: 'center', borderRadius: 20, width: 140, height: 140, }}>
+                <Image
+                  source={{ uri: userDetail.currentAvatar ? userDetail.currentAvatar : defaultAvatarUri }}
+                  style={{ width: '100%', height: '100%', borderRadius: 17 }}
+                />
               </LinearGradient>
 
               {/* Điểm số theo cấp */}
@@ -287,9 +293,9 @@ function HistoryScreen({ navigation }) {
 
               {/* Rank hiện tại */}
               <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                <Image source={{ uri: userDetail.rankUrl }}
+                <Image source={{ uri: userDetail.rank.url }}
                   style={{ width: 40, height: 40, }} />
-                <Text style={[{ fontSize: 25, color: 'black' }]}>Challenge</Text>
+                <Text style={[{ fontSize: 20, color: 'black', textTransform: 'uppercase' }]}>{userDetail.rank.name}</Text>
               </View>
             </View>
           </View>
