@@ -5,8 +5,8 @@ import axios from "axios";
 
 //Create an instance of axios
 const instance = axios.create({
-  // baseURL: "http://188.166.185.29:3107/api/v1", // Kết nối be server
-  baseURL: "http://localhost:3107/api/v1",   // Kết nối be local
+  baseURL: "http://188.166.185.29/api/v1", // Kết nối be server
+  // baseURL: "http://localhost:3107/api/v1",   // Kết nối be local
 });
 
 instance.defaults.withCredentials = true;
