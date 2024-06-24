@@ -23,7 +23,7 @@ import HistoryMatch from "../HistoryMatch";
 
 const GradientBar = ({ x, y, animated }) => {
   return (
-    <View style={{ position: 'absolute', left: 45, top: 13, height: 30, width: 100, borderWidth: 1, borderColor: 'black', borderRadius: 100, overflow: 'hidden', }}>
+    <View style={{ position: 'absolute', left: 45, top: 17, height: 30, width: 100, borderWidth: 1, borderColor: 'black', borderRadius: 100, overflow: 'hidden', }}>
       <Animated.View
         style={{ width: `${x * 100 / y}%`, position: 'absolute', backgroundColor: '#00B8FF', height: '100%', transform: [{ translateX: animated }], }}
       />
@@ -45,25 +45,48 @@ const calculateStarPoints = (centerX, centerY, arms, outerRadius, innerRadius) =
 };
 
 const Badge = ({ number, x, y, animated }) => {
+
+  const getTextStyle = () => {
+    const length = number.toString().length;
+    let leftPosition = 34;
+
+    if (length === 1) {
+      leftPosition = 36;
+    } else if (length === 2) {
+      leftPosition = 31;
+    } else if (length === 3) {
+      leftPosition = 27;
+    }
+
+    return {
+      position: 'absolute',
+      fontSize: 15,
+      left: leftPosition,
+      top: 21,
+      fontWeight: '500',
+      color: 'white'
+    };
+  };
+
   return (
     <View style={{ position: 'relative' }}>
       {/* Thanh điểm dài */}
       <GradientBar x={x} y={y} animated={animated} />
       <Svg style={{ position: 'relative' }}>
         <Polygon
-          points={calculateStarPoints(40, 28, 8, 27, 17)}
+          points={calculateStarPoints(40, 32, 8, 30, 20)}
           fill="#027CD1"
         />
       </Svg>
       <Svg style={{ position: 'absolute', }}>
         <Polygon
-          points={calculateStarPoints(40, 28, 8, 19, 11)}
+          points={calculateStarPoints(40, 32, 8, 21, 14)}
           fill="#0090FF"
           stroke="white"
           strokeWidth="2"
         />
       </Svg>
-      <Text style={{ position: 'absolute', fontSize: 20, left: 34, top: 14, fontWeight: '500', color: 'white' }}>
+      <Text style={getTextStyle()}>
         {number}
       </Text>
     </View>
@@ -195,8 +218,10 @@ function HistoryScreen({ navigation }) {
 
   const dispatch = useDispatch();
 
-  const [currentScore, setCurrentScore] = useState(100);
-  const [defaultScore, setDefaultScore] = useState(200);
+  const userDetail = useSelector((state) => state.playerDetail.userDetail);
+
+  const [currentScore, setCurrentScore] = useState(userDetail.exp.currentExp);
+  const [defaultScore, setDefaultScore] = useState(userDetail.exp.maxExpOfLevel);
 
   const animatedLogin = useRef(new Animated.Value(-300)).current;
 
@@ -220,7 +245,9 @@ function HistoryScreen({ navigation }) {
   return (
     <Background>
       <View style={styles.container}>
-        <View style={{ flex: 2.7, elevation: 10, backgroundColor: 'white', }}>
+
+        {/* Header */}
+        <View style={{ flex: 3, elevation: 10, backgroundColor: 'white', borderTopEndRadius: 20, borderTopStartRadius: 20, }}>
           {/* Nút quay về */}
           <TouchableOpacity
             style={{ alignItems: 'flex-end' }}
@@ -244,30 +271,29 @@ function HistoryScreen({ navigation }) {
               {/* Điểm số theo cấp */}
               <Text style={{ alignSelf: 'center', fontSize: 17, fontWeight: 500, color: '#55DAFF' }}>{currentScore}/{defaultScore}</Text>
 
-              {/* Thanh ngôi sao và số */}
-              <Badge number={5} x={currentScore} y={defaultScore} animated={animatedLogin} />
+              {/* Thanh ngôi sao và level */}
+              <Badge number={userDetail.exp.level} x={currentScore} y={defaultScore} animated={animatedLogin} />
             </View>
             <View style={{ flex: 1, }}>
 
               {/* Tên người chơi */}
-              <Text style={styles.text}>huy</Text>
+              <Text style={styles.text}>{userDetail.name}</Text>
 
               {/* Vàng hiện có */}
               <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                 <Coin />
-                <Text style={[styles.text, { marginLeft: 5 }]}>2901</Text>
+                <Text style={[styles.text, { marginLeft: 5 }]}>{userDetail.bcoin}</Text>
               </View>
 
               {/* Rank hiện tại */}
               <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                <Image source={{ uri: 'https://thumbs.dreamstime.com/b/award-ribbons-white-background-st-rank-55140260.jpg?w=768' }}
-                  style={{ width: 40, height: 40, backgroundColor: 'red' }} />
+                <Image source={{ uri: userDetail.rankUrl }}
+                  style={{ width: 40, height: 40, }} />
                 <Text style={[{ fontSize: 25, color: 'black' }]}>Challenge</Text>
               </View>
             </View>
           </View>
         </View>
-
         {/* List lịch sử */}
         <View style={{ flex: 4 }}>
           <HistoryList data={historyData} />

@@ -7,33 +7,33 @@ const initialState = {
   error: '',
   isLoading: false,
   isError: false,
-  user: '',
+  userDetail: '',
 }
 
-export const loginPlayer = createAsyncThunk(
-  'player/loginPlayer',
-  async (requestOptions) => {
-    let res = await axios.post('/login', requestOptions)
+export const playerDetail = createAsyncThunk(
+  'player/playerDetail',
+  async (playerId) => {
+    let res = await axios.get(`/player/detail/${playerId}`)
     return res.data;
   }
 )
 
-export const playerLoginSlice = createSlice({
-  name: 'playerLogin',
+export const playerDetailSlice = createSlice({
+  name: 'playerDetail',
   initialState,
   reducers: {
     reset: () => initialState,
   },
   extraReducers: (builder) => {
     builder
-      .addCase(loginPlayer.pending, (state, action) => {
+      .addCase(playerDetail.pending, (state, action) => {
         state.isLoading = true;
         state.isError = false;
       })
-      .addCase(loginPlayer.fulfilled, (state, action) => {
+      .addCase(playerDetail.fulfilled, (state, action) => {
         if (action.payload.errCode === 0) {
           state.isSuccess = true;
-          state.user = action.payload.user;
+          state.userDetail = action.payload.player;
         } else {
           state.isSuccess = false;
           state.error = action.payload.error;
@@ -42,7 +42,7 @@ export const playerLoginSlice = createSlice({
         state.isLoading = false;
         state.isError = false;
       })
-      .addCase(loginPlayer.rejected, (state, action) => {
+      .addCase(playerDetail.rejected, (state, action) => {
         state.isSuccess = false;
         state.isLoading = false;
         state.isError = true;
@@ -51,8 +51,8 @@ export const playerLoginSlice = createSlice({
   }
 })
 
-export const { reset, user } = playerLoginSlice.actions
+export const { reset } = playerDetailSlice.actions
 
-export default playerLoginSlice.reducer
+export default playerDetailSlice.reducer
 
 
