@@ -7,6 +7,7 @@ import Background from '../../components/Background';
 import Icon from 'react-native-vector-icons/AntDesign';
 import AwesomeButton from "react-native-really-awesome-button";
 import { Snackbar } from 'react-native-paper';
+import { useSelector } from 'react-redux';
 
 const RoomScreen = () => {
   const navigation = useNavigation();
@@ -16,6 +17,8 @@ const RoomScreen = () => {
   const [status, setStatus] = useState('');
   const [snackbarVisible, setSnackbarVisible] = useState(false);
   const [activeTab, setActiveTab] = useState('Join');
+
+  const user = useSelector((state) => state.playerLog.user);
 
   useEffect(() => {
     if (status)
@@ -47,15 +50,55 @@ const RoomScreen = () => {
   }, []);
 
   const handleCreateRoom = () => {
+    if (!roomId) {
+      setStatus('Invalid roomId: roomId is required');
+      return;
+    }
+
+    const regex = /^\d{1,6}$/;
+
+    if (!regex.test(roomId)) {
+      setStatus('Invalid roomId: roomId must be a number with a maximum of 6 digits.');
+      return;
+    }
+
     if (socket) {
       console.log("🚀 ~ handleCreateRoom ~ roomId:", roomId)
-      socket.emit('roomAction', { action: 'create', room: roomId, password: roomPassword });
+      const player = {
+        playerId: user.playerId,
+        name: user.name,
+        level: 2,
+        // currentAvatar: user.currentAvatar
+        rank: 'https://res.cloudinary.com/dbfftqigf/image/upload/v1719134641/Gold_rank_sknkd9.png',
+        currentAvatar: 'https://res.cloudinary.com/dbfftqigf/image/upload/v1719125700/Kingsol.jpg'
+      }
+      socket.emit('roomAction', { action: 'create', room: roomId, password: roomPassword, player });
     }
   };
 
   const handleJoinRoom = () => {
+    if (!roomId) {
+      setStatus('Invalid roomId: roomId is required');
+      return;
+    }
+
+    const regex = /^\d{1,6}$/;
+
+    if (!regex.test(roomId)) {
+      setStatus('Invalid roomId: roomId must be a number with a maximum of 6 digits.');
+      return;
+    }
+
     if (socket) {
-      socket.emit('roomAction', { action: 'join', room: roomId, password: roomPassword });
+      const player = {
+        playerId: user.playerId,
+        name: user.name,
+        level: 7,
+        // currentAvatar: user.currentAvatar
+        rank: 'https://res.cloudinary.com/dbfftqigf/image/upload/v1719134798/Master_rank_ktypbl.png',
+        currentAvatar: 'https://res.cloudinary.com/dbfftqigf/image/upload/v1719125669/Nineri.jpg'
+      }
+      socket.emit('roomAction', { action: 'join', room: roomId, password: roomPassword, player });
     }
   };
 
