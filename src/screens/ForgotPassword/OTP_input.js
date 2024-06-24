@@ -25,30 +25,34 @@ import {Svg, Polygon} from 'react-native-svg';
 import background_pen from '../../assets/images/background_pen.png';
 import Icon from 'react-native-vector-icons/AntDesign';
 import {useNavigation} from '@react-navigation/native';
+import OTPInput from '../../components/OTPInput/index';
 
 const FROM_COLOR = '#A541E1';
 const VIA_COLOR = '#8752E4';
 const TO_COLOR = '#6F60E7';
 
-function Username_input_fp() {
-  console.log({height, width});
+function OTP_verify_fp() {
   const navigation = useNavigation();
-    //navigato to email_input
-    const handleForgotPassword_email = () => {
-      navigation.navigate('ForgotPassword_email');
-    }
+  //navigato to email_input
+  const handleForgotPassword_email = () => {
+    navigation.navigate('ForgotPassword_email');
+  };
 
-  const [username, setUsername] = useState('');
+  const [otp, setOtp] = useState('');
 
-  const [visibleWrongUsername, setVisibleWrongUsername] = useState(false);
-  const hideDialogWrongUsername = () => setVisibleWrongUsername(false);
-  const showDialogWrongUsername = () => setVisibleWrongUsername(true);
+  const handleOtpChange = (newOtp) => {
+    setOtp(newOtp);
+  };
 
-  const [visibleEmptyUsername, setVisibleEmptyUsername] = useState(false);
-  const hideDialogEmptyUsername = () => setVisibleEmptyUsername(false);
-  const showDialogEmptyUsername = () => setVisibleEmptyUsername(true);
+  const [visibleWrongOTP, setVisibleWrongOTP] = useState(false);
+  const hideDialogWrongOTP = () => setVisibleWrongOTP(false);
+  const showDialogWrongOTP = () => setVisibleWrongOTP(true);
 
-  const Test_username = 'embethuong1996';
+  const [visibleEmptyOTP, setVisibleEmptyOTP] = useState(false);
+  const hideDialogEmptyOTP = () => setVisibleEmptyOTP(false);
+  const showDialogEmptyOTP = () => setVisibleEmptyOTP(true);
+
+  const Test_OTP = '2345';
 
   const animatedForgotPassWord = useRef(new Animated.Value(1000)).current;
   const animatedBdraw = useRef(new Animated.ValueXY({x: 300, y: 300})).current;
@@ -93,16 +97,13 @@ function Username_input_fp() {
     };
   }, [animatedForgotPassWord, animatedBdraw]);
 
-  //PopUp
-
-  const PopUP = () => {};
-
+  console.log('OTP: ', otp);
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.pen_back_Container}>
         <TouchableOpacity
           style={styles.iconGoBack}
-          onPress={() => navigation.navigate('Login')}>
+          onPress={() => navigation.navigate('ForgotPassword_email')}>
           <Icon name="back" size={45} color="black" />
         </TouchableOpacity>
         <Animated.View
@@ -121,7 +122,7 @@ function Username_input_fp() {
       <View>
         <LinearGradient
           colors={['#A541E1', '#8752E4', '#6F60E7']}
-          style={styles.gradient_username}
+          style={styles.gradient_OTP}
           start={{x: 0, y: 0}}
           end={{x: 1, y: 1}}
         />
@@ -134,31 +135,37 @@ function Username_input_fp() {
         <View style={styles.TextBDrawContainer}>
           <Text style={styles.TextBdraw}>BDraw</Text>
         </View>
-        <View style={styles.ForgotPasswordContainer}>
-          <Text style={styles.TextForgot}>Forgot</Text>
-          <Text style={styles.TextPassword}>Password?</Text>
+        <View style={styles.VerificationContainer}>
+          <Text style={styles.TextVerification}>Verification</Text>
         </View>
-        <View style={styles.TextContainer}>
-          <Text style={styles.Text}>
-            Don't worry! It happens. Please enter the username of your account.
-          </Text>
+        <View style={styles.Text_OTP_Container}>
+          <Text style={styles.Text}>Enter Verification Code</Text>
         </View>
-        <View style={styles.username_input}>
-          <TextInput
-            style={styles.input}
-            placeholder="Username"
-            placeholderTextColor="#BD98D1"
-            value={username}
-            onChangeText={setUsername}
+        <View style={styles.OTPContainer}>
+          <OTPInput
+            length={4}
+            value={otp}
+            disabled={false}
+            onChange={handleOtpChange}
           />
+        </View>
+        <View style={styles.ResendContainer}>
+          <TouchableOpacity>
+            <View style={{flexDirection: 'row'}}>
+              <Text style={styles.TextResend}>
+                If you didn’t receive a code,{' '}
+              </Text>
+              <Text style={{color: '#A541E1', fontWeight: '900'}}>Resend</Text>
+            </View>
+          </TouchableOpacity>
         </View>
         <View style={styles.Button_confirm_Container}>
           <TouchableOpacity
             onPress={() => {
-              if (username.length === 0) {
-                showDialogEmptyUsername();
-              } else if (username !== Test_username) {
-                showDialogWrongUsername();
+              if (otp.length === 0) {
+                showDialogEmptyOTP();
+              } else if (otp !== Test_OTP) {
+                showDialogWrongOTP();
               } else {
                 handleForgotPassword_email();
               }
@@ -170,13 +177,11 @@ function Username_input_fp() {
             </LinearGradient>
           </TouchableOpacity>
           <Portal>
-            <Dialog
-              visible={visibleWrongUsername}
-              onDismiss={hideDialogWrongUsername}>
+            <Dialog visible={visibleWrongOTP} onDismiss={hideDialogWrongOTP}>
               <Dialog.Icon icon="alert" color="#FFD139" size={50} />
               <Dialog.Title
                 style={{fontFamily: 'Montserrat-Regular', fontWeight: 'bold'}}>
-                Username does not exist. Please check again!
+                OTP is incorrect. Please check again!
               </Dialog.Title>
               <Dialog.Content>
                 <View
@@ -188,7 +193,7 @@ function Username_input_fp() {
                   <TouchableOpacity
                     activeOpacity={0.8}
                     style={styles.closeButton}
-                    onPress={hideDialogWrongUsername}>
+                    onPress={hideDialogWrongOTP}>
                     <Text style={styles.closeButtonText}>Close</Text>
                   </TouchableOpacity>
                 </View>
@@ -196,13 +201,11 @@ function Username_input_fp() {
             </Dialog>
           </Portal>
           <Portal>
-            <Dialog
-              visible={visibleEmptyUsername}
-              onDismiss={hideDialogEmptyUsername}>
+            <Dialog visible={visibleEmptyOTP} onDismiss={hideDialogEmptyOTP}>
               <Dialog.Icon icon="alert" color="#FFD139" size={50} />
               <Dialog.Title
                 style={{fontFamily: 'Montserrat-Regular', fontWeight: 'bold'}}>
-                Username is empty. Please enter your username!
+                OTP is empty. Please enter your OTP!
               </Dialog.Title>
               <Dialog.Content>
                 <View
@@ -214,7 +217,7 @@ function Username_input_fp() {
                   <TouchableOpacity
                     activeOpacity={0.8}
                     style={styles.closeButton}
-                    onPress={hideDialogEmptyUsername}>
+                    onPress={hideDialogEmptyOTP}>
                     <Text style={styles.closeButtonText}>Close</Text>
                   </TouchableOpacity>
                 </View>
@@ -227,4 +230,4 @@ function Username_input_fp() {
   );
 }
 
-export default Username_input_fp;
+export default OTP_verify_fp;

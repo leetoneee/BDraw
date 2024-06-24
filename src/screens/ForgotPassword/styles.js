@@ -2,8 +2,8 @@ import {StyleSheet} from 'react-native';
 import {height, width, aspect_ratio} from '../../constants';
 
 const width_iconback = width - 65;
-
 const margin_padding_20 = height * aspect_ratio;
+const OTP_input_size = height * 0.0622;
 
 export default styles = StyleSheet.create({
   container: {
@@ -24,7 +24,21 @@ export default styles = StyleSheet.create({
     transform: [{rotate: '-20deg'}],
   },
 
-  gradient: {
+  gradient_email: {
+    width: width,
+    height: height,
+    top: height / 2.5, // 2,7 for animatedForgotPassword
+    position: 'absolute',
+  },
+
+  gradient_username: {
+    width: width,
+    height: height,
+    top: height / 2.1, // 2,3 for animatedForgotPassword
+    position: 'absolute',
+  },
+
+  gradient_OTP: {
     width: width,
     height: height,
     top: height / 2.1, // 2,3 for animatedForgotPassword
@@ -99,9 +113,9 @@ export default styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 5,
     fontSize: 18,
-    paddingHorizontal: margin_padding_20
+    paddingHorizontal: margin_padding_20,
   },
-  
+
   Button_confirm_Container: {
     marginBottom: margin_padding_20,
   },
@@ -148,5 +162,55 @@ export default styles = StyleSheet.create({
     marginBottom: margin_padding_20,
     width: width / 1.1,
     paddingHorizontal: margin_padding_20,
+  },
+
+  Text_OTP_Container: {
+    marginBottom: margin_padding_20,
+    width: width / 1.1,
+    alignItems: 'center',
+  },
+
+  VerificationContainer: {
+    width: width / 1.1,
+    marginBottom: margin_padding_20,
+    paddingHorizontal: margin_padding_20,
+    alignItems: 'center',
+  },
+
+  TextVerification: {
+    fontWeight: 'bold',
+    fontSize: 40,
+    color: 'black',
+    fontFamily: 'Montserrat-Regular.ttf',
+  },
+
+  OTPContainer: {
+    width: '100%',
+    marginBottom: margin_padding_20,
+  },
+
+  OTPinput: {
+    fontSize: 24,
+    color: 'black',
+    textAlign: 'center',
+    backgroundColor: '#F0F5FA',
+    borderColor: '#32343E',
+    borderWidth: 1,
+    borderRadius: 10,
+    height: OTP_input_size,
+    width: OTP_input_size,
+  },
+
+  ResendContainer: {
+    marginBottom: margin_padding_20,
+  },
+
+  ResendText: {
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+
+  Resend: {
+    color: '#A541E1',
   },
 });

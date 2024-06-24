@@ -34,6 +34,10 @@ const TO_COLOR = '#6F60E7';
 function Email_input_fp() {
   console.log({height, width});
   const navigation = useNavigation();
+  //navigate to OTP_screen
+  const handleForgotPassword_OTP = () => {
+    navigation.navigate('ForgotPassword_OTP_Verify');
+  }
 
   const [Email, setEmail] = useState('');
 
@@ -51,7 +55,7 @@ function Email_input_fp() {
   const animatedBdraw = useRef(new Animated.ValueXY({x: 300, y: 300})).current;
   useEffect(() => {
     Animated.timing(animatedForgotPassWord, {
-      toValue: height / 2.3,
+      toValue: height / 2.7,
       duration: 1000,
       useNativeDriver: false,
     }).start();
@@ -77,7 +81,7 @@ function Email_input_fp() {
       'keyboardDidHide',
       () => {
         Animated.timing(animatedForgotPassWord, {
-          toValue: height / 2.3,
+          toValue: height / 2.7,
           duration: 300,
           useNativeDriver: false,
         }).start();
@@ -89,6 +93,7 @@ function Email_input_fp() {
       keyboardDidShowListener.remove();
     };
   }, [animatedForgotPassWord, animatedBdraw]);
+
 
   return (
     <SafeAreaView style={styles.container}>
@@ -114,7 +119,7 @@ function Email_input_fp() {
       <View>
         <LinearGradient
           colors={['#A541E1', '#8752E4', '#6F60E7']}
-          style={styles.gradient}
+          style={styles.gradient_email}
           start={{x: 0, y: 0}}
           end={{x: 1, y: 1}}
         />
@@ -134,7 +139,11 @@ function Email_input_fp() {
         <View style={styles.infoAccountContainer}>
             <AVT_Ingame name={'Rayfiri'} elemental={'Earth'} ingame={'Binkeurs'}/>
         </View>
-
+        <View style={styles.TextContainer}>
+          <Text style={styles.Text}>
+            Don't worry! It happens. Please enter the username of your account.
+          </Text>
+        </View>
         <View style={styles.email_input}>
           <TextInput
             style={styles.input}
@@ -152,7 +161,7 @@ function Email_input_fp() {
               } else if (Email !== Test_Email) {
                 showDialogWrongEmail();
               } else {
-                
+                handleForgotPassword_OTP();
               }
             }}>
             <LinearGradient
