@@ -32,7 +32,6 @@ const VIA_COLOR = '#8752E4';
 const TO_COLOR = '#6F60E7';
 
 function Email_input_fp() {
-  console.log({height, width});
   const navigation = useNavigation();
   //navigate to OTP_screen
   const handleForgotPassword_OTP = () => {

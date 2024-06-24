@@ -31,7 +31,6 @@ const VIA_COLOR = '#8752E4';
 const TO_COLOR = '#6F60E7';
 
 function Username_input_fp() {
-  console.log({height, width});
   const navigation = useNavigation();
     //navigato to email_input
     const handleForgotPassword_email = () => {

@@ -33,21 +33,33 @@ const TO_COLOR = '#6F60E7';
 
 function OTP_verify_fp() {
   const navigation = useNavigation();
-  //navigato to email_input
+  //navigate to email_input
   const handleForgotPassword_email = () => {
     navigation.navigate('ForgotPassword_email');
   };
 
+  //navigate to CreateNewPass
+  const handleForgotPassword_CreateNewPass = () => {
+    navigation.navigate('ForgotPassword_Create_NewPass');
+  };
+
   const [otp, setOtp] = useState('');
 
-  const handleOtpChange = (newOtp) => {
+  const handleOtpChange = newOtp => {
     setOtp(newOtp);
   };
 
-  const [visibleWrongOTP, setVisibleWrongOTP] = useState(false);
-  const hideDialogWrongOTP = () => setVisibleWrongOTP(false);
-  const showDialogWrongOTP = () => setVisibleWrongOTP(true);
+  const setOTPNull = () => {
+    setOtp('');
+  };
 
+  const [visibleWrongOTP, setVisibleWrongOTP] = useState(false);
+  const hideDialogWrongOTP = () => {
+    setOTPNull();
+    setVisibleWrongOTP(false);
+  };
+  const showDialogWrongOTP = () => setVisibleWrongOTP(true);
+  
   const [visibleEmptyOTP, setVisibleEmptyOTP] = useState(false);
   const hideDialogEmptyOTP = () => setVisibleEmptyOTP(false);
   const showDialogEmptyOTP = () => setVisibleEmptyOTP(true);
@@ -167,7 +179,7 @@ function OTP_verify_fp() {
               } else if (otp !== Test_OTP) {
                 showDialogWrongOTP();
               } else {
-                handleForgotPassword_email();
+                handleForgotPassword_CreateNewPass();
               }
             }}>
             <LinearGradient

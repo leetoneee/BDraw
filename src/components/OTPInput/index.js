@@ -1,9 +1,15 @@
-import React, { useRef } from 'react';
+import React, { useRef, useEffect } from 'react';
 import { View, TextInput } from 'react-native';
 import styles from './styles';
 
 const OTPInput = ({ length, value = '', disabled, onChange }) => {
   const inputRefs = useRef([]);
+
+  useEffect(() => {
+    if (value === '') {
+      inputRefs.current[0]?.focus();
+    }
+  }, [value]);
 
   const handleChange = (text, index) => {
     const newValueArray = value.split('');
@@ -19,6 +25,8 @@ const OTPInput = ({ length, value = '', disabled, onChange }) => {
       inputRefs.current[index + 1]?.focus();
     } else if (text.length === 0 && index > 0) {
       inputRefs.current[index - 1]?.focus();
+    } else if (text.length === 0 && index === 0) {
+      inputRefs.current[0]?.focus();
     }
   };
 

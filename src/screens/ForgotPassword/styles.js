@@ -45,6 +45,13 @@ export default styles = StyleSheet.create({
     position: 'absolute',
   },
 
+  gradient_creatpw: {
+    width: width,
+    height: height,
+    top: height / 2.5, // 2,7 for animatedForgotPassword
+    position: 'absolute',
+  },
+
   animatedView: {
     backgroundColor: 'white',
     width: width / 1.1,
@@ -75,6 +82,12 @@ export default styles = StyleSheet.create({
     paddingHorizontal: margin_padding_20,
   },
 
+  CreatePasswordContainer: {
+    width: width / 1.1,
+    paddingVertical: margin_padding_20,
+    paddingHorizontal: margin_padding_20,
+  },
+
   TextPassword: {
     fontWeight: 'bold',
     fontSize: 40,
@@ -83,6 +96,13 @@ export default styles = StyleSheet.create({
   },
 
   TextForgot: {
+    fontWeight: 'bold',
+    fontSize: 40,
+    color: 'black',
+    fontFamily: 'Montserrat-Regular.ttf',
+  },
+
+  TextNewPassword: {
     fontWeight: 'bold',
     fontSize: 40,
     color: 'black',
@@ -99,6 +119,13 @@ export default styles = StyleSheet.create({
     color: '#444444',
     fontSize: 16,
     fontWeight: 'bold',
+  },
+
+  TextEnterNP: {
+    color: '#444444',
+    fontSize: 16,
+    fontWeight: 'bold',
+    paddingBottom: margin_padding_20
   },
 
   username_input: {
@@ -149,6 +176,10 @@ export default styles = StyleSheet.create({
   },
 
   email_TextBDrawContainer: {
+    marginTop: margin_padding_20,
+  },
+
+  createpw_TextBDrawContainer: {
     marginTop: margin_padding_20,
   },
 
@@ -213,4 +244,10 @@ export default styles = StyleSheet.create({
   Resend: {
     color: '#A541E1',
   },
+
+  enterNewPass: {
+    width: '100%',
+    marginHorizontal: margin_padding_20,
+    marginBottom: margin_padding_20,
+  }
 });
