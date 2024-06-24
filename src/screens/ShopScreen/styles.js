@@ -40,15 +40,20 @@ export default styles = StyleSheet.create({
       color: 'black',
       textAlign:'center'
     },
-    selectedTextStyle: {
-      fontSize: 16,
+    itemTextStyle: {
+      fontFamily: "RobotoMono-Regular",
+      fontSize: 25,
+      color: 'black',
     },
     iconStyle: {
-      width: 20,
-      height: 20,
+      width: 25,
+      height: 25,
+      color: 'black'
     },
-    inputSearchStyle: {
-      height: 40,
-      fontSize: 16,
+    item: {
+      padding: 17,
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      alignItems: 'center',
     },
 });

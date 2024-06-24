@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { View, Text, Image, Button, FlatList, TouchableOpacity, ScrollView } from 'react-native';
+import { View, Text, Image, Button, FlatList, TouchableOpacity, ScrollView, BackHandler, Alert } from 'react-native';
 import styles from './styles';
 import { socket } from '../../setup/socket';
 import { useNavigation } from '@react-navigation/native';
@@ -11,6 +11,7 @@ import Background from '../../components/Background';
 import { Snackbar } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/AntDesign';
 import FastImage from 'react-native-fast-image'
+import PlayerModal from '../../components/PlayerModal';
 
 const LobbyScreen = ({ route }) => {
   const navigation = useNavigation();
@@ -24,6 +25,27 @@ const LobbyScreen = ({ route }) => {
   const [snackbarVisible, setSnackbarVisible] = useState(false);
 
   const { roomId } = route.params;
+
+  useEffect(() => {
+    const backAction = () => {
+      Alert.alert('Hold on!', 'Are you sure you want to leave room?', [
+        {
+          text: 'Cancel',
+          onPress: () => null,
+          style: 'cancel',
+        },
+        { text: 'YES', onPress: () => handleLeaveRoom() },
+      ]);
+      return true;
+    };
+
+    const backHandler = BackHandler.addEventListener(
+      'hardwareBackPress',
+      backAction,
+    );
+
+    return () => backHandler.remove();
+  }, []);
 
   useEffect(() => {
     if (status)
@@ -86,12 +108,12 @@ const LobbyScreen = ({ route }) => {
   };
 
   const handleLeaveRoom = () => {
-    socket.emit('leave-room', room.id);
+    socket.emit('leave-room', roomId);
     navigation.goBack();
   };
 
   const handleChangeIsReady = () => {
-    socket.emit('is-ready', room.id);
+    socket.emit('is-ready', roomId);
   };
 
   const startCountdown = () => {
@@ -116,6 +138,12 @@ const LobbyScreen = ({ route }) => {
   };
 
   const PlayerCard = ({ player }) => {
+    const [isModalVisible, setModalVisible] = useState(false);
+
+    const toggleModal = () => {
+      setModalVisible(!isModalVisible);
+    };
+
     return (
       <LinearGradient colors={['#2E2E99', '#2E2E99']} style={styles.card}>
         <View style={{ flexDirection: 'column', justifyContent: 'center', alignItems: 'center', gap: 4 }}>
@@ -136,7 +164,7 @@ const LobbyScreen = ({ route }) => {
           <FastImage
             style={{ width: 40, height: 40 }}
             source={{
-              uri: player.rank,
+              uri: player.rank.url,
             }}
             resizeMode={FastImage.resizeMode.cover}
           />
@@ -172,7 +200,7 @@ const LobbyScreen = ({ route }) => {
                 </LinearGradient>
               </TouchableOpacity>
               :
-              <TouchableOpacity style={styles.button}>
+              <TouchableOpacity style={styles.button} onPress={toggleModal}>
                 <LinearGradient colors={['#333', '#222']} style={styles.gradientButton}>
                   <Text style={styles.buttonText}>PROFILE</Text>
                 </LinearGradient>
@@ -180,6 +208,7 @@ const LobbyScreen = ({ route }) => {
             }
           </View>
         </View>
+        <PlayerModal isVisible={isModalVisible} onClose={toggleModal} item={player} />
       </LinearGradient>
     );
   };
@@ -214,42 +243,7 @@ const LobbyScreen = ({ route }) => {
           }
         </Text>
       </View>
-      {/* <Button title='leave room' onPress={handleLeaveRoom} /> */}
-      {/* {room &&
-        <Text style={{ fontSize: 30, color: 'black', backgroundColor: 'green' }}>{String(room?.id)}</Text>
-      }
-      <View style={{ flex: 1, backgroundColor: 'white', height: 400, width: '100%' }}>
-        {players &&
-          players.map((player, index) => {
-            return (
-              <View key={index} style={styles.userContainer}>
-                <Avatar.Image size={54} source={require('../../assets/images/user-default.png')} />
-                <View style={styles.userInfo}>
-                  <Text style={styles.userName}>{player.id}</Text>
-                  <Text style={styles.userStatus}>
-                    {player.isReady ?
-                      "READY"
-                      : "NOT READY"
-                    }
-                  </Text>
-                </View>
-                {player.id === socket.id &&
-                  <Button title={player.isReady ? "Wait" : "Ready"} color={player.isReady ? "red" : "green"} onPress={handleChangeIsReady} />
-                }
-              </View>
-            )
-          })
 
-        }
-        <Text>
-          {(countdown && countdown !== 0) ?
-            `Match will start in ${countdown} seconds`
-            : ""
-          }
-        </Text>
-
-
-      </View> */}
       <Snackbar
         visible={snackbarVisible}
         onDismiss={onDismissSnackBar}
@@ -262,13 +256,6 @@ const LobbyScreen = ({ route }) => {
       >
         <Text Text style={{ fontFamily: 'verdana', color: '#fff', fontSize: 13 }}>{status}</Text>
       </Snackbar>
-      {/* <View style={styles.container}>
-                <FlatList
-                    data={DATA}
-                    renderItem={({ item }) => <PlayerCard player={item} />}
-                    keyExtractor={item => item.id}
-                />
-            </View> */}
     </Background>
   );
 };

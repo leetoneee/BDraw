@@ -30,6 +30,7 @@ import Loading from '../../components/Loading';
 import { Snackbar } from 'react-native-paper';
 import { Dialog, Portal } from 'react-native-paper';
 import { loginPlayer, reset } from '../../redux/player/loginSlice/playerLoginSlice';
+import { playerDetail } from '../../redux/player/playerDetailSlice/playerDetailSlice';
 
 const FROM_COLOR = '#A541E1';
 const VIA_COLOR = '#8752E4';
@@ -51,6 +52,7 @@ function Login({ }) {
   const isLoading = useSelector((state) => state.playerLog.isLoading);
   const isSuccess = useSelector((state) => state.playerLog.isSuccess);
   const message = useSelector((state) => state.playerLog.message);
+  const user = useSelector((state) => state.playerLog.user);
 
   const hideDialog = async () => {
     setVisible(false);
@@ -70,17 +72,6 @@ function Login({ }) {
       return;
     }
 
-    const dispatchLogin = async (userCredentials) => {
-
-      try {
-        await loginPlayer(userCredentials);
-
-      } catch (error) {
-        console.error("Error when login:", error);
-        // handle error
-      }
-    }
-
     const requestOptions = {
       username: username,
       password: password,
@@ -95,6 +86,7 @@ function Login({ }) {
 
   useEffect(() => {
     if (isSuccess === true) {
+      dispatch(playerDetail(user.playerId));
       navigation.navigate('BottomTabs');
     }
     if (isSuccess === false) {

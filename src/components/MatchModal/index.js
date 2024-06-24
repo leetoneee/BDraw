@@ -1,4 +1,3 @@
-
 import React, { useImperativeHandle, forwardRef, useState, useRef, useEffect } from 'react';
 import { Alert, Modal, StyleSheet, Text, Easing, Pressable, View, Animated, TouchableOpacity } from 'react-native';
 import { Icon, Tooltip } from 'react-native-paper';
@@ -30,35 +29,15 @@ const MatchModal = (props, ref) => {
   useImperativeHandle(ref, () => ({
     show() {
       setModalVisible(true);
+      startDotAnimation();
     },
     hide() {
       setModalVisible(false);
+      stopDotAnimation();
     },
   }), []);
 
   useEffect(() => {
-    const animateDot = (dot, delay) => {
-      Animated.loop(
-        Animated.sequence([
-          Animated.timing(dot, {
-            toValue: 1,
-            duration: 500,
-            delay,
-            useNativeDriver: true,
-          }),
-          Animated.timing(dot, {
-            toValue: 0,
-            duration: 500,
-            useNativeDriver: true,
-          }),
-        ]),
-      ).start();
-    };
-
-    animateDot(dot1, 0);
-    animateDot(dot2, 250);
-    animateDot(dot3, 500);
-
     const handleMatchFound = () => {
       startMatchFoundAnimation();
     };
@@ -84,6 +63,36 @@ const MatchModal = (props, ref) => {
       socket.off('letsPlay', handleLetsPlay);
     };
   }, [roomId]);
+
+  const startDotAnimation = () => {
+    const animateDot = (dot, delay) => {
+      Animated.loop(
+        Animated.sequence([
+          Animated.timing(dot, {
+            toValue: 1,
+            duration: 500,
+            delay,
+            useNativeDriver: true,
+          }),
+          Animated.timing(dot, {
+            toValue: 0,
+            duration: 500,
+            useNativeDriver: true,
+          }),
+        ]),
+      ).start();
+    };
+
+    animateDot(dot1, 0);
+    animateDot(dot2, 250);
+    animateDot(dot3, 500);
+  };
+
+  const stopDotAnimation = () => {
+    dot1.setValue(0);
+    dot2.setValue(0);
+    dot3.setValue(0);
+  };
 
   const startMatchFoundAnimation = () => {
     Animated.timing(fadeAnim, {
@@ -141,7 +150,11 @@ const MatchModal = (props, ref) => {
       transparent={true}
       visible={modalVisible}
       onRequestClose={() => {
-        Alert.alert('Modal has been closed.');
+        // Alert.alert('Modal has been closed.');
+        if (findingMatch === true)
+          handleCancelFindMatch();
+        if (findingMatch === false)
+          return;
         setModalVisible(!modalVisible);
       }}>
       <Animated.View style={{ ...styles.container, opacity: fadeAnim }}>
