@@ -52,6 +52,11 @@ function SignUp({ navigation }) {
   const hideDialog = async () => {
     setVisible(false);
     setIcon('check');
+    if (isSuccess === true) {
+      navigation.navigate('Login');
+      dispatch(reset());
+      return;
+    }
     dispatch(reset());
   }
 
