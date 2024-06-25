@@ -100,12 +100,14 @@ function HomeScreen({ navigation }) {
   const dispatch = useDispatch();
 
   const userDetail = useSelector((state) => state.playerDetail.userDetail);
+  const listItem = useSelector((state) => state.getAllItem.listItem);
   const user = useSelector((state) => state.playerLog.user);
-  console.log("🚀 ~ HomeScreen ~ userDetail:", userDetail);
 
   useEffect(() => {
     dispatch(getAllItem(user.playerId));
+    console.log("huhu: ")
   }, [user])
+    
 
   const animatedLogin = useRef(new Animated.Value(-300)).current;
 

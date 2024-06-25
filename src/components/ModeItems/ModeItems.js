@@ -44,7 +44,7 @@ export default ModeItems = ({ item }) => {
 
   return (
 
-    <View style={[styles.container]}>
+    <View style={[styles.container,  ]}>
 
       <View>
         <Pressable onPress={() => handlePress(item.href)}>
@@ -52,7 +52,7 @@ export default ModeItems = ({ item }) => {
         </Pressable>
       </View>
 
-      <TouchableOpacity style={{ marginTop: 15 }} onPress={toggleModal}>
+      <TouchableOpacity style={{ marginTop: 15,}} onPress={toggleModal}>
         <Icon name="question" size={50} color="black" />
       </TouchableOpacity>
       {isModalVisible && <ModeItemModal isVisible={isModalVisible} onClose={toggleModal} item={item} />}
