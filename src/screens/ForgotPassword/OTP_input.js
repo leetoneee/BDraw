@@ -38,6 +38,8 @@ function OTP_verify_fp() {
     navigation.navigate('ForgotPassword_email');
   };
 
+  // const OTP = useSelector((state) => state.)
+
   //navigate to CreateNewPass
   const handleForgotPassword_CreateNewPass = () => {
     navigation.navigate('ForgotPassword_Create_NewPass');
@@ -64,7 +66,6 @@ function OTP_verify_fp() {
   const hideDialogEmptyOTP = () => setVisibleEmptyOTP(false);
   const showDialogEmptyOTP = () => setVisibleEmptyOTP(true);
 
-  const Test_OTP = '2345';
 
   const animatedForgotPassWord = useRef(new Animated.Value(1000)).current;
   const animatedBdraw = useRef(new Animated.ValueXY({x: 300, y: 300})).current;

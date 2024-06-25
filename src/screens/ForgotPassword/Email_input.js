@@ -35,8 +35,18 @@ function Email_input_fp() {
   const navigation = useNavigation();
   //navigate to OTP_screen
   const handleForgotPassword_OTP = () => {
+    const initOtp = () => {
+      return Math.floor(Math.random() * 10000);
+    };
+    let otp = initOtp();
+    let raw = {
+      otp: otp,
+      email: user.Email,
+    };
+    dispatch(setOtp(otp));
+    dispatch(sendOtp(raw));
     navigation.navigate('ForgotPassword_OTP_Verify');
-  }
+  };
 
   const [Email, setEmail] = useState('');
 
@@ -93,7 +103,6 @@ function Email_input_fp() {
     };
   }, [animatedForgotPassWord, animatedBdraw]);
 
-
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.pen_back_Container}>
@@ -136,7 +145,11 @@ function Email_input_fp() {
           <Text style={styles.TextPassword}>Password?</Text>
         </View>
         <View style={styles.infoAccountContainer}>
-            <AVT_Ingame name={'Rayfiri'} elemental={'Earth'} ingame={'Binkeurs'}/>
+          <AVT_Ingame
+            name={'Rayfiri'}
+            elemental={'Earth'}
+            ingame={'Binkeurs'}
+          />
         </View>
         <View style={styles.TextContainer}>
           <Text style={styles.Text}>
