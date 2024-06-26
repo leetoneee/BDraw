@@ -21,30 +21,24 @@ import {height, width} from '../../constants';
 import axios from 'axios';
 import React from 'react';
 import LinearGradient from 'react-native-linear-gradient';
-import {Svg, Polygon} from 'react-native-svg';
 import background_pen from '../../assets/images/background_pen.png';
 import Icon from 'react-native-vector-icons/AntDesign';
 import {useNavigation} from '@react-navigation/native';
-import AVT_Ingame from '../../components/avt_ingame_fp';
 
 const FROM_COLOR = '#A541E1';
 const VIA_COLOR = '#8752E4';
 const TO_COLOR = '#6F60E7';
 
 function isEmptyPass({pass}) {
-  const passStr = String(pass);
-  return passStr.length == 0 ? true : false;
+  return pass.toString().length == 0 ? true : false;
 }
 
 function Check_length_pass({pass}) {
-  const passStr = String(pass);
-  return passStr.length >= 8 ? true : false;
+  return pass.toString().length >= 8 ? true : false;
 }
 
 function ComparePass({pass, confirm}) {
-  const passStr = String(pass);
-  const confirmPassStr = String(confirm);
-  return passStr === confirmPassStr;
+  return pass === confirm;
 }
 
 function CreateNewPass_fp() {

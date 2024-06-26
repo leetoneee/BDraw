@@ -11,6 +11,7 @@ export default styles = StyleSheet.create({
         borderRadius: 20,
         paddingHorizontal: 10,
         backgroundColor: '#fff',
+        paddingVertical: 30
     },
     welcomeText: {
         fontSize: 24,

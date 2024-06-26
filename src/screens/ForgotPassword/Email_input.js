@@ -26,24 +26,37 @@ import background_pen from '../../assets/images/background_pen.png';
 import Icon from 'react-native-vector-icons/AntDesign';
 import {useNavigation} from '@react-navigation/native';
 import AVT_Ingame from '../../components/avt_ingame_fp';
+import { useRoute } from '@react-navigation/native';
+import {sendOtp, setOtp} from '../../redux/system/sendOtp/sendOtpSlice';
+import {reset} from '../../redux/player/playerDetailByUsernameSlice/playerDetailByUsernameSlice';
 
 const FROM_COLOR = '#A541E1';
 const VIA_COLOR = '#8752E4';
 const TO_COLOR = '#6F60E7';
 
+const initOtp = () => {
+  return Math.floor(Math.random() * 10000);
+};
+
 function Email_input_fp() {
+  const dispatch = useDispatch();
+
+  const userDetail = useSelector(
+    state => state.playerDetailByUsername.userDetail,
+  );
+
+  console.log('Thong tin userDetail: ', userDetail);
+
   const navigation = useNavigation();
   //navigate to OTP_screen
   const handleForgotPassword_OTP = () => {
-    const initOtp = () => {
-      return Math.floor(Math.random() * 10000);
-    };
-    let otp = initOtp();
+    let otpsend = initOtp();
+    console.log('OTP: ', otpsend)
     let raw = {
-      otp: otp,
-      email: user.Email,
+      otp: otpsend,
+      email: userDetail.gmail,
     };
-    dispatch(setOtp(otp));
+    dispatch(setOtp(otpsend));
     dispatch(sendOtp(raw));
     navigation.navigate('ForgotPassword_OTP_Verify');
   };
@@ -58,7 +71,6 @@ function Email_input_fp() {
   const hideDialogEmptyEmail = () => setVisibleEmptyEmail(false);
   const showDialogEmptyEmail = () => setVisibleEmptyEmail(true);
 
-  const Test_Email = 'titvamit1996@gmail.com';
 
   const animatedForgotPassWord = useRef(new Animated.Value(1000)).current;
   const animatedBdraw = useRef(new Animated.ValueXY({x: 300, y: 300})).current;
@@ -108,7 +120,10 @@ function Email_input_fp() {
       <View style={styles.pen_back_Container}>
         <TouchableOpacity
           style={styles.iconGoBack}
-          onPress={() => navigation.navigate('ForgotPassword')}>
+          onPress={() => {
+            dispatch(reset());
+            navigation.navigate('ForgotPassword');
+          }}>
           <Icon name="back" size={45} color="black" />
         </TouchableOpacity>
         <Animated.View
@@ -146,9 +161,8 @@ function Email_input_fp() {
         </View>
         <View style={styles.infoAccountContainer}>
           <AVT_Ingame
-            name={'Rayfiri'}
-            elemental={'Earth'}
-            ingame={'Binkeurs'}
+            url={userDetail.currentAvatar}
+            ingame={userDetail.name}
           />
         </View>
         <View style={styles.TextContainer}>
@@ -170,7 +184,7 @@ function Email_input_fp() {
             onPress={() => {
               if (Email.length === 0) {
                 showDialogEmptyEmail();
-              } else if (Email !== Test_Email) {
+              } else if (Email !== userDetail.gmail) {
                 showDialogWrongEmail();
               } else {
                 handleForgotPassword_OTP();
@@ -189,7 +203,7 @@ function Email_input_fp() {
               <Dialog.Icon icon="alert" color="#FFD139" size={50} />
               <Dialog.Title
                 style={{fontFamily: 'Montserrat-Regular', fontWeight: 'bold'}}>
-                Email does not exist. Please check again!
+                Email is incorrect. Please check again!
               </Dialog.Title>
               <Dialog.Content>
                 <View

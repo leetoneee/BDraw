@@ -26,33 +26,40 @@ import background_pen from '../../assets/images/background_pen.png';
 import Icon from 'react-native-vector-icons/AntDesign';
 import {useNavigation} from '@react-navigation/native';
 import OTPInput from '../../components/OTPInput/index';
+import {sendOtp, setOtp} from '../../redux/system/sendOtp/sendOtpSlice';
 
 const FROM_COLOR = '#A541E1';
 const VIA_COLOR = '#8752E4';
 const TO_COLOR = '#6F60E7';
 
+const initOtp = () => {
+  return Math.floor(Math.random() * 10000);
+};
+
 function OTP_verify_fp() {
   const navigation = useNavigation();
+  const dispatch = useDispatch();
   //navigate to email_input
   const handleForgotPassword_email = () => {
     navigation.navigate('ForgotPassword_email');
   };
 
-  // const OTP = useSelector((state) => state.)
-
+  const otp_gmail = useSelector(state => state.sendOtp.otp);
+  const userDetail = useSelector(state => state.playerDetailByUsername.userDetail);
+  console.log('OTP_gmail: ', otp_gmail);
   //navigate to CreateNewPass
   const handleForgotPassword_CreateNewPass = () => {
     navigation.navigate('ForgotPassword_Create_NewPass');
   };
 
-  const [otp, setOtp] = useState('');
+  const [otp, StatesetOtp] = useState('');
 
   const handleOtpChange = newOtp => {
-    setOtp(newOtp);
+    StatesetOtp(newOtp);
   };
 
   const setOTPNull = () => {
-    setOtp('');
+    StatesetOtp('');
   };
 
   const [visibleWrongOTP, setVisibleWrongOTP] = useState(false);
@@ -61,11 +68,10 @@ function OTP_verify_fp() {
     setVisibleWrongOTP(false);
   };
   const showDialogWrongOTP = () => setVisibleWrongOTP(true);
-  
+
   const [visibleEmptyOTP, setVisibleEmptyOTP] = useState(false);
   const hideDialogEmptyOTP = () => setVisibleEmptyOTP(false);
   const showDialogEmptyOTP = () => setVisibleEmptyOTP(true);
-
 
   const animatedForgotPassWord = useRef(new Animated.Value(1000)).current;
   const animatedBdraw = useRef(new Animated.ValueXY({x: 300, y: 300})).current;
@@ -163,7 +169,17 @@ function OTP_verify_fp() {
           />
         </View>
         <View style={styles.ResendContainer}>
-          <TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => {
+              let otpsend = initOtp();
+              console.log('OTP_new: ', otpsend);
+              let raw = {
+                otp: otpsend,
+                email: userDetail.gmail,
+              };
+              dispatch(setO6tp(otpsend));
+              dispatch(sendOtp(raw));
+            }}>
             <View style={{flexDirection: 'row'}}>
               <Text style={styles.TextResend}>
                 If you didn’t receive a code,{' '}
@@ -177,7 +193,9 @@ function OTP_verify_fp() {
             onPress={() => {
               if (otp.length === 0) {
                 showDialogEmptyOTP();
-              } else if (otp !== Test_OTP) {
+              } else if (otp !== otp_gmail.toString()) {
+                // console.log('Type of otp: ', typeof otp);
+                // console.log('Type of otp_gmail: ', typeof otp_gmail.toString());
                 showDialogWrongOTP();
               } else {
                 handleForgotPassword_CreateNewPass();

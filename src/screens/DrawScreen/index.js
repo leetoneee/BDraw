@@ -1,36 +1,38 @@
-import React, {useEffect, useMemo, useRef, useState} from 'react';
-import {View, Dimensions, TouchableOpacity, Text, Image} from 'react-native';
-import {Svg, Path} from 'react-native-svg';
-import ViewShot from 'react-native-view-shot';
-import styles from './styles';
-import {captureRef} from 'react-native-view-shot';
-import {debounce} from '../../hooks/debounce';
-import AwesomeButton from 'react-native-really-awesome-button';
-import {Icon} from 'react-native-paper';
-import {displayTime} from '../../utils/displayTime';
-import {Dialog, Portal, Button} from 'react-native-paper';
-import ColorPicker from '../../components/ColorPicker';
-import {colors, timeLimit, strokeWidthPath} from '../../constants';
-import {useDispatch, useSelector} from 'react-redux';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import {
-  reset,
-  setEncodeImages,
-  setScoreTable,
-} from '../../redux/drawSlice/drawSlice';
+  View,
+  Dimensions,
+  TouchableOpacity,
+  Text,
+  Image,
+} from 'react-native';
+import { Svg, Path } from 'react-native-svg';
+import ViewShot from "react-native-view-shot";
+import styles from './styles';
+import { captureRef } from 'react-native-view-shot';
+import { debounce } from '../../hooks/debounce';
+import AwesomeButton from "react-native-really-awesome-button";
+import { Icon } from 'react-native-paper';
+import { displayTime } from '../../utils/displayTime';
+import { Dialog, Portal } from 'react-native-paper';
+import ColorPicker from '../../components/ColorPicker';
+import { colors, timeLimit, strokeWidthPath, authorToken } from '../../constants';
+import { useDispatch, useSelector } from 'react-redux';
+import { reset, setEncodeImages, setScoreTable } from '../../redux/drawSlice/drawSlice';
 import Tts from 'react-native-tts';
-import {throttle} from '../../hooks/throttle';
+import { throttle } from '../../hooks/throttle';
 
-export default DrawScreen = ({props, round, onRoundEnd}) => {
-  const viewShotRef = useRef();
+export default DrawScreen = ({ props, round, onRoundEnd }) => {
+  const viewShotRef = useRef()
   const colorPickerRef = useRef();
   const isMounted = useRef(true); // Biến ref để theo dõi trạng thái mount của component
   const intervalRef = useRef(null);
   const dispatch = useDispatch();
 
-  const currentColor = useSelector(state => state.multiPlayer.currentColor);
-  const scoreTable = useSelector(state => state.draw.scoreTable);
-  const keywords = useSelector(state => state.multiPlayer.keywords);
-  const encodeImages = useSelector(state => state.draw.encodeImages);
+  const currentColor = useSelector((state) => state.draw.currentColor);
+  const scoreTable = useSelector((state) => state.draw.scoreTable);
+  const keywords = useSelector((state) => state.draw.keywords);
+  const encodeImages = useSelector((state) => state.draw.encodeImages);
 
   const [endRound, setEndRound] = useState(false);
   const [timer, setTimer] = useState(timeLimit);
@@ -49,7 +51,7 @@ export default DrawScreen = ({props, round, onRoundEnd}) => {
   const hideDialog = async () => setVisible(false);
   const showDialog = () => setVisible(true);
 
-  const handleVoice = script => {
+  const handleVoice = (script) => {
     Tts.setDefaultLanguage('en-US');
     Tts.speak(script);
   };
@@ -81,26 +83,28 @@ export default DrawScreen = ({props, round, onRoundEnd}) => {
       if (timer === 0) {
         setEndRound(true);
         setLabel("Sorry, I couldn't guess it.");
-        handleVoice("Sorry, I couldn't guess it.");
+        handleVoice("Sorry, I couldn't guess it.")
         handleStoreEncodeImage();
         setTimeout(() => {
-          onRoundEnd(); // Callback to notify the parent component that the round has ended
-        }, 2000);
+          onRoundEnd();  // Callback to notify the parent component that the round has ended
+        }, 2000)
       }
     }
   }, [timer]);
 
+
   // handle win game
   useEffect(() => {
-    console.log('🚀 ~ useEffect ~ scoreTable:', scoreTable);
+    console.log("🚀 ~ useEffect ~ scoreTable:", scoreTable)
 
-    if (scoreTable[round]) return;
+    if (scoreTable[round])
+      return;
 
     if (label === keywords[round]) {
       let currentScoreTable = [...scoreTable];
-      console.log('🚀 ~ useEffect ~ currentScoreTable:', currentScoreTable);
+      console.log("🚀 ~ useEffect ~ currentScoreTable:", currentScoreTable)
       currentScoreTable[round] = true;
-      console.log('🚀 ~ useEffect ~ currentScoreTable:', currentScoreTable);
+      console.log("🚀 ~ useEffect ~ currentScoreTable:", currentScoreTable)
       dispatch(setScoreTable(currentScoreTable));
 
       setLabel(`Oh I know, It's ${keywords[round]}`);
@@ -111,34 +115,36 @@ export default DrawScreen = ({props, round, onRoundEnd}) => {
         handleClearButtonClick();
         onRoundEnd();
       }, 2000);
-      console.log('🚀 ~ timeout ~ timeout:', timeout);
+      console.log("🚀 ~ timeout ~ timeout:", timeout)
     }
     if (label && label !== keywords[round] && !endRound) {
       handleVoice(`or ${label}`);
     }
-  }, [label, scoreTable, endRound]);
+
+  }, [label, scoreTable, endRound])
 
   useEffect(() => {
     if (intervalRef.current) clearInterval(intervalRef.current);
 
-    if (scoreTable[round] || endRound) return;
+    if (scoreTable[round] || endRound)
+      return;
 
     intervalRef.current = setInterval(() => {
       const match = allResults.find(result => result.label === keywords[round]);
       if (match) {
         setLabel(match.label);
         clearInterval(intervalRef.current);
-        console.log('🚀 ~ interval ~ allResults:', allResults);
+        console.log("🚀 ~ interval ~ allResults:", allResults)
       } else if (allResults.length > 0) {
         if (currentIndex === allResults.length) {
           setLabel('...');
           return;
         }
         setLabel(allResults[currentIndex].label);
-        setCurrentIndex(prevIndex => prevIndex + 1);
+        setCurrentIndex((prevIndex) => (prevIndex + 1));
       }
     }, 1500);
-    console.log('🚀 ~ interval ~ interval:', intervalRef.current);
+    console.log("🚀 ~ interval ~ interval:", intervalRef.current)
 
     return () => {
       if (intervalRef.current) {
@@ -146,65 +152,63 @@ export default DrawScreen = ({props, round, onRoundEnd}) => {
         intervalRef.current = null;
       }
     };
+
   }, [allResults, currentIndex, scoreTable, endRound]);
 
   useEffect(() => {
-    if (paths.length > 0) handleExport();
-  }, [currentPath, paths]);
+    if (paths.length > 0)
+      handleExport();
+  }, [currentPath, paths])
 
   useEffect(() => {
-    if (paths.length > 0) requestAPI(encodeImage);
-  }, [encodeImage, paths]);
+    if (paths.length > 0)
+      requestAPI(encodeImage)
+  }, [encodeImage, paths])
 
   const handleExport = useMemo(() => {
     return debounce(async () => {
-      console.log('🚀 ~ handleExport ~ encodeImage: no');
+      console.log("🚀 ~ handleExport ~ encodeImage: no");
       if (!isMounted.current) {
-        console.log(
-          '🚀 ~ returndebounce ~ isMounted.current:',
-          isMounted.current,
-        );
+        console.log("🚀 ~ returndebounce ~ isMounted.current:", isMounted.current)
         return;
       }
       await captureRef(viewShotRef, {
-        result: 'base64',
+        result: 'base64'
+      }).then(
+        result => {
+          console.log("🚀 ~ handleExport ~ encodeImage: yes")
+          setEncodeImage(result)
+        }
+      ).catch((err) => {
+        console.log("🚀 ~ handleExport ~ err:", err)
       })
-        .then(result => {
-          console.log('🚀 ~ handleExport ~ encodeImage: yes');
-          setEncodeImage(result);
-        })
-        .catch(err => {
-          console.log('🚀 ~ handleExport ~ err:', err);
-        });
     }, 500);
   }, []);
 
   const requestAPI = useMemo(() => {
-    return debounce(data => {
+    return debounce((data) => {
       fetch(
-        'https://api-inference.huggingface.co/models/kmewhort/beit-sketch-classifier',
+        "https://api-inference.huggingface.co/models/kmewhort/beit-sketch-classifier",
         {
-          headers: {
-            Authorization: `Bearer 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`,
-          },
-          method: 'POST',
-          body: JSON.stringify({inputs: data}),
-        },
+          headers: { Authorization: `Bearer ${authorToken}` },
+          method: "POST",
+          body: JSON.stringify({ inputs: data }),
+        }
       )
-        .then(res => res.json())
-        .then(res => {
+        .then((res) => res.json())
+        .then((res) => {
           if (res && res.length > 0) {
-            console.log('🚀 ~ query ~ result:', res);
+            console.log("🚀 ~ query ~ result:", res)
             handleApiResponse(res);
           }
         })
-        .catch(err => {
-          console.log('🚀 ~ ERR:', err);
-        });
+        .catch((err) => {
+          console.log("🚀 ~ ERR:", err);
+        })
     }, 1000);
   }, []);
 
-  const onTouchMove = event => {
+  const onTouchMove = (event) => {
     setIsClearButtonClicked(false);
     const newPath = [...currentPath];
 
@@ -213,9 +217,7 @@ export default DrawScreen = ({props, round, onRoundEnd}) => {
     const locationY = event.nativeEvent.locationY;
 
     // create new point
-    const newPoint = `${newPath.length === 0 ? 'M' : ''}${locationX.toFixed(
-      0,
-    )},${locationY.toFixed(0)} `;
+    const newPoint = `${newPath.length === 0 ? 'M' : ''}${locationX.toFixed(0,)},${locationY.toFixed(0)} `;
 
     // add the point to older points
     newPath.push(newPoint);
@@ -242,34 +244,34 @@ export default DrawScreen = ({props, round, onRoundEnd}) => {
     setAllResults([]);
     setLabel('...');
     setIsClearButtonClicked(true);
-  };
+  }
 
   const handleNextRound = () => {
     handleStoreEncodeImage();
     handleClearButtonClick();
     onRoundEnd();
-  };
+  }
 
   const hanldeQuit = () => {
     setVisible(false);
     handleClearButtonClick();
     dispatch(reset());
     onRoundEnd('BottomTabs');
-  };
+  }
 
   const handleShowColorPicker = () => {
-    colorPickerRef.current.show();
-  };
+    colorPickerRef.current.show()
+  }
 
   const handleStoreEncodeImage = () => {
     const currentEncodeImage = encodeImage;
     const newEncodeImages = [...encodeImages];
     newEncodeImages.push(currentEncodeImage);
     dispatch(setEncodeImages(newEncodeImages));
-    console.log('🚀 ~ encodeImages:', encodeImages.length);
-  };
+    console.log("🚀 ~ encodeImages:", encodeImages.length)
+  }
 
-  const handleApiResponse = apiResponse => {
+  const handleApiResponse = (apiResponse) => {
     const newResults = [];
     for (let i = 0; i < apiResponse.length; i++) {
       if (!allResults.some(result => result.label === apiResponse[i].label)) {
@@ -286,46 +288,43 @@ export default DrawScreen = ({props, round, onRoundEnd}) => {
   return (
     <View style={styles.container}>
       <View style={styles.topContainer}>
-        <View style={{flex: 1}}>
-          <View
-            style={{height: 'auto', width: 'auto', alignSelf: 'flex-start'}}>
+        <View style={{ flex: 1 }}>
+          <View style={{ height: 'auto', width: 'auto', alignSelf: 'flex-start' }}>
             <AwesomeButton
-              backgroundColor="#D3CCBD"
-              backgroundDarker="#B8B09C"
-              textFontFamily="verdana"
+              backgroundColor='#D3CCBD'
+              backgroundDarker='#B8B09C'
+              textFontFamily='verdana'
               raiseLevel={5}
               width={50}
               borderRadius={10}
               paddingHorizontal={10}
-              onPress={showDialog}>
-              <Icon source="close" color={'#fff'} size={30} />
+              onPress={showDialog}
+            >
+              <Icon
+                source="close"
+                color={'#fff'}
+                size={30}
+              />
             </AwesomeButton>
           </View>
         </View>
-        <View
-          style={{
-            flex: 3,
-            justifyContent: 'space-evenly',
-            alignItems: 'center',
-            flexDirection: 'column',
-          }}>
+        <View style={{ flex: 3, justifyContent: 'space-evenly', alignItems: 'center', flexDirection: 'column' }}>
           <Text style={styles.drawText}>Draw: {keywords[round]}</Text>
           <View style={[styles.timeBg, styles.shadowProp]}>
-            <Text style={{fontFamily: 'RobotoMono-Regular', fontSize: 20}}>
-              {displayTime(timer)}
-            </Text>
+            <Text style={{ fontFamily: 'RobotoMono-Regular', fontSize: 20 }}>{displayTime(timer)}</Text>
           </View>
         </View>
-        <View style={{flex: 1, alignItems: 'flex-end'}}>
+        <View style={{ flex: 1, alignItems: 'flex-end' }}>
           <AwesomeButton
-            backgroundColor="#D3CCBD"
-            backgroundDarker="#B8B09C"
-            textFontFamily="verdana"
+            backgroundColor='#D3CCBD'
+            backgroundDarker='#B8B09C'
+            textFontFamily='verdana'
             raiseLevel={5}
             width={50}
             borderRadius={10}
             paddingHorizontal={10}
-            onPress={handleNextRound}>
+            onPress={handleNextRound}
+          >
             <Svg
               xmlns="http://www.w3.org/2000/svg"
               fill="#fff"
@@ -333,7 +332,8 @@ export default DrawScreen = ({props, round, onRoundEnd}) => {
               strokeWidth={1.5}
               className="size-6"
               viewBox="0 0 24 24"
-              {...props}>
+              {...props}
+            >
               <Path
                 strokeLinecap="round"
                 strokeLinejoin="round"
@@ -342,12 +342,13 @@ export default DrawScreen = ({props, round, onRoundEnd}) => {
             </Svg>
           </AwesomeButton>
         </View>
+
       </View>
       <View style={[styles.resultContainer, styles.shadowProp]}>
-        <Text style={{fontSize: 25}}>{label}</Text>
+        <Text style={{ fontSize: 25 }}>{label}</Text>
       </View>
       <View style={styles.drawContainer}>
-        <ViewShot ref={viewShotRef}>
+        <ViewShot ref={viewShotRef} >
           <View
             style={styles.svgContainer}
             onTouchMove={onTouchMove}
@@ -379,13 +380,7 @@ export default DrawScreen = ({props, round, onRoundEnd}) => {
         </ViewShot>
       </View>
       <View style={styles.bottomContainer}>
-        <View
-          style={{
-            flex: 1,
-            flexDirection: 'row',
-            alignItems: 'center',
-            justifyContent: 'flex-start',
-          }}>
+        <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start' }}>
           <Svg
             xmlns="http://www.w3.org/2000/svg"
             fill={colors[currentColor]}
@@ -395,7 +390,8 @@ export default DrawScreen = ({props, round, onRoundEnd}) => {
             height={50}
             className="size-6"
             viewBox="0 0 24 24"
-            {...props}>
+            {...props}
+          >
             <Path
               strokeLinecap="round"
               strokeLinejoin="round"
@@ -403,33 +399,33 @@ export default DrawScreen = ({props, round, onRoundEnd}) => {
             />
           </Svg>
           <AwesomeButton
-            backgroundColor="#D3CCBD"
-            backgroundDarker="#B8B09C"
-            textFontFamily="verdana"
+            backgroundColor='#D3CCBD'
+            backgroundDarker='#B8B09C'
+            textFontFamily='verdana'
             raiseLevel={5}
             width={70}
             height={50}
             borderRadius={10}
             paddingHorizontal={10}
-            onPress={handleShowColorPicker}>
+            onPress={handleShowColorPicker}
+          >
             <Image
-              style={{width: 40, height: 40}}
-              source={require('../../assets/images/paint-palette_2272364.png')}
-            />
+              style={{ width: 40, height: 40 }}
+              source={require('../../assets/images/paint-palette_2272364.png')} />
           </AwesomeButton>
         </View>
-        <View
-          style={{flex: 1, alignItems: 'flex-end', justifyContent: 'center'}}>
+        <View style={{ flex: 1, alignItems: 'flex-end', justifyContent: 'center' }}>
           <AwesomeButton
-            backgroundColor="#D3CCBD"
-            backgroundDarker="#B8B09C"
-            textFontFamily="verdana"
+            backgroundColor='#D3CCBD'
+            backgroundDarker='#B8B09C'
+            textFontFamily='verdana'
             raiseLevel={5}
             width={60}
             height={40}
             borderRadius={10}
             paddingHorizontal={10}
-            onPress={handleClearButtonClick}>
+            onPress={handleClearButtonClick}
+          >
             <Icon
               source="delete"
               color={'red'}
@@ -443,52 +439,44 @@ export default DrawScreen = ({props, round, onRoundEnd}) => {
       <ColorPicker ref={colorPickerRef} />
 
       <Portal>
-        <Dialog visible={visible} onDismiss={hideDialog}>
-          <Dialog.Icon icon="alert" color="#FFD139" size={30} />
-          <Dialog.Title style={{fontFamily: 'VampiroOne-Regular'}}>
-            Are you sure you want to Quit?
-          </Dialog.Title>
+        <Dialog visible={visible} onDismiss={hideDialog}  >
+          <Dialog.Icon icon="alert" color='#FFD139' size={30} />
+          <Dialog.Title style={{ fontFamily: 'VampiroOne-Regular' }}>Are you sure you want to Quit?</Dialog.Title>
           <Dialog.Content>
-            <View
-              style={{flexDirection: 'row', justifyContent: 'space-around'}}>
+            <View style={{ flexDirection: 'row', justifyContent: 'space-around' }}>
               <AwesomeButton
-                backgroundColor="#FFD139"
-                backgroundDarker="#E2B537"
-                textFontFamily="verdana"
+                backgroundColor='#FFD139'
+                backgroundDarker='#E2B537'
+                textFontFamily='verdana'
                 raiseLevel={5}
                 width={100}
                 height={40}
                 paddingHorizontal={10}
-                onPress={hideDialog}>
-                <Text
-                  style={{
-                    fontFamily: 'RobotoMono-Regular',
-                    color: '#fff',
-                  }}>
-                  Cancel
-                </Text>
+                onPress={hideDialog}
+              >
+                <Text style={{
+                  fontFamily: 'RobotoMono-Regular', color: '#fff'
+                }}>Cancel</Text>
               </AwesomeButton>
               <AwesomeButton
-                backgroundColor="#FFD139"
-                backgroundDarker="#E2B537"
-                textFontFamily="verdana"
+                backgroundColor='#FFD139'
+                backgroundDarker='#E2B537'
+                textFontFamily='verdana'
                 raiseLevel={5}
                 width={100}
                 height={40}
                 paddingHorizontal={10}
-                onPress={hanldeQuit}>
-                <Text
-                  style={{
-                    fontFamily: 'RobotoMono-Regular',
-                    color: '#fff',
-                  }}>
-                  Quit
-                </Text>
+                onPress={hanldeQuit}
+              >
+                <Text style={{
+                  fontFamily: 'RobotoMono-Regular', color: '#fff'
+                }}>Quit</Text>
               </AwesomeButton>
             </View>
           </Dialog.Content>
         </Dialog>
       </Portal>
+
     </View>
   );
 };

@@ -14,6 +14,9 @@ import {
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import HomeScreen from './src/screens/HomeScreen';
+import HistoryScreen from './src/screens/HistoryScreen';
+import HistoryMatch from './src/screens//HistoryMatch';
+import ShopScreen from './src/screens/ShopScreen';
 import SinglePlayerGame from './src/screens/SinglePlayerGame';
 import ChooseMode from './src/screens/ChooseMode';
 import DetailResultScreen from './src/screens/DetailResultScreen';
@@ -22,6 +25,7 @@ import SignUp from './src/screens/SignUp';
 import RoomScreen from './src/screens/RoomScreen';
 import LobbyScreen from './src/screens/LobbyScreen';
 import MultiPlayerGame from './src/screens/MultiPlayerGame';
+import FindMatch from './src/screens/FindMatchScreen';
 import Init from './src/screens/Init';
 import { PaperProvider } from 'react-native-paper';
 import { Provider as StoreProvide } from 'react-redux';
@@ -84,6 +88,21 @@ export default function App() {
             />
 
             <Stack.Screen
+              name="HistoryScreen"
+              component={HistoryScreen}
+            />
+
+            <Stack.Screen
+              name="HistoryMatch"
+              component={HistoryMatch}
+            />
+
+            <Stack.Screen
+              name="ShopScreen"
+              component={ShopScreen}
+            />
+
+            <Stack.Screen
               name="SinglePlayerGame"
               component={SinglePlayerGame}
             />
@@ -108,6 +127,10 @@ export default function App() {
             <Stack.Screen
               name="MultiPlayerGame"
               component={MultiPlayerGame} />
+
+            <Stack.Screen
+              name="FindMatch"
+              component={FindMatch} />
           </Stack.Navigator>
         </NavigationContainer>
       </PaperProvider>

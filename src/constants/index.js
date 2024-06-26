@@ -9,24 +9,25 @@ export const aspect_ratio = 0.02;
 // Exporting declarations
 
 
-
+// Authorization
+export const authorToken = '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';
 
 // Export list
 
 // Color Picker
 export const colors = [
-    '#6874e7',
-    '#b8304f',
-    '#758E4F',
-    '#fa3741',
-    '#F26419',
-    '#F6AE2D',
-    '#DFAEB4',
-    '#7A93AC',
-    '#33658A',
-    '#3d2b56',
-    '#42273B',
-    '#171A21',
+  '#6874e7',
+  '#b8304f',
+  '#758E4F',
+  '#fa3741',
+  '#F26419',
+  '#F6AE2D',
+  '#DFAEB4',
+  '#7A93AC',
+  '#33658A',
+  '#3d2b56',
+  '#42273B',
+  '#171A21',
 ];
 
 // Draw Time

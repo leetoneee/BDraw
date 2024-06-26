@@ -13,14 +13,14 @@ const images = {
     Xeranair: require('../../assets/images/chars/Earth/Xeranair.png'),
   }
 }
-
-export default function AVT_Ingame({name, elemental, ingame}) {
-  const imageSource  = getImageSource(name, elemental);
+// export default function AVT_Ingame({name, elemental, ingame})
+export default function AVT_Ingame({url, ingame}) {
+  // const imageSource  = getImageSource(name, elemental);
   return(
     <SafeAreaView style={styles.Container}>
       <View style={styles.ImageContainer}>
-      {imageSource ? (
-          <Image source={imageSource} resizeMode="contain" style={styles.ImageStyle} />
+      {url ? (
+          <Image source={{uri: url}} resizeMode="contain" style={styles.ImageStyle} />
         ) : (
           <Text>Image not found</Text>
         )}
