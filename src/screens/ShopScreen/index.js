@@ -20,6 +20,7 @@ import Coin from '../../assets/images/coin.svg'
 import axios from "../../services/axios";
 import { Dialog, Portal, Snackbar } from 'react-native-paper';
 import { getAllItem } from '../../redux/items/getAllItemsSlice/getAllItemsSlice';
+import { playerDetail } from '../../redux/player/playerDetailSlice/playerDetailSlice';
 import AvatarModal from '../../components/AvatarModal/index';
 
 const choice = [
@@ -78,6 +79,7 @@ const AvtItem = ({ name, url, price, avatarId, isBought, userDetail, item }) => 
 
     setVisible(false);
     dispatch(getAllItem(userDetail.playerId));
+    dispatch(playerDetail(userDetail.playerId));
   };
 
   return (
@@ -93,7 +95,7 @@ const AvtItem = ({ name, url, price, avatarId, isBought, userDetail, item }) => 
 
         {/* Ảnh nhân vật */}
         <TouchableWithoutFeedback onPress={toggleModal}
-          style={{   width: '100%', height: '100%', flex: 1, }}>
+          style={{ width: '100%', height: '100%', flex: 1, }}>
           <FastImage
             source={{ uri: url }}
             style={{ width: '100%', height: '100%', borderTopLeftRadius: 20, borderTopRightRadius: 20, flex: 1 }}
@@ -114,7 +116,7 @@ const AvtItem = ({ name, url, price, avatarId, isBought, userDetail, item }) => 
               style={{ width: '100%', flex: 1, flexDirection: 'row', backgroundColor: '#00000099', justifyContent: 'center', alignItems: 'center', borderBottomRightRadius: 20, }}>
               <Coin />
               <Text style={{ color: '#BDA067', fontSize: 30, marginLeft: 10 }}>{price}</Text>
-              <View style={{ width: '100%', height:'100%', backgroundColor: '#000000b3', borderBottomRightRadius: 20, position: 'absolute' }}/>
+              <View style={{ width: '100%', height: '100%', backgroundColor: '#000000b3', borderBottomRightRadius: 20, position: 'absolute' }} />
             </View>
           ) : (
             <TouchableOpacity
@@ -172,7 +174,7 @@ const AvtItem = ({ name, url, price, avatarId, isBought, userDetail, item }) => 
         </Portal>
       }
       {isModalVisible && <AvatarModal isVisible={isModalVisible} onClose={toggleModal} item={item} />}
-      
+
     </View>
 
   );
@@ -243,11 +245,12 @@ function ShopScreen({ navigation }) {
 
         {/* Header */}
         <View style={{ flex: 1, elevation: 10, backgroundColor: 'white', borderTopEndRadius: 20, borderTopStartRadius: 20 }}>
-          <TouchableOpacity
-            style={{ alignItems: 'center' }}
-            onPress={() => navigation.goBack()}>
-            <IconBack name="back" size={45} color="black" />
-          </TouchableOpacity>
+          <View style={{ alignItems: 'center' }}>
+            <TouchableOpacity
+              onPress={() => navigation.goBack()}>
+              <IconBack name="back" size={45} color="black" />
+            </TouchableOpacity>
+          </View>
 
           <LinearGradient
             colors={["#6F60E7", '#8752E4', '#A541E1']}

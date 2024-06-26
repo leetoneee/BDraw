@@ -31,6 +31,7 @@ import { Snackbar } from 'react-native-paper';
 import { Dialog, Portal } from 'react-native-paper';
 import { loginPlayer, reset } from '../../redux/player/loginSlice/playerLoginSlice';
 import { playerDetail } from '../../redux/player/playerDetailSlice/playerDetailSlice';
+import { playerHistory } from '../../redux/player/playerHistorySlice/playerDetailSlice';
 
 const FROM_COLOR = '#A541E1';
 const VIA_COLOR = '#8752E4';
@@ -87,12 +88,14 @@ function Login({ }) {
   useEffect(() => {
     if (isSuccess === true) {
       dispatch(playerDetail(user.playerId));
+      dispatch(playerHistory(user.playerId));
       navigation.navigate('BottomTabs');
     }
     if (isSuccess === false) {
       showDialog();
     }
-  }, [isSuccess])
+  }, [isSuccess]) 
+  // Thêm isSuccess vào đây
 
   useEffect(() => {
     if (status) {

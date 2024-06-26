@@ -21,6 +21,7 @@ import LinearGradient from 'react-native-linear-gradient';
 import { useNavigation } from '@react-navigation/native';
 import HistoryMatch from "../HistoryMatch";
 import { getAllItem } from '../../redux/items/getAllItemsSlice/getAllItemsSlice';
+import { reset as resetLogin } from '../../redux/player/loginSlice/playerLoginSlice';
 
 const GradientBar = ({ x, y, animated }) => {
   return (
@@ -107,7 +108,7 @@ function HomeScreen({ navigation }) {
     dispatch(getAllItem(user.playerId));
     console.log("huhu: ")
   }, [user])
-    
+
 
   const animatedLogin = useRef(new Animated.Value(-300)).current;
 
@@ -119,17 +120,24 @@ function HomeScreen({ navigation }) {
     }).start();
   }, [animatedLogin]);
 
+  const handleIconBack = () => {
+    dispatch(resetLogin());
+    navigation.goBack();
+  };
+
   return (
     <Background>
       <View style={styles.container}>
         {/* Header */}
         <View style={{ flex: 3, elevation: 10, backgroundColor: 'white', borderTopEndRadius: 20, borderTopStartRadius: 20 }}>
           {/* Nút quay về */}
-          <TouchableOpacity
-            style={{ alignItems: 'flex-end' }}
-            onPress={() => navigation.goBack()}>
-            <Icon name="back" size={45} color="black" />
-          </TouchableOpacity>
+          <View style={{ alignItems: 'flex-end' }}>
+            <TouchableOpacity
+              onPress={handleIconBack}>
+              <Icon name="back" size={45} color="black" />
+            </TouchableOpacity>
+          </View>
+
           <View style={{ flex: 1, flexDirection: 'row', columnGap: 10 }}>
             <View style={{ flex: 1, marginLeft: 10 }}>
               {/* Ảnh đại diện */}
@@ -167,7 +175,7 @@ function HomeScreen({ navigation }) {
                 <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                   <Image source={{ uri: userDetail?.rank?.url }}
                     style={{ width: 40, height: 40 }} />
-                  <Text style={{ fontSize: 20, color: 'black' ,textTransform: 'uppercase' }}>{userDetail?.rank?.name}</Text>
+                  <Text style={{ fontSize: 20, color: 'black', textTransform: 'uppercase' }}>{userDetail?.rank?.name}</Text>
                 </View>
               }
             </View>

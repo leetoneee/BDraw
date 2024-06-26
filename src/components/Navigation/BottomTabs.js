@@ -52,7 +52,7 @@ const BottomTabs = ({ props }) => {
         headerShown: false,
         tabBarIcon: ({ focused }) => <Svg
           xmlns="http://www.w3.org/2000/svg"
-          fill={'white'}
+          fill={focused ? "blue" : 'white'}
           stroke="black"
           strokeWidth={1}
           width={35}
