@@ -17,6 +17,8 @@ import Robotic from '../../assets/images/robotic.svg'
 import { socket } from '../../setup/socket';
 import calculateRankings from '../../utils/calcRank';
 import { playerDetail } from '../../redux/player/playerDetailSlice/playerDetailSlice';
+import { playerCheckRank } from '../../redux/player/checkUpRank/checkUpRankSlice';
+import { playerHistory } from '../../redux/player/playerHistorySlice/playerHistorySlice';
 
 function MultiPlayerGame() {
   const modalRef = useRef();
@@ -88,10 +90,11 @@ function MultiPlayerGame() {
       console.log('Screen is focused');
       if (round === 6) {
         const rankedData = calculateRankings(room.sockets);
+        dispatch(playerCheckRank(user.playerId));
+        dispatch(playerDetail(user.playerId));
+        dispatch(playerHistory(user.playerId));
 
         setTimeout(() => {
-          dispatch(playerDetail(user.playerId));
-          dispatch(playerHistory(user.playerId));
           resultRef.current.showResult(round, rankedData);
         }, 1000)
       }
