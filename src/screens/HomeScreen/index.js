@@ -2,7 +2,8 @@ import {
   Text,
   View,
   Button,
-  Image, TouchableOpacity, Animated, ScrollView, FlatList, StyleSheet
+  Image, TouchableOpacity, Animated, ScrollView, FlatList, StyleSheet, BackHandler,
+  Alert
 } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState, useRef } from "react";
@@ -20,8 +21,9 @@ import axios from 'axios';
 import LinearGradient from 'react-native-linear-gradient';
 import { useNavigation } from '@react-navigation/native';
 import HistoryMatch from "../HistoryMatch";
-import { getAllItem } from '../../redux/items/getAllItemsSlice/getAllItemsSlice';
+import { getAllItem, reset as resetItem } from '../../redux/items/getAllItemsSlice/getAllItemsSlice';
 import { reset as resetLogin } from '../../redux/player/loginSlice/playerLoginSlice';
+import { reset as resetDetail } from "../../redux/player/playerDetailSlice/playerDetailSlice";
 
 const GradientBar = ({ x, y, animated }) => {
   return (
@@ -106,7 +108,6 @@ function HomeScreen({ navigation }) {
 
   useEffect(() => {
     dispatch(getAllItem(user.playerId));
-    console.log("huhu: ")
   }, [user])
 
 
@@ -122,8 +123,35 @@ function HomeScreen({ navigation }) {
 
   const handleIconBack = () => {
     dispatch(resetLogin());
-    navigation.goBack();
+    dispatch(resetItem());
+    dispatch(resetDetail());
+    navigation.navigate('Login');
   };
+
+  const handleLogout = () => {
+    Alert.alert('Hold on!', 'Are you sure you want to logout?', [
+      {
+        text: 'Cancel',
+        onPress: () => null,
+        style: 'cancel',
+      },
+      { text: 'YES', onPress: () => handleIconBack() },
+    ]);
+  }
+
+  useEffect(() => {
+    const backAction = () => {
+      handleLogout();
+      return true;
+    };
+
+    const backHandler = BackHandler.addEventListener(
+      'hardwareBackPress',
+      backAction,
+    );
+
+    return () => backHandler.remove();
+  }, []);
 
   return (
     <Background>
@@ -133,7 +161,7 @@ function HomeScreen({ navigation }) {
           {/* Nút quay về */}
           <View style={{ alignItems: 'flex-end' }}>
             <TouchableOpacity
-              onPress={handleIconBack}>
+              onPress={handleLogout}>
               <Icon name="back" size={45} color="black" />
             </TouchableOpacity>
           </View>

@@ -73,7 +73,7 @@ const MPDrawModal = (props, ref) => {
           </View>
           <View style={styles.midContainer}>
             <Text style={styles.modalText}>Draw</Text>
-            <Text style={styles.keywordText}>{keywords[round]}</Text>
+            <Text style={styles.keywordText}> {keywords[round]} </Text>
             <Text style={styles.modalText}>in under {timeLimit} seconds</Text>
           </View>
           <View style={styles.bottomContainer}>

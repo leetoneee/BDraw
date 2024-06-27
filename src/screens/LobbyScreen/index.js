@@ -80,16 +80,22 @@ const LobbyScreen = ({ route }) => {
       navigation.navigate('BottomTabs');
     }
 
+    const handleNotice = (message) => {
+      setStatus(message);
+    }
+
     socket.on("connect", handleReconnect);
 
     socket.emit('findRoom', roomId);
     socket.on('foundRoom', handleFoundRoom);
+    socket.on('notice', handleNotice);
     socket.on('startCountdown', handleStartCountdown);
     socket.on('resetCountdown', handleResetCountdown);
     socket.on('letsPlay', handleLetsPlay);
     socket.on('invalidOperation', handleInvalidOperation);
     return () => {
       socket.off('foundRoom', handleFoundRoom);
+      socket.off('notice', handleNotice);
       socket.off('startCountdown', handleStartCountdown);
       socket.off('resetCountdown', handleResetCountdown);
       socket.off('letsPlay', handleLetsPlay);
@@ -173,7 +179,7 @@ const LobbyScreen = ({ route }) => {
         <View style={styles.info}>
           <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
             <Text style={styles.name}>{player.name}</Text>
-            <Text style={{ color: player.isReady ? '#16C60C' : 'white', fontFamily: 'verdana' }}>
+            <Text style={{ color: player.isReady ? '#16C60C' : 'white', fontFamily: 'verdana', fontWeight: 'bold' }}>
               {player.isReady ?
                 "🏁 READY"
                 : "⏳ PLEASE WAIT"
