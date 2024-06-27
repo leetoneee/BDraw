@@ -46,7 +46,6 @@ function OTP_verify_fp() {
 
   const otp_gmail = useSelector(state => state.sendOtp.otp);
   const userDetail = useSelector(state => state.playerDetailByUsername.userDetail);
-  console.log('OTP_gmail: ', otp_gmail);
   //navigate to CreateNewPass
   const handleForgotPassword_CreateNewPass = () => {
     navigation.navigate('ForgotPassword_Create_NewPass');

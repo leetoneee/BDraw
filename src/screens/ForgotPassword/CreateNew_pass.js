@@ -9,6 +9,7 @@ import {
   SafeAreaView,
   StyleSheet,
   Keyboard,
+  ActivityIndicator,
 } from 'react-native';
 import CheckBox from '@react-native-community/checkbox';
 import {useDispatch, useSelector} from 'react-redux';
@@ -29,16 +30,16 @@ const FROM_COLOR = '#A541E1';
 const VIA_COLOR = '#8752E4';
 const TO_COLOR = '#6F60E7';
 
-function isEmptyPass({pass}) {
-  return pass.toString().length == 0 ? true : false;
+function isEmptyPass(pass) {
+  return pass.toString().length === 0 ? true : false;
 }
 
-function Check_length_pass({pass}) {
-  return pass.toString().length >= 8 ? true : false;
+function Check_length_pass(pass) {
+  return pass.toString().length >= 8;
 }
 
-function ComparePass({pass, confirm}) {
-  return pass === confirm;
+function ComparePass(pass, confirm) {
+  return pass.toString() === confirm.toString();
 }
 
 function CreateNewPass_fp() {
@@ -46,6 +47,39 @@ function CreateNewPass_fp() {
   //navigate to OTP_screen
   const handleForgotPassword_OTP = () => {
     navigation.navigate('ForgotPassword_OTP_Verify');
+  };
+
+  const userDetail = useSelector(
+    state => state.playerDetailByUsername.userDetail,
+  );
+
+  //Handle confirm password
+  const [data, setData] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [visibleNewPassword, setVisibleNewPassword] = useState(false);
+  const showDialogNewPassword = () => setVisibleNewPassword(true);
+  const hideDialogNewPassword = () => setVisibleNewPassword(false);
+  const handleCloseNewPassword = () => {
+    hideDialogNewPassword();
+    navigation.navigate('Login');
+  };
+  const handleConfirmPassword = async () => {
+    setIsLoading(true);
+    let raw = {
+      playerId: userDetail.playerId,
+      newPassword: newPass.toString(),
+    };
+    axios
+      .post('http://188.166.185.29/api/v1/password/forget', raw)
+      .then(response => {
+        setData(response.data);
+        setIsLoading(false);
+        showDialogNewPassword();
+      })
+      .catch(error => {
+        console.error(error);
+        setIsLoading(false);
+      });
   };
 
   const [newPass, setnewPass] = useState('');
@@ -65,7 +99,6 @@ function CreateNewPass_fp() {
 
   const [visibleWrongPassConfirm, setvisibleWrongPassConfirm] = useState(false);
   const hideDialogWrongPassConfirm = () => {
-    setnewPass('');
     setConfirmPass('');
     setvisibleWrongPassConfirm(false);
   };
@@ -190,16 +223,17 @@ function CreateNewPass_fp() {
             onPress={() => {
               if (isEmptyPass(newPass)) {
                 showDialogEmptyPass();
-              } else if (Check_length_pass(newPass)) {
+              } else if (!Check_length_pass(newPass)) {
                 showDialogWrongPass();
               } else if (isEmptyPass(confirmPass)) {
                 showDialogEmptyPassConfirm();
               } else if (
-                Check_length_pass(confirmPass) ||
-                ComparePass(newPass, confirmPass)
+                Check_length_pass(confirmPass) === false ||
+                ComparePass(newPass, confirmPass) === false
               ) {
                 showDialogWrongPassConfirm();
               } else {
+                handleConfirmPassword();
               }
             }}>
             <LinearGradient
@@ -234,7 +268,9 @@ function CreateNewPass_fp() {
           </Portal>
 
           <Portal>
-            <Dialog visible={visibleEmptyPass} onDismiss={hideDialogEmptyPass}>
+            <Dialog
+              visible={visibleWrongPassConfirm}
+              onDismiss={hideDialogWrongPassConfirm}>
               <Dialog.Icon icon="alert" color="#FFD139" size={50} />
               <Dialog.Title
                 style={{fontFamily: 'Montserrat-Regular', fontWeight: 'bold'}}>
@@ -250,17 +286,16 @@ function CreateNewPass_fp() {
                   <TouchableOpacity
                     activeOpacity={0.8}
                     style={styles.closeButton}
-                    onPress={hideDialogWrongPass}>
+                    onPress={hideDialogWrongPassConfirm}>
                     <Text style={styles.closeButtonText}>Close</Text>
                   </TouchableOpacity>
                 </View>
               </Dialog.Content>
             </Dialog>
           </Portal>
+
           <Portal>
-            <Dialog
-              visible={visibleWrongPassConfirm}
-              onDismiss={hideDialogWrongPassConfirm}>
+            <Dialog visible={visibleEmptyPass} onDismiss={hideDialogEmptyPass}>
               <Dialog.Icon icon="alert" color="#FFD139" size={50} />
               <Dialog.Title
                 style={{fontFamily: 'Montserrat-Regular', fontWeight: 'bold'}}>
@@ -276,7 +311,7 @@ function CreateNewPass_fp() {
                   <TouchableOpacity
                     activeOpacity={0.8}
                     style={styles.closeButton}
-                    onPress={hideDialogWrongPass}>
+                    onPress={hideDialogEmptyPass}>
                     <Text style={styles.closeButtonText}>Close</Text>
                   </TouchableOpacity>
                 </View>
@@ -302,10 +337,43 @@ function CreateNewPass_fp() {
                   <TouchableOpacity
                     activeOpacity={0.8}
                     style={styles.closeButton}
-                    onPress={hideDialogWrongPass}>
+                    onPress={hideDialogEmptyPassConfirm}>
                     <Text style={styles.closeButtonText}>Close</Text>
                   </TouchableOpacity>
                 </View>
+              </Dialog.Content>
+            </Dialog>
+          </Portal>
+          <Portal>
+            <Dialog
+              visible={visibleNewPassword}
+              onDismiss={hideDialogNewPassword}>
+              <View style={{alignItems: 'center'}}>
+                <Icon name="checkcircle" color="#FFD139" size={50} />
+              </View>
+              {/* <Dialog.Icon icon="Alert" color="#FFD139" size={50} /> */}
+              <Dialog.Title style={{fontFamily: 'Montserrat-Regular', fontWeight: 'bold'}}>
+                Updated password successfully!
+              </Dialog.Title>
+              <Dialog.Content>
+                {isLoading && (
+                  <ActivityIndicator size="large" color="#0000ff" />
+                )}
+                {data && (
+                  <View
+                    style={{
+                      flexDirection: 'row',
+                      justifyContent: 'space-around',
+                      alignSelf: 'center',
+                    }}>
+                    <TouchableOpacity
+                      activeOpacity={0.8}
+                      style={styles.closeButton}
+                      onPress={handleCloseNewPassword}>
+                      <Text style={styles.closeButtonText}>Close</Text>
+                    </TouchableOpacity>
+                  </View>
+                )}
               </Dialog.Content>
             </Dialog>
           </Portal>
