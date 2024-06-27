@@ -258,7 +258,7 @@ const MPResultModal = (props, ref) => {
                   </Text>
                 </View>
               }
-              {round !== 6 &&
+              {round >= 6 &&
                 <Text style={styles.level}> {player.top} </Text>
               }
             </View>
@@ -280,7 +280,7 @@ const MPResultModal = (props, ref) => {
         setModalVisible(!modalVisible);
       }}>
       <Background style={{ flex: 1 }}>
-        {round === 6 &&
+        {round >= 6 &&
           <View style={styles.btnQuit}>
             <AwesomeButton
               backgroundColor='#D3CCBD'
@@ -305,13 +305,13 @@ const MPResultModal = (props, ref) => {
             <View style={styles.topContainer}>
               {round !== '' && round !== undefined ?
                 <View>
-                  {round !== 6 &&
+                  {round !== 6 && round < 6 &&
                     <View style={{ width: width - 20, justifyContent: 'center', alignItems: 'center', paddingVertical: 10 }}>
                       <Text style={styles.roundText}>Drawing {round + 1}/6</Text>
                       <Text style={styles.modalText}> {keywords[round]} </Text>
                     </View>
                   }
-                  {round === 6 &&
+                  {round >= 6 &&
                     <View>
                       <Text style={styles.modalText}> FINAL RESULT </Text>
                       <Text style={styles.congraText}> CONGRATULATIONS!!! </Text>
@@ -332,7 +332,7 @@ const MPResultModal = (props, ref) => {
                 <ActivityIndicator style={{ marginTop: 30 }} size={80} animating={true} color={'#ff8f00'} />
               }
             </View>
-            {round === 6 &&
+            {round >= 6 &&
               <View style={styles.bottomContainerr}>
                 <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
                   <View>
@@ -412,7 +412,7 @@ const MPResultModal = (props, ref) => {
               </View>
             }
 
-            {round !== 6 &&
+            {round < 6 &&
               <ScrollView style={styles.scrollview}>
                 <View style={styles.bottomContainer}>
                   {players && players.length > 0 &&
