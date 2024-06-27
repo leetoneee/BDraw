@@ -55,7 +55,7 @@ const MPWaitingModal = (props, ref) => {
           </View>
           <View style={styles.midContainer}>
             <Text style={styles.modalText}>Waiting for other players</Text>
-            <Text style={styles.modalText}>and calculating score ... </Text>
+            <Text style={styles.modalText}> and calculating score ... </Text>
             <ActivityIndicator style={{ marginTop: 30 }} size={80} animating={true} color={'#ff8f00'} />
           </View>
           <View style={styles.bottomContainer}>

@@ -15,6 +15,7 @@ import background_pen from '../../assets/images/background_pen.png';
 import Icon from 'react-native-vector-icons/AntDesign';
 import Robotic from '../../assets/images/robotic.svg'
 import { socket } from '../../setup/socket';
+import calculateRankings from '../../utils/calcRank';
 
 function MultiPlayerGame() {
   const modalRef = useRef();
@@ -26,13 +27,13 @@ function MultiPlayerGame() {
   const keywordsData = useSelector((state) => state.multiPlayer.keywords);
   const score = useSelector((state) => state.multiPlayer.score);
   const roomId = useSelector((state) => state.multiPlayer.roomId);
+  const encodeImages = useSelector((state) => state.multiPlayer.encodeImages);
 
   const [round, setRound] = useState(0);
   const [isDrawing, setIsDrawing] = useState(false);  // State to manage the drawing status
   const [keywords, setKeywords] = useState(keywordsData);
   const [room, setRoom] = useState('');
 
-  console.log("🚀 ~ SinglePlayerGame ~ keywords:", keywords)
 
   useEffect(() => {
     setTimeout(() => {
@@ -41,25 +42,24 @@ function MultiPlayerGame() {
   }, [])
 
   useEffect(() => {
+    console.log("🚀 ~ MultiPlayerGame ~ keywords:", keywords)
     dispatch(dispatchSetKeywords(keywords));
   }, [keywords])
 
   useEffect(() => {
     const handleGetScore = (roomData) => {
-      console.log("🚀 ~ socket.on ~ roomData:", roomData)
       setRoom(roomData);
+
+      const rankedData = calculateRankings(roomData.sockets);
       setTimeout(() => {
         waitingRef.current.hide();
-        resultRef.current.showResult();
+        resultRef.current.showResult(round, rankedData);
+        console.log("🚀 ~ handleShowResult ~ round:", round)
       }, 500)
-
     };
 
     const handleHideResult = () => {
-      if (round === 6) {
-        setRound(prep => prep + 1);
-        return;
-      }
+      console.log("🚀 ~ handleHideResult ~ round:", round)
       resultRef.current.hideResult();
       setRound(prep => prep + 1);
     };
@@ -70,7 +70,6 @@ function MultiPlayerGame() {
     }
 
     socket.on("connect", handleReconnect);
-
     socket.on('get-score', handleGetScore);
     socket.on('hide-result', handleHideResult);
 
@@ -85,16 +84,19 @@ function MultiPlayerGame() {
     useCallback(() => {
       // Do something when the screen is focused
       console.log('Screen is focused');
-      console.log("🚀 ~ useCallback ~ round:", round)
       if (round === 6) {
-        resultRef.current.showResult();
+        const rankedData = calculateRankings(room.sockets);
+
+        setTimeout(() => {
+          resultRef.current.showResult(round, rankedData);
+        }, 1000)
       }
 
       return () => {
         // Clean up or reset when the screen is unfocused
         console.log('Screen is unfocused');
       };
-    }, [round])
+    }, [round, room])
   );
 
   useEffect(() => {
@@ -102,9 +104,9 @@ function MultiPlayerGame() {
       modalRef.current.startGame(round);
     } else {
       // Handle end of game
-      if (round === keywords.length && keywords.length > 0) {
-        resultRef.current.showResult();
-      }
+      // if (round === keywords.length && keywords.length > 0) {
+      //   resultRef.current.showResult();
+      // }
     }
   }, [round])
 
@@ -117,13 +119,15 @@ function MultiPlayerGame() {
     setIsDrawing(true);
   };
 
-  const handleRoundEnd = (direction) => {
+  const handleRoundEnd = (direction, currentScore) => {
     if (direction === 'BottomTabs') {
       setRound(0);
       navigation.navigate('BottomTabs');
       return;
     }
-    socket.emit('set-score', { room: roomId, score, round });
+
+    socket.emit('set-score', { room: roomId, score: currentScore, round, encodeImage: direction });
+
     setIsDrawing(false);
     waitingRef.current.show(round);
   };
