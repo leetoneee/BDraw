@@ -34,7 +34,7 @@ function ChooseMode() {
               fontSize: 55,
               fontFamily: 'VampiroOne-Regular',
               textAlign: 'center',
-              color: 'red',
+              color: '#9b23d0',
             }}>
             BDraw
           </Text>

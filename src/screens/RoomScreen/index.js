@@ -121,7 +121,7 @@ const RoomScreen = () => {
         <Background>
 
           <View style={styles.container}>
-            <Text style={{ flex: 1, fontSize: 55, fontFamily: 'VampiroOne-Regular', textAlign: 'center', color: 'red' }}>BDraw</Text>
+            <Text style={{ flex: 1, fontSize: 55, fontFamily: 'VampiroOne-Regular', textAlign: 'center', color: '#9b23d0' }}>BDraw</Text>
 
             <View style={styles.tabContainer}>
               <View style={styles.tabControl}>

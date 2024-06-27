@@ -19,13 +19,13 @@ export const styles = StyleSheet.create({
         elevation: 5,
     },
     topContainer: {
-        flex: 2,
+        flex: 1,
     },
     midContainer: {
         flex: 4,
     },
     bottomContainer: {
-        flex: 2,
+        flex: 1,
     },
     roundText: {
         fontFamily: 'RobotoMono-Regular',

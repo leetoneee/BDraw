@@ -27,12 +27,10 @@ import background_pen from '../../assets/images/background_pen.png';
 import Icon from 'react-native-vector-icons/AntDesign';
 import {useNavigation} from '@react-navigation/native';
 import Loading from '../../components/Loading';
-import {Snackbar} from 'react-native-paper';
-import {Dialog, Portal} from 'react-native-paper';
-import {
-  loginPlayer,
-  reset,
-} from '../../redux/player/loginSlice/playerLoginSlice';
+import { Snackbar } from 'react-native-paper';
+import { Dialog, Portal } from 'react-native-paper';
+import { loginPlayer, reset } from '../../redux/player/loginSlice/playerLoginSlice';
+import { playerHistory } from '../../redux/player/playerHistorySlice/playerHistorySlice';
 import {playerDetail} from '../../redux/player/playerDetailSlice/playerDetailSlice';
 
 const FROM_COLOR = '#A541E1';
@@ -90,6 +88,7 @@ function Login({}) {
   useEffect(() => {
     if (isSuccess === true) {
       dispatch(playerDetail(user.playerId));
+      dispatch(playerHistory(user.playerId));
       navigation.navigate('BottomTabs');
     }
     if (isSuccess === false) {

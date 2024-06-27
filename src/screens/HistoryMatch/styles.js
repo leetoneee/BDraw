@@ -11,7 +11,7 @@ export default styles = StyleSheet.create({
       },
 
     text: {
-      fontSize: 38,
+      fontSize: 35,
       fontWeight: '500',
       color: 'black'
     }

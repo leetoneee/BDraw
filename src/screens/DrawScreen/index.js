@@ -5,6 +5,7 @@ import {
   TouchableOpacity,
   Text,
   Image,
+  BackHandler
 } from 'react-native';
 import { Svg, Path } from 'react-native-svg';
 import ViewShot from "react-native-view-shot";
@@ -144,7 +145,6 @@ export default DrawScreen = ({ props, round, onRoundEnd }) => {
         setCurrentIndex((prevIndex) => (prevIndex + 1));
       }
     }, 1500);
-    console.log("🚀 ~ interval ~ interval:", intervalRef.current)
 
     return () => {
       if (intervalRef.current) {
@@ -164,6 +164,20 @@ export default DrawScreen = ({ props, round, onRoundEnd }) => {
     if (paths.length > 0)
       requestAPI(encodeImage)
   }, [encodeImage, paths])
+
+  useEffect(() => {
+    const backAction = () => {
+      showDialog();
+      return true;
+    };
+
+    const backHandler = BackHandler.addEventListener(
+      'hardwareBackPress',
+      backAction,
+    );
+
+    return () => backHandler.remove();
+  }, []);
 
   const handleExport = useMemo(() => {
     return debounce(async () => {

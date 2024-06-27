@@ -2,7 +2,8 @@ import {
   Text,
   View,
   Button,
-  Image, TouchableOpacity, Animated, ScrollView, FlatList, StyleSheet
+  Image, TouchableOpacity, Animated, ScrollView, FlatList, StyleSheet, BackHandler,
+  Alert
 } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState, useRef } from "react";
@@ -20,7 +21,9 @@ import axios from 'axios';
 import LinearGradient from 'react-native-linear-gradient';
 import { useNavigation } from '@react-navigation/native';
 import HistoryMatch from "../HistoryMatch";
-import { getAllItem } from '../../redux/items/getAllItemsSlice/getAllItemsSlice';
+import { getAllItem, reset as resetItem } from '../../redux/items/getAllItemsSlice/getAllItemsSlice';
+import { reset as resetLogin } from '../../redux/player/loginSlice/playerLoginSlice';
+import { reset as resetDetail } from "../../redux/player/playerDetailSlice/playerDetailSlice";
 
 const GradientBar = ({ x, y, animated }) => {
   return (
@@ -100,12 +103,13 @@ function HomeScreen({ navigation }) {
   const dispatch = useDispatch();
 
   const userDetail = useSelector((state) => state.playerDetail.userDetail);
+  const listItem = useSelector((state) => state.getAllItem.listItem);
   const user = useSelector((state) => state.playerLog.user);
-  console.log("🚀 ~ HomeScreen ~ userDetail:", userDetail);
 
   useEffect(() => {
     dispatch(getAllItem(user.playerId));
   }, [user])
+
 
   const animatedLogin = useRef(new Animated.Value(-300)).current;
 
@@ -117,17 +121,51 @@ function HomeScreen({ navigation }) {
     }).start();
   }, [animatedLogin]);
 
+  const handleIconBack = () => {
+    dispatch(resetLogin());
+    dispatch(resetItem());
+    dispatch(resetDetail());
+    navigation.navigate('Login');
+  };
+
+  const handleLogout = () => {
+    Alert.alert('Hold on!', 'Are you sure you want to logout?', [
+      {
+        text: 'Cancel',
+        onPress: () => null,
+        style: 'cancel',
+      },
+      { text: 'YES', onPress: () => handleIconBack() },
+    ]);
+  }
+
+  useEffect(() => {
+    const backAction = () => {
+      handleLogout();
+      return true;
+    };
+
+    const backHandler = BackHandler.addEventListener(
+      'hardwareBackPress',
+      backAction,
+    );
+
+    return () => backHandler.remove();
+  }, []);
+
   return (
     <Background>
       <View style={styles.container}>
         {/* Header */}
         <View style={{ flex: 3, elevation: 10, backgroundColor: 'white', borderTopEndRadius: 20, borderTopStartRadius: 20 }}>
           {/* Nút quay về */}
-          <TouchableOpacity
-            style={{ alignItems: 'flex-end' }}
-            onPress={() => navigation.goBack()}>
-            <Icon name="back" size={45} color="black" />
-          </TouchableOpacity>
+          <View style={{ alignItems: 'flex-end' }}>
+            <TouchableOpacity
+              onPress={handleLogout}>
+              <Icon name="back" size={45} color="black" />
+            </TouchableOpacity>
+          </View>
+
           <View style={{ flex: 1, flexDirection: 'row', columnGap: 10 }}>
             <View style={{ flex: 1, marginLeft: 10 }}>
               {/* Ảnh đại diện */}
@@ -165,8 +203,13 @@ function HomeScreen({ navigation }) {
                 <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                   <Image source={{ uri: userDetail?.rank?.url }}
                     style={{ width: 40, height: 40 }} />
-                  <Text style={{ fontSize: 20, color: 'black' ,textTransform: 'uppercase' }}>{userDetail?.rank?.name}</Text>
+                  <Text style={{ fontSize: 20, color: 'black', textTransform: 'uppercase' }}>{userDetail?.rank?.name}</Text>
                 </View>
+              }
+              {userDetail &&
+                <Text style={{ alignSelf: 'flex-start', fontSize: 20, fontWeight: '500', color: 'black'}}>
+                  Score: {userDetail?.score }
+                </Text>
               }
             </View>
           </View>

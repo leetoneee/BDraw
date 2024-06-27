@@ -5,6 +5,7 @@ import {
   TouchableOpacity,
   Text,
   Image,
+  BackHandler
 } from 'react-native';
 import { Svg, Path } from 'react-native-svg';
 import ViewShot from "react-native-view-shot";
@@ -110,11 +111,11 @@ export default MPDrawScreen = ({ props, round, onRoundEnd, onQuit }) => {
         handleVoice("Sorry, I couldn't guess it.")
         handleStoreEncodeImage();
         setTimeout(() => {
-          onRoundEnd();  // Callback to notify the parent component that the round has ended
+          onRoundEnd(encodeImage, score);  // Callback to notify the parent component that the round has ended
         }, 2000)
       }
     }
-  }, [timer]);
+  }, [timer, score]);
 
 
   // handle win game
@@ -140,9 +141,8 @@ export default MPDrawScreen = ({ props, round, onRoundEnd, onQuit }) => {
 
       const timeout = setTimeout(() => {
         handleClearButtonClick();
-        onRoundEnd();
+        onRoundEnd(encodeImage, newScore);
       }, 2000);
-      console.log("🚀 ~ timeout ~ timeout:", timeout)
     }
     if (label && label !== keywords[round] && !endRound) {
       handleVoice(`or ${label}`);
@@ -171,7 +171,6 @@ export default MPDrawScreen = ({ props, round, onRoundEnd, onQuit }) => {
         setCurrentIndex((prevIndex) => (prevIndex + 1));
       }
     }, 1500);
-    console.log("🚀 ~ interval ~ interval:", intervalRef.current)
 
     return () => {
       if (intervalRef.current) {
@@ -192,6 +191,20 @@ export default MPDrawScreen = ({ props, round, onRoundEnd, onQuit }) => {
       requestAPI(encodeImage)
   }, [encodeImage, paths])
 
+  useEffect(() => {
+    const backAction = () => {
+      showDialog();
+      return true;
+    };
+
+    const backHandler = BackHandler.addEventListener(
+      'hardwareBackPress',
+      backAction,
+    );
+
+    return () => backHandler.remove();
+  }, []);
+
   const handleExport = useMemo(() => {
     return debounce(async () => {
       console.log("🚀 ~ handleExport ~ encodeImage: no");
@@ -211,6 +224,7 @@ export default MPDrawScreen = ({ props, round, onRoundEnd, onQuit }) => {
       })
     }, 500);
   }, []);
+
 
   const onDismissSnackBar = () => {
     setStatus('');
@@ -280,8 +294,10 @@ export default MPDrawScreen = ({ props, round, onRoundEnd, onQuit }) => {
 
   const handleNextRound = () => {
     handleStoreEncodeImage();
-    handleClearButtonClick();
-    onRoundEnd();
+    setTimeout(() => {
+      handleClearButtonClick();
+      onRoundEnd(encodeImage, score);
+    }, 2000)
   }
 
   const handleQuit = () => {
@@ -289,7 +305,7 @@ export default MPDrawScreen = ({ props, round, onRoundEnd, onQuit }) => {
     setVisible(false);
     handleClearButtonClick();
     dispatch(reset());
-    onRoundEnd('BottomTabs');
+    onRoundEnd('BottomTabs', 0);
   }
 
   const handleShowColorPicker = () => {
@@ -301,7 +317,6 @@ export default MPDrawScreen = ({ props, round, onRoundEnd, onQuit }) => {
     const newEncodeImages = [...encodeImages];
     newEncodeImages.push(currentEncodeImage);
     dispatch(setEncodeImages(newEncodeImages));
-    console.log("🚀 ~ encodeImages:", encodeImages.length)
   }
 
   const handleApiResponse = (apiResponse) => {

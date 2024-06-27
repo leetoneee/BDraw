@@ -32,6 +32,7 @@ import { Provider as StoreProvide } from 'react-redux';
 import { store } from './src/redux/store';
 import BottomTabs from './src/components/Navigation/BottomTabs';
 import { socket } from './src/setup/socket';
+import Translator, { TranslatorProvider, useTranslator } from 'react-native-translator';
 import { Username_input_fp, Email_input_fp, OTP_verify_fp, CreateNewPass_fp } from './src/screens/ForgotPassword';
 
 const Stack = createNativeStackNavigator();
@@ -47,19 +48,20 @@ export default function App() {
     <StoreProvide store={store}>
       <PaperProvider>
         <NavigationContainer>
-          <Stack.Navigator screenOptions={{ headerShown: false }}>
+          <TranslatorProvider>
+            <Stack.Navigator screenOptions={{ headerShown: false }}>
 
-            <Stack.Screen
-              name="Init"
-              component={Init} />
+              <Stack.Screen
+                name="Init"
+                component={Init} />
 
-            <Stack.Screen
-              name="SignUp"
-              component={SignUp} />
+              <Stack.Screen
+                name="SignUp"
+                component={SignUp} />
 
-            <Stack.Screen
-              name="Login"
-              component={Login} />
+              <Stack.Screen
+                name="Login"
+                component={Login} />
 
             <Stack.Screen
               name="ForgotPassword"
@@ -78,81 +80,63 @@ export default function App() {
             name="ForgotPassword_Create_NewPass"
             component={CreateNewPass_fp}/>
 
-            <Stack.Screen
-              name="BottomTabs"
-              component={BottomTabs} />
+              <Stack.Screen
+                name="BottomTabs"
+                component={BottomTabs} />
 
-            <Stack.Screen
-              name="Home"
-              component={HomeScreen}
-            />
+              <Stack.Screen
+                name="Home"
+                component={HomeScreen}
+              />
 
-            <Stack.Screen
-              name="HistoryScreen"
-              component={HistoryScreen}
-            />
+              <Stack.Screen
+                name="HistoryScreen"
+                component={HistoryScreen}
+              />
 
-            <Stack.Screen
-              name="HistoryMatch"
-              component={HistoryMatch}
-            />
+              <Stack.Screen
+                name="HistoryMatch"
+                component={HistoryMatch}
+              />
 
-            <Stack.Screen
-              name="ShopScreen"
-              component={ShopScreen}
-            />
+              <Stack.Screen
+                name="ShopScreen"
+                component={ShopScreen}
+              />
 
-            <Stack.Screen
-              name="SinglePlayerGame"
-              component={SinglePlayerGame}
-            />
+              <Stack.Screen
+                name="SinglePlayerGame"
+                component={SinglePlayerGame}
+              />
 
-            <Stack.Screen
-              name="ChooseMode"
-              component={ChooseMode}
-            />
+              <Stack.Screen
+                name="ChooseMode"
+                component={ChooseMode}
+              />
 
-            <Stack.Screen
-              name="DetailResultScreen"
-              component={DetailResultScreen} />
+              <Stack.Screen
+                name="DetailResultScreen"
+                component={DetailResultScreen} />
 
-            <Stack.Screen
-              name="RoomScreen"
-              component={RoomScreen} />
+              <Stack.Screen
+                name="RoomScreen"
+                component={RoomScreen} />
 
-            <Stack.Screen
-              name="LobbyScreen"
-              component={LobbyScreen} />
+              <Stack.Screen
+                name="LobbyScreen"
+                component={LobbyScreen} />
 
-            <Stack.Screen
-              name="MultiPlayerGame"
-              component={MultiPlayerGame} />
+              <Stack.Screen
+                name="MultiPlayerGame"
+                component={MultiPlayerGame} />
 
-            <Stack.Screen
-              name="FindMatch"
-              component={FindMatch} />
-          </Stack.Navigator>
+              <Stack.Screen
+                name="FindMatch"
+                component={FindMatch} />
+            </Stack.Navigator>
+          </TranslatorProvider>
         </NavigationContainer>
       </PaperProvider>
     </StoreProvide >
   );
 }
-
-const styles = StyleSheet.create({
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
-  },
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: '600',
-  },
-  sectionDescription: {
-    marginTop: 8,
-    fontSize: 18,
-    fontWeight: '400',
-  },
-  highlight: {
-    fontWeight: '700',
-  },
-});
