@@ -10,18 +10,18 @@ import Translator, { TranslatorProvider, useTranslator } from 'react-native-tran
 import IconMaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
 const DrawModal = (props, ref) => {
-    const [modalVisible, setModalVisible] = useState(false);
-    const [round, setRound] = useState('');
-    const keywords = useSelector((state) => state.draw.keywords);
+  const [modalVisible, setModalVisible] = useState(false);
+  const [round, setRound] = useState('');
+  const keywords = useSelector((state) => state.draw.keywords);
 
-    useImperativeHandle(ref, () => {
-        return {
-            startGame(round) {
-                setRound(round);
-                setModalVisible(true);
-            }
-        }
-    }, [modalVisible])
+  useImperativeHandle(ref, () => {
+    return {
+      startGame(round) {
+        setRound(round);
+        setModalVisible(true);
+      }
+    }
+  }, [modalVisible])
 
     const handleGotItPress = () => {
         setModalVisible(!modalVisible)
@@ -52,6 +52,7 @@ const DrawModal = (props, ref) => {
             transparent={true}
             visible={modalVisible}
             onRequestClose={() => {
+                return;
                 setModalVisible(!modalVisible);
             }}>
             <Background style={{ flex: 1 }}>

@@ -66,7 +66,7 @@ const AvatarModal = ({ isVisible, onClose, item }) => {
       transparent={true}
       visible={isVisible}
       onRequestClose={() => {
-        Alert.alert('Modal has been closed.');
+        // Alert.alert('Modal has been closed.');
         onClose();
       }}>
       <View style={styles.centeredView}>
