@@ -8,6 +8,7 @@ import playerLoginReducer from "./player/loginSlice/playerLoginSlice";
 import playerDetailReducer from "./player/playerDetailSlice/playerDetailSlice"
 import playerHistoryReducer from "./player/playerHistorySlice/playerHistorySlice"
 import getAllItemReducer from "./items/getAllItemsSlice/getAllItemsSlice"
+import checkUpRankReducer from "./player/checkUpRank/checkUpRankSlice";
 
 const rootReducer = combineReducers({
   counter: counterReducer,
@@ -19,6 +20,7 @@ const rootReducer = combineReducers({
   playerDetail: playerDetailReducer,
   playerHistory: playerHistoryReducer,
   getAllItem: getAllItemReducer,
+  checkRank: checkUpRankReducer
 });
 
 export default rootReducer;
