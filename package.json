@@ -23,6 +23,7 @@
     "react-native-fast-image": "^8.6.3",
     "react-native-fs": "^2.20.0",
     "react-native-linear-gradient": "^2.8.3",
+    "react-native-otp-textinput": "^1.1.6",
     "react-native-paper": "^5.12.3",
     "react-native-raw-bottom-sheet": "^3.0.0",
     "react-native-really-awesome-button": "^2.0.4",

@@ -124,7 +124,7 @@ function HomeScreen({ navigation }) {
   const handleIconBack = () => {
     dispatch(resetLogin());
     dispatch(resetItem());
-    dispatch(resetDetail());
+    // dispatch(resetDetail());
     navigation.navigate('Login');
   };
 
@@ -207,8 +207,8 @@ function HomeScreen({ navigation }) {
                 </View>
               }
               {userDetail &&
-                <Text style={{ alignSelf: 'center', fontSize: 17, fontWeight: '500', color: '#55DAFF' }}>
-                  {userDetail?.exp?.currentExp}/{userDetail?.exp?.maxExpOfLevel}
+                <Text style={{ alignSelf: 'flex-start', fontSize: 20, fontWeight: '500', color: 'black' }}>
+                  BScore: {userDetail?.score}
                 </Text>
               }
             </View>

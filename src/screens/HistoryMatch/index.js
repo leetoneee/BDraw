@@ -222,7 +222,7 @@ function HistoryMatch({ navigation }) {
     <Background>
       <View style={styles.container}>
 
-        <View style={{ flex: 1, elevation: 10, backgroundColor: 'white', }}>
+        <View style={{ flex: 1, elevation: 10, backgroundColor: 'white', borderTopEndRadius: 20, borderTopStartRadius: 20,  }}>
           {/* Nút quay về */}
           <View style={{ alignItems: 'flex-start', margin: 5 }}>
             <TouchableOpacity

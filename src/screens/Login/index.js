@@ -9,7 +9,7 @@ import {
   SafeAreaView,
   StyleSheet,
   TouchableWithoutFeedback,
-  Keyboard
+  Keyboard,
 } from 'react-native';
 import CheckBox from '@react-native-community/checkbox';
 import { useDispatch, useSelector } from 'react-redux';
@@ -30,8 +30,8 @@ import Loading from '../../components/Loading';
 import { Snackbar } from 'react-native-paper';
 import { Dialog, Portal } from 'react-native-paper';
 import { loginPlayer, reset } from '../../redux/player/loginSlice/playerLoginSlice';
-import { playerDetail } from '../../redux/player/playerDetailSlice/playerDetailSlice';
 import { playerHistory } from '../../redux/player/playerHistorySlice/playerHistorySlice';
+import { playerDetail } from '../../redux/player/playerDetailSlice/playerDetailSlice';
 
 const FROM_COLOR = '#A541E1';
 const VIA_COLOR = '#8752E4';
@@ -50,15 +50,15 @@ function Login({ }) {
 
   const animatedLogin = useRef(new Animated.Value(1000)).current;
   const animatedBdraw = useRef(new Animated.ValueXY({ x: 300, y: 300 })).current;
-  const isLoading = useSelector((state) => state.playerLog.isLoading);
-  const isSuccess = useSelector((state) => state.playerLog.isSuccess);
-  const message = useSelector((state) => state.playerLog.message);
-  const user = useSelector((state) => state.playerLog.user);
+  const isLoading = useSelector(state => state.playerLog.isLoading);
+  const isSuccess = useSelector(state => state.playerLog.isSuccess);
+  const message = useSelector(state => state.playerLog.message);
+  const user = useSelector(state => state.playerLog.user);
 
   const hideDialog = async () => {
     setVisible(false);
     dispatch(reset());
-  }
+  };
 
   const showDialog = () => setVisible(true);
 
@@ -76,14 +76,14 @@ function Login({ }) {
     const requestOptions = {
       username: username,
       password: password,
-    }
+    };
 
     dispatch(loginPlayer(requestOptions));
-  }
+  };
 
   const dismissKeyboard = () => {
     Keyboard.dismiss();
-  }
+  };
 
   useEffect(() => {
     if (isSuccess === true) {
@@ -94,8 +94,7 @@ function Login({ }) {
     if (isSuccess === false) {
       showDialog();
     }
-  }, [isSuccess])
-  // Thêm isSuccess vào đây
+  }, [isSuccess]);
 
   useEffect(() => {
     if (status) {
@@ -118,12 +117,11 @@ function Login({ }) {
   }, [animatedLogin, animatedBdraw]);
 
   useEffect(() => {
-
     const keyboardDidShowListener = Keyboard.addListener(
       'keyboardDidShow',
       () => {
         Animated.timing(animatedLogin, {
-          toValue: height / 3,
+          toValue: height / 9,
           duration: 300,
           useNativeDriver: false,
         }).start();
@@ -150,7 +148,11 @@ function Login({ }) {
   const onDismissSnackBar = () => {
     setStatus('');
     setSnackbarVisible(false);
-  }
+  };
+
+  const handleForgotPassword = () => {
+    navigation.navigate('ForgotPassword');
+  };
 
   return (
     <TouchableWithoutFeedback onPress={dismissKeyboard}>
@@ -228,14 +230,12 @@ function Login({ }) {
             </TouchableOpacity>
           </View>
           <View style={styles.forgotPasswordContainer}>
-            <TouchableOpacity>
+            <TouchableOpacity onPress={handleForgotPassword}>
               <Text style={styles.forgotPassword}>Forgot your password?</Text>
             </TouchableOpacity>
           </View>
         </Animated.View>
-        {isLoading &&
-          <Loading />
-        }
+        {isLoading && <Loading />}
         <Snackbar
           visible={snackbarVisible}
           onDismiss={onDismissSnackBar}
@@ -246,21 +246,28 @@ function Login({ }) {
         //     },
         // }}
         >
-          <Text Text style={{ fontFamily: 'verdana', color: '#fff', fontSize: 13 }}>{status}</Text>
+          <Text
+            Text
+            style={{ fontFamily: 'verdana', color: '#fff', fontSize: 13 }}>
+            {status}
+          </Text>
         </Snackbar>
-        {!isSuccess &&
+        {!isSuccess && (
           <Portal>
-            <Dialog visible={visible} onDismiss={hideDialog}  >
-              <Dialog.Icon icon='alert' color='#6a0dad' size={30} />
-              <Dialog.Title style={{ fontFamily: 'Roboto-Regular', fontSize: 18 }}>Login Failed!</Dialog.Title>
-              {message &&
-                <Dialog.Content><Text>{message}</Text></Dialog.Content>
-              }
+            <Dialog visible={visible} onDismiss={hideDialog}>
+              <Dialog.Icon icon="alert" color="#6a0dad" size={30} />
+              <Dialog.Title
+                style={{ fontFamily: 'Roboto-Regular', fontSize: 18 }}>
+                Login Failed!
+              </Dialog.Title>
+              {message && (
+                <Dialog.Content>
+                  <Text>{message}</Text>
+                </Dialog.Content>
+              )}
             </Dialog>
           </Portal>
-        }
-
-
+        )}
       </SafeAreaView>
     </TouchableWithoutFeedback>
   );

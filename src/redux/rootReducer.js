@@ -5,10 +5,12 @@ import startGameReducer from "./startGameSlice/startGameSlice"
 import multiPlayerReducer from "./multiPlayerSlice/multiPlayerSlice";
 import playerRegisterReducer from "./player/registerSlice/playerRegisterSlice";
 import playerLoginReducer from "./player/loginSlice/playerLoginSlice";
-import playerDetailReducer from "./player/playerDetailSlice/playerDetailSlice"
 import playerHistoryReducer from "./player/playerHistorySlice/playerHistorySlice"
 import getAllItemReducer from "./items/getAllItemsSlice/getAllItemsSlice"
 import checkUpRankReducer from "./player/checkUpRank/checkUpRankSlice";
+import playerDetailReducer from "./player/playerDetailSlice/playerDetailSlice";
+import playerDetailByUsernameReducer from "./player/playerDetailByUsernameSlice/playerDetailByUsernameSlice";
+import sendOtpSlice from "./system/sendOtp/sendOtpSlice";
 
 const rootReducer = combineReducers({
   counter: counterReducer,
@@ -20,7 +22,9 @@ const rootReducer = combineReducers({
   playerDetail: playerDetailReducer,
   playerHistory: playerHistoryReducer,
   getAllItem: getAllItemReducer,
-  checkRank: checkUpRankReducer
+  checkRank: checkUpRankReducer,
+  playerDetailByUsername: playerDetailByUsernameReducer,
+  sendOtp: sendOtpSlice,
 });
 
 export default rootReducer;

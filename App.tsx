@@ -33,6 +33,7 @@ import { store } from './src/redux/store';
 import BottomTabs from './src/components/Navigation/BottomTabs';
 import { socket } from './src/setup/socket';
 import Translator, { TranslatorProvider, useTranslator } from 'react-native-translator';
+import { Username_input_fp, Email_input_fp, OTP_verify_fp, CreateNewPass_fp } from './src/screens/ForgotPassword';
 
 const Stack = createNativeStackNavigator();
 
@@ -62,7 +63,22 @@ export default function App() {
                 name="Login"
                 component={Login} />
 
+            <Stack.Screen
+              name="ForgotPassword"
+              component={Username_input_fp}
+            />
 
+            <Stack.Screen
+            name="ForgotPassword_email"
+            component={Email_input_fp}/>
+
+            <Stack.Screen
+            name="ForgotPassword_OTP_Verify"
+            component={OTP_verify_fp}/>
+
+            <Stack.Screen
+            name="ForgotPassword_Create_NewPass"
+            component={CreateNewPass_fp}/>
 
               <Stack.Screen
                 name="BottomTabs"

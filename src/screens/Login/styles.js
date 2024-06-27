@@ -48,6 +48,7 @@ export default styles = StyleSheet.create({
     fontSize: 18,
     paddingHorizontal: 20
   },
+  
   checkboxContainer: {
     flexDirection: 'row',
     marginBottom: 20,

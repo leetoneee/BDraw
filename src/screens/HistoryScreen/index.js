@@ -316,6 +316,9 @@ function HistoryScreen({ navigation }) {
                   style={{ width: 40, height: 40, }} />
                 <Text style={[{ fontSize: 20, color: 'black', textTransform: 'uppercase' }]}>{userDetail.rank.name}</Text>
               </View>
+              <Text style={{ alignSelf: 'flex-start', fontSize: 20, fontWeight: '500', color: 'black'}}>
+                  Score: {userDetail?.score }
+                </Text>
             </View>
           </View>
         </View>
