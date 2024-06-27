@@ -99,7 +99,7 @@ function SinglePlayerGame() {
                 {round === 0 && !isDrawing &&
                     <>
                         <ImageBackground source={background_pen} resizeMode='contain' style={styles.imagebackground}>
-                            <Text style={{ fontSize: 55, fontFamily: 'VampiroOne-Regular',  textAlign: 'center', color:'red', marginBottom:20}}>BDraw</Text>
+                            <Text style={{ fontSize: 55, fontFamily: 'VampiroOne-Regular',  textAlign: 'center', color:'#9b23d0', marginBottom:20}}>BDraw</Text>
 
                             <SinglePlayer style={{ position: 'relative' }} />
                             <Robotic style={{ position: 'absolute', top:'35%'}}  />

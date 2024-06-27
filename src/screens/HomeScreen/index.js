@@ -178,6 +178,11 @@ function HomeScreen({ navigation }) {
                   <Text style={{ fontSize: 20, color: 'black', textTransform: 'uppercase' }}>{userDetail?.rank?.name}</Text>
                 </View>
               }
+              {userDetail &&
+                <Text style={{ alignSelf: 'center', fontSize: 17, fontWeight: '500', color: '#55DAFF' }}>
+                  {userDetail?.exp?.currentExp}/{userDetail?.exp?.maxExpOfLevel}
+                </Text>
+              }
             </View>
           </View>
         </View>

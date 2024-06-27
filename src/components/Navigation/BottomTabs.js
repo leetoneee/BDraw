@@ -36,10 +36,10 @@ const BottomTabs = ({ props }) => {
         headerShown: false,
         tabBarIcon: ({ focused }) => <History name="history" size={30} color={focused ? "blue" : ''} />
       }} />
-      <Tab.Screen name="Inventory" component={HomeScreen} options={{
+      {/* <Tab.Screen name="Inventory" component={HomeScreen} options={{
         headerShown: false,
         tabBarIcon: ({ focused }) => <Inventory name="inventory" size={30} color={focused ? "blue" : ''} />
-      }} />
+      }} /> */}
       <Tab.Screen name="Shop" component={ShopScreen} options={{
         headerShown: false,
         tabBarIcon: ({ focused }) => <Cart name="shoppingcart" size={30} color={focused ? "blue" : ''} />

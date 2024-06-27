@@ -139,7 +139,7 @@ function MultiPlayerGame() {
         {!isDrawing &&
           <>
             <ImageBackground source={background_pen} resizeMode='contain' style={styles.imagebackground}>
-              <Text style={{ fontSize: 55, fontFamily: 'VampiroOne-Regular', textAlign: 'center', color: 'red', marginBottom: 20, marginTop: 20 }}>BDraw</Text>
+              <Text style={{ fontSize: 55, fontFamily: 'VampiroOne-Regular', textAlign: 'center', color: '#9b23d0', marginBottom: 20, marginTop: 20 }}>BDraw</Text>
             </ImageBackground>
 
           </>
