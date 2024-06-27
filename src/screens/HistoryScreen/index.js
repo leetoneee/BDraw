@@ -21,6 +21,7 @@ import LinearGradient from 'react-native-linear-gradient';
 import { useNavigation } from '@react-navigation/native';
 import HistoryMatch from "../HistoryMatch";
 import { formatDate } from "../../utils/displayDate";
+import { playerHistory } from '../../redux/player/playerHistorySlice/playerHistorySlice';
 
 const GradientBar = ({ x, y, animated }) => {
   return (
@@ -256,13 +257,14 @@ function HistoryScreen({ navigation }) {
   const animatedLogin = useRef(new Animated.Value(-300)).current;
 
   useEffect(() => {
+    dispatch(playerHistory(userDetail.playerId));
     Animated.timing(animatedLogin, {
       toValue: 0,
       duration: 1000,
       useNativeDriver: true,
     }).start();
 
-  }, [animatedLogin]);
+  }, [animatedLogin, userHistory]);
 
   return (
     <Background>
