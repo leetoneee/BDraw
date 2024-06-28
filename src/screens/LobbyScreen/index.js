@@ -5,7 +5,7 @@ import { socket } from '../../setup/socket';
 import { useNavigation } from '@react-navigation/native';
 import { Avatar } from 'react-native-paper';
 import { useDispatch } from 'react-redux';
-import { setKeywords, setRoomId } from '../../redux/multiPlayerSlice/multiPlayerSlice';
+import { reset, setKeywords, setRoomId } from '../../redux/multiPlayerSlice/multiPlayerSlice';
 import LinearGradient from 'react-native-linear-gradient';
 import Background from '../../components/Background';
 import { Snackbar } from 'react-native-paper';
@@ -66,6 +66,7 @@ const LobbyScreen = ({ route }) => {
     };
 
     const handleLetsPlay = (keywords) => {
+      dispatch(reset());
       console.log("🚀 ~ socket.on ~ keywords: ", keywords);
       dispatch(setKeywords(keywords));
       dispatch(setRoomId(roomId));

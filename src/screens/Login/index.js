@@ -63,6 +63,7 @@ function Login({ }) {
   const showDialog = () => setVisible(true);
 
   const handleLogin = () => {
+    dismissKeyboard();
     if (!username) {
       setStatus('Invalid username: Username is required');
       return;

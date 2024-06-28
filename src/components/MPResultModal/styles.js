@@ -22,7 +22,7 @@ export const styles = StyleSheet.create({
     flex: 3,
   },
   midContainer: {
-    flex: 7,
+    flex: 6,
     width: width - 40,
   },
   scrollview: {
@@ -66,7 +66,7 @@ export const styles = StyleSheet.create({
     color: 'black'
   },
   congraText: {
-    marginVertical: 5,
+    marginTop: 5,
     textAlign: 'center',
     fontFamily: 'Bangers-Regular',
     fontSize: 35,

@@ -167,7 +167,7 @@ export default MPDrawScreen = ({ props, round, onRoundEnd, onQuit }) => {
           setLabel('...');
           return;
         }
-        setLabel(allResults[currentIndex].label);
+        setLabel(allResults[currentIndex]?.label);
         setCurrentIndex((prevIndex) => (prevIndex + 1));
       }
     }, 1500);
@@ -187,7 +187,7 @@ export default MPDrawScreen = ({ props, round, onRoundEnd, onQuit }) => {
   }, [currentPath, paths])
 
   useEffect(() => {
-    if (paths.length > 0)
+    if (paths.length >= 0)
       requestAPI(encodeImage)
   }, [encodeImage, paths])
 
@@ -393,7 +393,9 @@ export default MPDrawScreen = ({ props, round, onRoundEnd, onQuit }) => {
 
       </View>
       <View style={[styles.resultContainer, styles.shadowProp]}>
-        <Text style={{ fontSize: 25 }}>{label}</Text>
+        {label &&
+          <Text style={{ fontSize: 25 }}>{label}</Text>
+        }
       </View>
       <View style={styles.drawContainer}>
         <ViewShot ref={viewShotRef} >

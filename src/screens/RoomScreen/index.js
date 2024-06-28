@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, TextInput, Button, Modal, Alert, Pressable, TouchableOpacity, KeyboardAvoidingView, ScrollView } from 'react-native';
+import { View, Text, TextInput, Button, Modal, Alert, Pressable, TouchableOpacity, KeyboardAvoidingView, ScrollView, BackHandler } from 'react-native';
 import styles from './styles';
 import { useNavigation } from '@react-navigation/native';
 import { socket } from '../../setup/socket';
@@ -20,6 +20,20 @@ const RoomScreen = () => {
   const [activeTab, setActiveTab] = useState('Join');
 
   const userDetail = useSelector((state) => state.playerDetail.userDetail);
+
+  useEffect(() => {
+    const backAction = () => {
+      navigation.goBack()
+      return true;
+    };
+
+    const backHandler = BackHandler.addEventListener(
+      'hardwareBackPress',
+      backAction,
+    );
+
+    return () => backHandler.remove();
+  }, []);
 
   useEffect(() => {
     if (status)

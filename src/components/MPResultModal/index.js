@@ -258,7 +258,7 @@ const MPResultModal = (props, ref) => {
                   </Text>
                 </View>
               }
-              {round >= 6 &&
+              {round < 6 &&
                 <Text style={styles.level}> {player.top} </Text>
               }
             </View>

@@ -5,7 +5,7 @@ import styles from './styles';
 import { socket } from '../../setup/socket';
 import AwesomeButton from "react-native-really-awesome-button";
 import { useDispatch } from 'react-redux';
-import { setKeywords, setRoomId as setRoomid } from '../../redux/multiPlayerSlice/multiPlayerSlice';
+import { reset, setKeywords, setRoomId as setRoomid } from '../../redux/multiPlayerSlice/multiPlayerSlice';
 import { useNavigation } from '@react-navigation/native';
 
 const MatchModal = (props, ref) => {
@@ -48,6 +48,7 @@ const MatchModal = (props, ref) => {
     };
 
     const handleLetsPlay = (keywords) => {
+      dispatch(reset());
       dispatch(setKeywords(keywords));
       dispatch(setRoomid(roomId));
       navigation.navigate('MultiPlayerGame');

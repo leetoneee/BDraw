@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { socket } from '../../setup/socket';
-import { Button, View, ImageBackground, Text, TouchableOpacity } from 'react-native';
+import { Button, View, ImageBackground, Text, TouchableOpacity, BackHandler } from 'react-native';
 import MatchModal from '../../components/MatchModal';
 import Background from '../../components/Background';
 import background_pen from '../../assets/images/background_pen.png';
@@ -42,6 +42,20 @@ const FindMatch = () => {
       socket.off('matchFound', handleMatchFound);
       socket.off('matchCancelled', handleMatchCancelled);
     };
+  }, []);
+
+  useEffect(() => {
+    const backAction = () => {
+      navigation.goBack()
+      return true;
+    };
+
+    const backHandler = BackHandler.addEventListener(
+      'hardwareBackPress',
+      backAction,
+    );
+
+    return () => backHandler.remove();
   }, []);
 
   useEffect(() => {

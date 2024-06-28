@@ -249,9 +249,6 @@ function HistoryScreen({ navigation }) {
   const userDetail = useSelector((state) => state.playerDetail.userDetail);
   const userHistory = useSelector((state) => state.playerHistory.userHistory);
 
-  const [currentScore, setCurrentScore] = useState(userDetail.exp.currentExp);
-  const [defaultScore, setDefaultScore] = useState(userDetail.exp.maxExpOfLevel);
-
   const defaultAvatarUri = 'https://res.cloudinary.com/dbfftqigf/image/upload/v1719194745/avatar-trang-2_byptft.jpg';
 
   const animatedLogin = useRef(new Animated.Value(-300)).current;
@@ -296,10 +293,10 @@ function HistoryScreen({ navigation }) {
               </LinearGradient>
 
               {/* Điểm số theo cấp */}
-              <Text style={{ alignSelf: 'center', fontSize: 17, fontWeight: 500, color: '#55DAFF' }}>{currentScore}/{defaultScore}</Text>
+              <Text style={{ alignSelf: 'center', fontSize: 17, fontWeight: 500, color: '#55DAFF' }}>{userDetail.exp.currentExp}/{userDetail.exp.maxExpOfLevel}</Text>
 
               {/* Thanh ngôi sao và level */}
-              <Badge number={userDetail.exp.level} x={currentScore} y={defaultScore} animated={animatedLogin} />
+              <Badge number={userDetail.exp.level} x={userDetail.exp.currentExp} y={userDetail.exp.maxExpOfLevel} animated={animatedLogin} />
             </View>
             <View style={{ flex: 1, }}>
 
@@ -316,11 +313,11 @@ function HistoryScreen({ navigation }) {
               <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                 <Image source={{ uri: userDetail.rank.url }}
                   style={{ width: 40, height: 40, }} />
-                <Text style={[{ fontSize: 20, color: 'black', textTransform: 'uppercase' }]}>{userDetail.rank.name}</Text>
+                <Text style={[{ fontSize: 18, color: 'black', textTransform: 'uppercase' }]}>{userDetail.rank.name}</Text>
               </View>
-              <Text style={{ alignSelf: 'flex-start', fontSize: 20, fontWeight: '500', color: 'black'}}>
-                  Score: {userDetail?.score }
-                </Text>
+              <Text style={{ alignSelf: 'flex-start', fontSize: 20, fontWeight: '500', color: 'black' }}>
+                BScore: {userDetail?.score}
+              </Text>
             </View>
           </View>
         </View>
