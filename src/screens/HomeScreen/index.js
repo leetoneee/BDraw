@@ -24,6 +24,7 @@ import HistoryMatch from "../HistoryMatch";
 import { getAllItem, reset as resetItem } from '../../redux/items/getAllItemsSlice/getAllItemsSlice';
 import { reset as resetLogin } from '../../redux/player/loginSlice/playerLoginSlice';
 import { reset as resetDetail } from "../../redux/player/playerDetailSlice/playerDetailSlice";
+import Paint from '../../assets/images/paint-palette_2272364.png';
 
 const GradientBar = ({ x, y, animated }) => {
   return (
@@ -216,11 +217,19 @@ function HomeScreen({ navigation }) {
         </View>
 
         {/* List lịch sử */}
-        <View style={{ flex: 4 }}>
+        <View style={{ flex: 4, }}>
+
+          <View style={{ flex: 1, alignItems: 'center', justifyContent: 'flex-end', }}>
+            <Text style={{ fontSize: 55, fontFamily: 'VampiroOne-Regular', color: '#9b23d0' }}>BDraw</Text>
+          </View>
+          <View style={{ flex: 2 }}>
+            <Image source={Paint} resizeMode='contain' style={{ width: '100%', height: '100%',}} />
+          </View>
+
         </View>
 
         {/* Để trống */}
-        <View style={{ flex: 0.5 }}>
+        <View style={{ flex: 1 }}>
         </View>
       </View>
     </Background>
